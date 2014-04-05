@@ -1,5 +1,9 @@
 <?
 /*
+TODO: Grabar contraseña
+Variables de sesion
+Modificar foto
+guardar Radio
 
 Se utiliza esta pagina para cambiar las opciones de perfil.
 Utiliza librerias Jquery: para el MAPA, para validar y para la fecha de nacimiento.
@@ -59,17 +63,17 @@ global $db;
 		<div class="fb-follow" data-href="https://www.facebook.com/zuck" data-width="300" data-height="20" data-colorscheme="dark" data-layout="standard" data-show-faces="false"></div>
 		</header>
 
-		<div id="login" class="redondeado sombra">
+		<div id="modificar" class="redondeado sombra">
 			<h1 style="margin-right:70px;">Modificar Perfil</h1>
-			
+
 <?php		if(!isset($_POST['modificar']))
-		{ 
+		{
 			$id = $_SESSION['id'];
-			$usuario = $db->get_row("SELECT * FROM USUARIO WHERE ID = '$id' "); 
+			$usuario = $db->get_row("SELECT * FROM USUARIO WHERE ID = '$id' ");
 			?>
-		
+
 			<form id="formModificar" name="formModificar" method="POST" action="<? $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data">
-				
+
 				<!----DATOS OBLIGATORIOS -->
 				<input id="alias" name="alias" type="text" placeholder="Usuario" value="<? echo $usuario->ALIAS; ?>" /><br>
 				<input id="email" name="email" type="text" placeholder="Correo eletronico" value="<? echo $usuario->MAIL; ?>" /><br>
@@ -80,25 +84,13 @@ global $db;
                 <input id="telefono" name="telefono" type="text" placeholder="Celular o telefono"/><br>
                 <input id="datepicker" name="datepicker" type="text" placeholder="Fecha de Nacimiento"/><br>
 				<input type="radio" name="sexo" value="hombre" checked /> Hombre - <input type="radio" name="sexo" value="mujer" /> Mujer <br>
-				<input id="geocomplete" name="geocomplete" type="text" placeholder="Type in an address" size="90" onchange="actualizar_mapa()"/>
-				<input id="radio" name="radio" type="text" placeholder="Radio de busqueda en KM" size="90" onkeyup="actualizar_mapa()"/>
-				<div id="map_canvas" class="map_canvas" style="width:300px;height:300px;"></div>
+				<input id="geocomplete" name="geocomplete" type="text" placeholder="Type in an address" size="90" onchange="actualizar_mapa()"/><br>
+				Rango de busqueda <input id="radio" name="radio" type="range" min="0" max="100" placeholder="Radio de busqueda en KM" size="90" onchange="actualizar_mapa()"/><br>
 
-				<? if( $usuario->PATH_FOTO == "default.jpg" )
-					{ ?>
-							<img style="margin-top:10px;" src="./images/thumbnails/default.jpg">
-				<?	} 
-					else
-					{ ?>
-							<img src="./images/thumbnails/<? echo $usuario->PATH_FOTO; ?>">						
-				<?	}
-				?>
-				<input id="foto" name="foto" type="file" placeholder="Foto de Perfil"/><br>
-				
-			   <input name="lat" id="lat" type="hidden" value="">
-			   <input name="lng" id="lng" type="hidden" value="">
+			    <input name="lat" id="lat" type="hidden" value="">
+			    <input name="lng" id="lng" type="hidden" value="">
 
-				<input type="submit" id="modificar" name="modificar" value="Modificar" />
+				<input type="submit" name="modificar" value="Modificar" />
 			</form>
 
 	<?		}
@@ -212,6 +204,29 @@ global $db;
 		} ?>
 
 		</div>
+
+      <div id="modificar-mapa" class="redondeado sombra">
+        <div id="map_canvas" class="map_canvas"></div>
+      </div>
+
+      <div id="modificar-foto" class="redondeado sombra">
+        <form id="formModificarFoto" name="formModificarFoto" method="POST" action="<? $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data" >
+    		<!----DATOS OPCIONALES -->
+    		<? if( $usuario->PATH_FOTO == "default.jpg" )
+    		   {
+    		?>
+    					<img src="./images/thumbnails/default.jpg" >
+    		<?	}
+    			else
+    			{ ?>
+    					<img src="./images/thumbnails/<? echo $usuario->PATH_FOTO; ?>" >
+    		<?	}
+    		?>
+    		<input id="foto" name="foto" type="file" placeholder="Foto de Perfil"/>
+
+    		<input type="submit" name="modificar" value="Modificar" />
+    	</form>
+      </div>
 
 	</div>
     <? include("php/footer.php"); ?>

@@ -1,3 +1,20 @@
+@font-face {
+	font-family: 'TwCenMT-Regular';
+	src: url('../font/TwCenMT-Regular.eot?') format('eot'),
+	     url('../font/TwCenMT-Regular.woff') format('woff'),
+	     url('../font/TwCenMT-Regular.ttf')  format('truetype'),
+	     url('../font/TwCenMT-Regular.svg#TwCenMT-Regular') format('svg');
+}
+
+
+@font-face {
+	font-family: 'TwCenMT-Bold';
+	src: url('../font/TwCenMT-Bold.eot?') format('eot'),
+	     url('../font/TwCenMT-Bold.woff') format('woff'),
+	     url('../font/TwCenMT-Bold.ttf')  format('truetype'),
+	     url('../font/TwCenMT-Bold.svg#TwCenMT-Bold') format('svg');
+}
+
 /* BASIC PAGE SETUP ============================================================================= */
 
 body {
@@ -164,7 +181,42 @@ footer {
 
 #centro{
   background: #000000;
-  min-height: 600px;
+  min-height: 500px;
+  margin-top: 30px;
+}
+
+#menu{
+  width: 100%;
+  height: 42px;
+  background: url(../images/menu.png) no-repeat;
+  -webkit-border-top-left-radius: 10px;
+  -webkit-border-top-right-radius: 10px;
+  -moz-border-radius-topleft: 10px;
+  -moz-border-radius-topright: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  overflow: hidden;
+}
+
+#menu a{
+  font-family: "TwCenMT-Bold";
+  font-weight: bold;
+  color: #f7f7f8;
+  font-size: 16px;
+  letter-spacing: 1px;
+  margin: 10px 30px;
+  float: left;
+}
+#menu a:hover{
+  color: #ebea6b;
+}
+#menu #user{
+  font-family: "Helvetica LT Black", Arial;
+  font-weight: bold;
+  color: #f7f7f8;
+  font-size: 15px;
+  float: right;
+  margin-right: 20px;
 }
 
 #login{
@@ -195,7 +247,7 @@ footer {
 
 #login-derecha{
   position: relative;
-  background: #000000 url(../images/fondo-login.png) top no-repeat;
+  background: #000000;
   float: left;
   margin-top: 30px;
   margin-left: 30px;
@@ -277,4 +329,66 @@ footer {
   top: -6px;
   width: 11px;
   height: 22px;
+}
+
+#modificar{
+  position: relative;
+  background: #000000 url(../images/fondo-login.png) top no-repeat;
+  float: left;
+  margin-top: 30px;
+  width: 400px;
+  min-height: 400px;
+  text-align: center;
+  padding: 15px 0px 35px 0px;
+}
+#modificar h1{
+  font-family: Arial;
+  font-weight: bold;
+  font-size: 18px;
+  color: #FFFFFF;
+  margin-top: 20px;
+}
+
+#modificar-foto{
+  position: relative;
+  background: #000000;
+  float: left;
+  width: 480px;
+  height: 107px;
+  line-height: 75px;
+  text-align: center;
+  color: #FFFFFF;
+  font-family: Arial;
+  font-style: italic;
+  font-size: 30px;
+  text-shadow: 2px 2px 3px #000000;
+  z-index:1000;
+  bottom: 0px;
+  margin-top: 30px;
+  margin-left: 30px;
+  padding: 10px;
+}
+#modificar-foto img{
+  float: left;
+  border: 2px solid #FFFFFF;
+}
+#modificar-foto input{
+  float: left;
+  margin-left: 10px;
+}
+
+#modificar-mapa{
+  position: relative;
+  background: #000000;
+  float: left;
+  margin-top: 30px;
+  margin-left: 30px;
+  width: 500px;
+  height: 292px;
+  text-align: center;
+  overflow: hidden;
+}
+#modificar-mapa #map_canvas{
+  width: 500px;
+  height: 292px;
 }
