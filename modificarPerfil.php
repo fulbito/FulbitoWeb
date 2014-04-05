@@ -1,7 +1,7 @@
 <?
 /*
 
-Se utiliza esta pagina para cambiar las opciones de perfil. 
+Se utiliza esta pagina para cambiar las opciones de perfil.
 Utiliza librerias Jquery: para el MAPA, para validar y para la fecha de nacimiento.
 
 */
@@ -15,7 +15,7 @@ include_once "./php/conexionBD.php"; // Conexion de la BD
 
 global $db;
 
-  
+
 ?>
 <!DOCTYPE html>
 
@@ -37,7 +37,8 @@ global $db;
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
 <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script> -->
 <script language="javascript" type="text/javascript" src="./js/ubilabs-geocomplete/jquery.geocomplete.js" ></script>
-<script language="javascript" type="text/javascript" src="./js/ubilabs-geocomplete/jquery.geocomplete.min.js" ></script> 
+<script language="javascript" type="text/javascript" src="./js/ubilabs-geocomplete/jquery.geocomplete.min.js" ></script>
+<script language="javascript" type="text/javascript" src="./js/mapa.js" ></script>
 
 <!------------------------------------- FECHA ------------------------------------ http://jqueryui.com/datepicker/#dropdown-month-year  -->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
@@ -79,8 +80,9 @@ global $db;
                 <input id="telefono" name="telefono" type="text" placeholder="Celular o telefono"/><br>
                 <input id="datepicker" name="datepicker" type="text" placeholder="Fecha de Nacimiento"/><br>
 				<input type="radio" name="sexo" value="hombre" checked /> Hombre - <input type="radio" name="sexo" value="mujer" /> Mujer <br>
-				<input id="geocomplete" name="geocomplete" type="text" placeholder="Type in an address" size="90" />
-				<div class="map_canvas"></div>
+				<input id="geocomplete" name="geocomplete" type="text" placeholder="Type in an address" size="90" onchange="actualizar_mapa()"/>
+				<input id="radio" name="radio" type="text" placeholder="Radio de busqueda en KM" size="90" onkeyup="actualizar_mapa()"/>
+				<div id="map_canvas" class="map_canvas" style="width:300px;height:300px;"></div>
 
 				<? if( $usuario->PATH_FOTO == "default.jpg" )
 					{ ?>
@@ -93,8 +95,8 @@ global $db;
 				?>
 				<input id="foto" name="foto" type="file" placeholder="Foto de Perfil"/><br>
 				
-			   <input name="lat" type="hidden" value="">
-			   <input name="lng" type="hidden" value="">
+			   <input name="lat" id="lat" type="hidden" value="">
+			   <input name="lng" id="lng" type="hidden" value="">
 
 				<input type="submit" id="modificar" name="modificar" value="Modificar" />
 			</form>
