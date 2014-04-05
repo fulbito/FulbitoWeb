@@ -1,4 +1,8 @@
 <?php
 	global $db;
-	$db = new ezSQL_mysql('root','palermo9','a6003835_fulbito','localhost');
+    $usuario="root";
+    $clave="root";
+    $nombreBD="fulbito";  
+    $conexion="localhost";
+	$db = new ezSQL_mysql($usuario,$clave,$nombreBD,$conexion);
 ?>
