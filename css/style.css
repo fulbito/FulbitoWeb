@@ -1,18 +1,18 @@
 @font-face {
 	font-family: 'TwCenMT-Regular';
-	src: url('../font/TwCenMT-Regular.eot?') format('eot'),
-	     url('../font/TwCenMT-Regular.woff') format('woff'),
-	     url('../font/TwCenMT-Regular.ttf')  format('truetype'),
-	     url('../font/TwCenMT-Regular.svg#TwCenMT-Regular') format('svg');
+	src: url('../fonts/TwCenMT-Regular.eot?') format('eot'),
+	     url('../fonts/TwCenMT-Regular.woff') format('woff'),
+	     url('../fonts/TwCenMT-Regular.ttf')  format('truetype'),
+	     url('../fonts/TwCenMT-Regular.svg#TwCenMT-Regular') format('svg');
 }
 
 
 @font-face {
 	font-family: 'TwCenMT-Bold';
-	src: url('../font/TwCenMT-Bold.eot?') format('eot'),
-	     url('../font/TwCenMT-Bold.woff') format('woff'),
-	     url('../font/TwCenMT-Bold.ttf')  format('truetype'),
-	     url('../font/TwCenMT-Bold.svg#TwCenMT-Bold') format('svg');
+	src: url('../fonts/TwCenMT-Bold.eot?') format('eot'),
+	     url('../fonts/TwCenMT-Bold.woff') format('woff'),
+	     url('../fonts/TwCenMT-Bold.ttf')  format('truetype'),
+	     url('../fonts/TwCenMT-Bold.svg#TwCenMT-Bold') format('svg');
 }
 
 /* BASIC PAGE SETUP ============================================================================= */
