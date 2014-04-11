@@ -19,6 +19,12 @@ include_once "./php/conexionBD.php"; // Conexion de la BD
 
 global $db;
 
+$id_us = $_SESSION['id'];
+$usuario = $db->get_row("SELECT *
+                         FROM USUARIO AS u, DATOS_OPCIONALES_USUARIO AS d
+                         WHERE u.ID = '$id'
+                         AND u.ID = ID_USUARIO ");
+
 
 ?>
 <!DOCTYPE html>
@@ -64,14 +70,25 @@ global $db;
 		</header>
 
 		<div id="modificar" class="redondeado sombra">
-			<h1 style="margin-right:70px;">Modificar Perfil</h1>
 
-<?php		if(!isset($_POST['modificar']))
-		{
-			$id = $_SESSION['id'];
-			$usuario = $db->get_row("SELECT * FROM USUARIO WHERE ID = '$id' ");
-			?>
+        <?
+         if(!isset($_POST['modificar']))
+	     {
+             if(isset($_SESSION['datosError']))
+            {
+              print "<label class='errorLogin'>".htmlentities($_SESSION['datosError'])."</label>";
+              unset($_SESSION['datosError']);
+            }
 
+            if(isset($_SESSION['datosOk']))
+            {
+              print "<label class='ok'>".htmlentities($_SESSION['datosOk'])."</label>";
+              unset($_SESSION['datosOk']);
+            }
+
+            ?>
+
+            <h1 style="margin-right:70px;">Modificar Perfil</h1>
 			<form id="formModificar" name="formModificar" method="POST" action="<? $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data">
 
 				<!----DATOS OBLIGATORIOS -->
@@ -81,10 +98,10 @@ global $db;
 				<input id="confirma_password" name="confirma_password" type="password" placeholder="Confirmar Contrase&ntilde;a"/><br>
 
 				<!----DATOS OPCIONALES -->
-                <input id="telefono" name="telefono" type="text" placeholder="Celular o telefono"/><br>
-                <input id="datepicker" name="datepicker" type="text" placeholder="Fecha de Nacimiento"/><br>
-				<input type="radio" name="sexo" value="hombre" checked /> Hombre - <input type="radio" name="sexo" value="mujer" /> Mujer <br>
-				<input id="geocomplete" name="geocomplete" type="text" placeholder="Type in an address" size="90" onchange="actualizar_mapa()"/><br>
+                <input id="telefono" name="telefono" type="text" placeholder="Celular o telefono" <? if( isset($usuario->TELEFONO) ) echo "value='$usuario->TELEFONO'"; ?>/><br>
+                <input id="datepicker" name="datepicker" type="text" placeholder="Fecha de Nacimiento" <? if( isset($usuario->FECHA_NACIMIENTO) ) echo "value='$usuario->FECHA_NACIMIENTO'"; ?> /><br>
+				<input type="radio" name="sexo" value="h" <? if( $usuario->SEXO == "h" ) echo "checked"; ?>  /> Hombre - <input type="radio" name="sexo" value="m" <? if( $usuario->SEXO == "m" ) echo "checked"; ?> /> Mujer <br>
+				<input id="geocomplete" name="geocomplete" type="text" placeholder="Escriba su ciudad"  size="90" onchange="actualizar_mapa()"  <? if( isset($usuario->UBICACION) ) echo "value='$usuario->UBICACION'"; ?> /><br>
 				Rango de busqueda <input id="radio" name="radio" type="range" min="0" max="100" placeholder="Radio de busqueda en KM" size="90" onchange="actualizar_mapa()"/><br>
 
 			    <input name="lat" id="lat" type="hidden" value="">
@@ -93,65 +110,105 @@ global $db;
 				<input type="submit" name="modificar" value="Modificar" />
 			</form>
 
-	<?		}
+	<?	}
 		else
 		{
-			$alias = $_POST['alias'];
+            $alias = $_POST['alias'];
 			$email = $_POST['email'];
 
 			$consulta = "UPDATE  USUARIO SET MAIL = '$email', ALIAS = '$alias' ";
-			
-			if(isset($_POST['password']) && !empty($_POST['password']) ) // Si cambio el password
+
+            //  Si cambio el password
+			if(isset($_POST['password']) && !empty($_POST['password']) )
 			{
-				$password = $_POST['password'];
+				$password = md5($_POST['password']);
 				$consulta.= ", PASSWORD = '$password' ";
 			}
-			
-			/*
-			Para poner el nombre del archivo se utiliza la fecha y la hora de hoy como nombre y se le ponele
-			su extension. Ademas se redimensiona la imagen para que sea menos pesada.
-			*/
 
-			if(isset($_FILES["foto"]['name']) && !empty($_FILES["foto"]['name']) ) // Si eligió la foto, se procece a trabajar con la foto.
-			{
-				$hoy = date("Y-m-d H:i:s"); // Fecha
-				$sNombreArchivo = strtotime($hoy); // Transformada en string
-				$sPath= realpath('./images/usuarios/').'\\'; // Path
-				
-				$sExtensionArchivo = pathinfo($_FILES["foto"]['name'], PATHINFO_EXTENSION); // Extension del archivo.
-				$sNombreArchivo=$sNombreArchivo.".".$sExtensionArchivo; // nombre del archivo con extencion
-				
-				
-				if( move_uploaded_file ($_FILES["foto"]['tmp_name'], $sPath.$sNombreArchivo) == FALSE) // no se pudo subir el archivo
-				{
-					echo "La imagen ".$sNombreArchivo." no ha sido cargada correctamente.";
-				}
-			   
-				$redim=redimensionar_imagen($sPath.$sNombreArchivo, $sNombreArchivo); // redimensiona la imagen
-				$consulta.= ", PATH_FOTO = '$sNombreArchivo' ";
-			}
-			else // Si no eligió la foto
-			{
-				$sNombreArchivo = "default.jpg";
-			}
-			
-			$id_us = $_SESSION['id'];
 			$consulta.=" WHERE ID = '$id_us'  ";
 
 			$db->query($consulta);
-			if($db->rows_affeted > 0) echo "Se ha modificado el perfil correctamente.<br>";
 
+			if($db->rows_affected > 0)
+			    $_SESSION['datosOk']= "Se han modificado los datos correctamente.";
+            else
+                $_SESSION['datosError']= "No se han modificado los datos, intente mas tarde.";
 
-            //-------------- TRABAJA CON LOS DATOS OPCIONALES
+            //-------------- TRABAJA CON LOS DATOS OPCIONALES ------------------------//
 
-           	$db->query("SELECT * FROM datos_opcionales_usuario WHERE ID_USUARIO = $id_us ");
+           	$db->query("SELECT * FROM DATOS_OPCIONALES_USUARIO WHERE ID_USUARIO = $id_us ");
 
             if($db->num_rows > 0) // ACTUALIZAR DATOS OPCIONALES
             {
-               echo "Encontro el ID";
+                $contador = 0;
+                $consultaActulizarOpcionales="UPDATE DATOS_OPCIONALES_USUARIO SET ";
+
+                if( isset($_POST['telefono']) && !empty($_POST['telefono']) )    // FECHA DE NACIMIENTO
+                {
+                  $contador = 1;
+                  $telefono =$_POST['telefono'];
+                  $consultaActulizarOpcionales.="TELEFONO = '$telefono'";
+                }
+
+                if( isset($_POST['sexo']) && !empty($_POST['sexo']) )    // FECHA DE SEXO
+                {
+                   if($contador == 1)
+                     $consultaActulizarOpcionales.="," ;
+                  $contador = 1;
+                  $sexo =$_POST['sexo'];
+                  $consultaActulizarOpcionales.="SEXO = '$sexo'";
+                }
+
+                if( isset($_POST['datepicker']) && !empty($_POST['datepicker']) )    // FECHA DE NACIMIENTO
+                {
+                  if($contador == 1)
+                     $consultaActulizarOpcionales.="," ;
+                  $contador = 1;
+
+                  $fechaNacimiento=$_POST['datepicker'];
+                  $consultaActulizarOpcionales.=" FECHA_NACIMIENTO = '$fechaNacimiento' ";
+                }
+
+                if( isset($_POST['geocomplete']) && !empty($_POST['geocomplete']) )    // LLENAR CIUDAD, LATITUD, LONGITUD
+                {
+                  if($contador == 1)
+                    $consultaActulizarOpcionales.="," ;
+
+                  $contador = 1;
+
+                  $ciudad =$_POST['geocomplete'];
+                  $latitud =$_POST['lat'];
+                  $longitud =$_POST['lng'];
+                  $consultaActulizarOpcionales.=" UBICACION = '$ciudad' , LATITUD = '$latitud' , LONGITUD = '$longitud' ";
+                }
+
+                 if( isset($_POST['radio']) && !empty($_POST['radio']) )    // LLENAR CIUDAD, LATITUD, LONGITUD
+                {
+                  if($contador == 1)
+                    $consultaActulizarOpcionales.="," ;
+
+                  $contador = 1;
+
+                  $radio =$_POST['radio'];
+                  $consultaActulizarOpcionales.=" RADIO_BUSQUEDA_PARTIDOS = '$radio' ";
+                }
+
+                if( isset($_POST['sexo']) && !empty($_POST['sexo']) )    // SEXO
+                {
+                  if($contador == 1)
+                    $consultaActulizarOpcionales.="," ;
+
+                  $contador = 1;
+                  $sexo =$_POST['sexo'];
+                  $consultaActulizarOpcionales.=" SEXO = '$sexo' ";
+                }
+
+                $consultaActulizarOpcionales.=" WHERE ID_USUARIO = '$id_us' ";
+
+                $db->query($consultaActulizarOpcionales);
 
             }
-            else      // INSERTAR DATOS OPCIONALES
+            else   // INSERTAR DATOS OPCIONALES
             {
                 $consultaDatosOpcionales1="INSERT INTO DATOS_OPCIONALES_USUARIO (ID_USUARIO ";
                 $consultaDatosOpcionales2="VALUE( '$id_us' ";
@@ -181,6 +238,14 @@ global $db;
                     $consultaDatosOpcionales2.=", '$ciudad', '$latitud', '$longitud' ";
                 }
 
+                if( isset($_POST['radio']) && !empty($_POST['radio']) )    // SEXO
+                {
+                    $radio =$_POST['radio'];
+
+                    $consultaDatosOpcionales1.=", RADIO_BUSQUEDA_PARTIDOS ";
+                    $consultaDatosOpcionales2.=", '$radio' ";
+                }
+
                 if( isset($_POST['sexo']) && !empty($_POST['sexo']) )    // SEXO
                 {
                     $sexo =$_POST['sexo'];
@@ -196,36 +261,98 @@ global $db;
 
                 $db->query($consultaFinal);
 
-                if($db->rows_affected)
-                    echo "Se inserto correctamente";
-         }
+            }
 
+            if($db->rows_affected > 0)
+               $_SESSION['datosOpcionales']= "Se han modificado los datos opcionales";
+            else
+               $_SESSION['datosOpcionales']= "No se han modificado los datos opcionales";
+
+            abrirPagina("./modificarPerfil.php",0);
 
 		} ?>
 
-		</div>
+	  </div>
 
       <div id="modificar-mapa" class="redondeado sombra">
         <div id="map_canvas" class="map_canvas"></div>
       </div>
 
       <div id="modificar-foto" class="redondeado sombra">
+
+      <?
+
+      if(isset($_SESSION['ImagenError']))
+      {
+        print "<label class='errorLogin'>".htmlentities($_SESSION['ImagenError'])."</label>";
+        unset($_SESSION['ImagenError']);
+      }
+
+      if(isset($_SESSION['ImagenOk']))
+      {
+        print "<label class='ok'>".htmlentities($_SESSION['ImagenOk'])."</label>";
+        unset($_SESSION['ImagenOk']);
+      }
+
+      if(!isset($_POST['modificarFoto']))
+      {
+      ?>
         <form id="formModificarFoto" name="formModificarFoto" method="POST" action="<? $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data" >
-    		<!----DATOS OPCIONALES -->
-    		<? if( $usuario->PATH_FOTO == "default.jpg" )
-    		   {
-    		?>
-    					<img src="./images/thumbnails/default.jpg" >
-    		<?	}
-    			else
-    			{ ?>
-    					<img src="./images/thumbnails/<? echo $usuario->PATH_FOTO; ?>" >
-    		<?	}
+    		<?
+                $foto = $usuario->PATH_FOTO;
+
+                if( $foto == "default.jpg" )
+                    echo "<img src=./images/thumbnails/default.jpg  >";
+                else
+                    echo "<img src=./images/thumbnails/$foto >";
     		?>
     		<input id="foto" name="foto" type="file" placeholder="Foto de Perfil"/>
 
-    		<input type="submit" name="modificar" value="Modificar" />
+    		<input type="submit" name="modificarFoto" value="Modificar" />
     	</form>
+      <?
+      }
+      else
+      {
+             $consulta = "UPDATE USUARIO SET";
+
+             /*  Para poner el nombre del archivo se utiliza la fecha y la hora de hoy como nombre y se le ponele
+			su extension. Ademas se redimensiona la imagen para que sea menos pesada.*/
+
+             // Si eligió la foto, se procece a trabajar con la foto.
+			if(isset($_FILES["foto"]['name']) && !empty($_FILES["foto"]['name']) )
+			{
+				$hoy = date("Y-m-d H:i:s"); // Fecha
+				$sNombreArchivo = strtotime($hoy); // Transformada en string
+				$sPath= realpath('./images/usuarios/').'\\'; // Path
+
+				$sExtensionArchivo = pathinfo($_FILES["foto"]['name'], PATHINFO_EXTENSION); // Extension del archivo.
+				$sNombreArchivo=$sNombreArchivo.".".$sExtensionArchivo; // nombre del archivo con extencion
+
+				if( move_uploaded_file ($_FILES["foto"]['tmp_name'], $sPath.$sNombreArchivo) == FALSE) // no se pudo subir el archivo
+				    echo "Error la subir la foto";
+
+				$redim=redimensionar_imagen($sPath.$sNombreArchivo, $sNombreArchivo); // redimensiona la imagen
+
+			}
+			else // Si no eligió la foto
+				$sNombreArchivo = "default.jpg";
+
+            $consulta.= "  PATH_FOTO = '$sNombreArchivo' ";
+
+            $consulta.=" WHERE ID = '$id_us'  ";
+
+			$db->query($consulta);
+
+            if($db->rows_affected > 0)
+			    $_SESSION['ImagenOk']= "Se han modificado los datos correctamente.";
+            else
+                $_SESSION['ImagenError']= "No se han modificado los datos, intente mas tarde.";
+
+            abrirPagina("./modificarPerfil.php",0);
+
+      }
+      ?>
       </div>
 
 	</div>

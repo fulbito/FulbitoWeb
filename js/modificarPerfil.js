@@ -28,7 +28,7 @@ $(function() {
 $(function(){	
 		
 		$('#formModificar').validate({
-			
+
 			rules : {
 					alias : { 
 						required : true, //para validar campo vacio
@@ -48,13 +48,10 @@ $(function(){
 						minlength : 6, //para validar campo con minimo 3 caracteres
 						maxlength : 15,  //para validar campo con maximo 9 caracteres
 						equalTo: "#password"
-					},
-					foto : {
-						accept: "image/*"
 					}
 			},
 			messages : {
-					alias : { 
+					alias : {
 						required : "Debe ingresar su usuario.",
 						minlength : "EL usuario debe tener un minimo de 6 caracteres",
 						maxlength : "EL usuario debe tener un maximo de 20 caracteres",
@@ -72,11 +69,35 @@ $(function(){
 						minlength : "Su password debe tener un minimo de 6 caracteres",
 						maxlength : "Su password debe tener un maximo de 15 caracteres",
 						equalTo: "Los password deben ser iguales."
-					},
+					}
+			}
+		});
+
+        $('#formModificarFoto').validate({
+
+			rules : {
+					foto : {
+                        required : true, //para validar campo vacio
+                        accept: "image/*"
+					}
+			},
+			messages : {
+				   	foto : {
+                        required : "Debe seleccionar una imagen.",
+                        accept: "Seleccione archivos de imagen."
+					}
+			}
+		});
+
+});
+
+
+/*,
+					foto : {
+						accept: "image/*"
+					}
+                         ,
 					foto : {
 						accept: "Seleccione archivos de imagen."
 					}
-			}
-		});    
-
-});
+                    */
