@@ -20,11 +20,11 @@ include_once "./php/conexionBD.php"; // Conexion de la BD
 global $db;
 
 $id_us = $_SESSION['id'];
-$usuario = $db->get_row("SELECT *
-                         FROM USUARIO AS u, DATOS_OPCIONALES_USUARIO AS d
-                         WHERE u.ID = '$id'
-                         AND u.ID = ID_USUARIO ");
 
+$usuario = $db->get_row("SELECT *
+                         FROM USUARIO AS u LEFT JOIN DATOS_OPCIONALES_USUARIO AS d
+                         ON ( u.ID = d.ID_USUARIO )
+                         WHERE u.ID = '$id' ");
 
 ?>
 <!DOCTYPE html>
