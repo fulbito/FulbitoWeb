@@ -24,7 +24,7 @@ $id_us = $_SESSION['id'];
 $usuario = $db->get_row("SELECT *
                          FROM USUARIO AS u LEFT JOIN DATOS_OPCIONALES_USUARIO AS d
                          ON ( u.ID = d.ID_USUARIO )
-                         WHERE u.ID = '$id' ");
+                         WHERE u.ID = '$id_us' ");
 
 ?>
 <!DOCTYPE html>
