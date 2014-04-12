@@ -47,7 +47,7 @@ $usuario = $db->get_row("SELECT *
 <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
 <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script> -->
 <script language="javascript" type="text/javascript" src="./js/ubilabs-geocomplete/jquery.geocomplete.js" ></script>
-<script language="javascript" type="text/javascript" src="./js/ubilabs-geocomplete/jquery.geocomplete.min.js" ></script>
+<!--<script language="javascript" type="text/javascript" src="./js/ubilabs-geocomplete/jquery.geocomplete.min.js" ></script>-->
 <script language="javascript" type="text/javascript" src="./js/mapa.js" ></script>
 
 <!------------------------------------- FECHA ------------------------------------ http://jqueryui.com/datepicker/#dropdown-month-year  -->
@@ -55,7 +55,15 @@ $usuario = $db->get_row("SELECT *
 <!-- <script src="//code.jquery.com/jquery-1.9.1.js"></script> NO DESCOMENTAR TRAE INCOMPATIBILIDADES   -->
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
+<script>
+  $(document).ready(function(){
+    google.maps.event.addDomListener(window, 'load', initialize("<?=$usuario->LATITUD?>","<?=$usuario->LONGITUD?>","<?=$usuario->UBICACION?>"));
+  })
+</script>
+
 <body>
+
+
 
 <div id="wrapper">
 
@@ -88,7 +96,7 @@ $usuario = $db->get_row("SELECT *
 
             ?>
 
-            <h1 style="margin-right:70px;">Modificar Perfil</h1>
+            <h1 >Modificar Perfil</h1>
 			<form id="formModificar" name="formModificar" method="POST" action="<? $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data">
 
 				<!----DATOS OBLIGATORIOS -->
@@ -101,11 +109,13 @@ $usuario = $db->get_row("SELECT *
                 <input id="telefono" name="telefono" type="text" placeholder="Celular o telefono" <? if( isset($usuario->TELEFONO) ) echo "value='$usuario->TELEFONO'"; ?>/><br>
                 <input id="datepicker" name="datepicker" type="text" placeholder="Fecha de Nacimiento" <? if( isset($usuario->FECHA_NACIMIENTO) ) echo "value='$usuario->FECHA_NACIMIENTO'"; ?> /><br>
 				<input type="radio" name="sexo" value="h" <? if( $usuario->SEXO == "h" ) echo "checked"; ?>  /> Hombre - <input type="radio" name="sexo" value="m" <? if( $usuario->SEXO == "m" ) echo "checked"; ?> /> Mujer <br>
-				<input id="geocomplete" name="geocomplete" type="text" placeholder="Escriba su ciudad"  size="90" onchange="actualizar_mapa()"  <? if( isset($usuario->UBICACION) ) echo "value='$usuario->UBICACION'"; ?> /><br>
-				Rango de busqueda <input id="radio" name="radio" type="range" min="0" max="100" placeholder="Radio de busqueda en KM" size="90" onchange="actualizar_mapa()"/><br>
+				<input id="geocomplete" name="geocomplete" type="text" placeholder="Escriba su ciudad"  size="90" onchange="actualizar_mapa()" onkeypress="if(event.keyCode == 13){actualizar_mapa();}" <? if( isset($usuario->UBICACION) ) echo "value='$usuario->UBICACION'"; ?> /><br>
+				Rango de busqueda de partidos en km.<br>
+                <input id="radio" name="radio" type="range" <? if( isset($usuario->RADIO_BUSQUEDA_PARTIDOS) ) echo "value='$usuario->RADIO_BUSQUEDA_PARTIDOS'"; else echo "value='0'"; ?> min="0" max="100" placeholder="Radio de busqueda en KM" size="90" onchange="actualizar_radio()"/>
+                <input id="radio2" name="radio2" type="text" <? if( isset($usuario->RADIO_BUSQUEDA_PARTIDOS) ) echo "value='$usuario->RADIO_BUSQUEDA_PARTIDOS'"; else echo "value='0'"; ?> style="width:40px;" onkeyup="actualizar_radio2()"/><br>
 
-			    <input name="lat" id="lat" type="hidden" value="">
-			    <input name="lng" id="lng" type="hidden" value="">
+			    <input name="lat" id="lat" type="hidden" value="<?=$usuario->LATITUD?>">
+			    <input name="lng" id="lng" type="hidden" value="<?=$usuario->LONGITUD?>">
 
 				<input type="submit" name="modificar" value="Modificar" />
 			</form>
@@ -308,7 +318,7 @@ $usuario = $db->get_row("SELECT *
     		?>
     		<input id="foto" name="foto" type="file" placeholder="Foto de Perfil"/>
 
-    		<input type="submit" name="modificarFoto" value="Modificar" />
+    		<input type="submit" name="modificarFoto" id="modificarFoto" value="Modificar" />
     	</form>
       <?
       }
@@ -324,7 +334,8 @@ $usuario = $db->get_row("SELECT *
 			{
 				$hoy = date("Y-m-d H:i:s"); // Fecha
 				$sNombreArchivo = strtotime($hoy); // Transformada en string
-				$sPath= realpath('./images/usuarios/').'\\'; // Path
+				//$sPath= realpath('./images/usuarios/').'\\'; // Path
+				$sPath= './images/usuarios/'; // Path
 
 				$sExtensionArchivo = pathinfo($_FILES["foto"]['name'], PATHINFO_EXTENSION); // Extension del archivo.
 				$sNombreArchivo=$sNombreArchivo.".".$sExtensionArchivo; // nombre del archivo con extencion
@@ -334,6 +345,12 @@ $usuario = $db->get_row("SELECT *
 
 				$redim=redimensionar_imagen($sPath.$sNombreArchivo, $sNombreArchivo); // redimensiona la imagen
 
+                //Borro la imagen anterior
+                if($usuario->PATH_FOTO != "" && $usuario->PATH_FOTO != "default.jpg" && file_exists("./images/usuarios/".$usuario->PATH_FOTO))
+                {
+                  unlink("./images/usuarios/".$usuario->PATH_FOTO);
+                  unlink("./images/thumbnails/".$usuario->PATH_FOTO);
+                }
 			}
 			else // Si no eligió la foto
 				$sNombreArchivo = "default.jpg";
@@ -342,7 +359,9 @@ $usuario = $db->get_row("SELECT *
 
             $consulta.=" WHERE ID = '$id_us'  ";
 
-			$db->query($consulta);
+		//echo $consulta;
+
+		$db->query($consulta);
 
             if($db->rows_affected > 0)
 			    $_SESSION['ImagenOk']= "Se han modificado los datos correctamente.";
@@ -359,5 +378,6 @@ $usuario = $db->get_row("SELECT *
     <? include("php/footer.php"); ?>
 </div>
 
+<? include("php/menu.php"); ?>
 </body>
 </html>

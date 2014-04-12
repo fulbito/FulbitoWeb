@@ -112,8 +112,6 @@ input[type="submit"]
   text-shadow: 1px 1px 2px #000000;
 }
 
-
-
 input[placeholder], [placeholder], *[placeholder] {
    color: #f5f4f4 !important;
 }
@@ -337,9 +335,11 @@ footer {
   float: left;
   margin-top: 30px;
   width: 400px;
-  min-height: 400px;
+  min-height: 430px;
   text-align: center;
   padding: 15px 0px 35px 0px;
+  color:#FFFFFF;
+  font-size: 12px;
 }
 #modificar h1{
   font-family: Arial;
@@ -347,15 +347,16 @@ footer {
   font-size: 18px;
   color: #FFFFFF;
   margin-top: 20px;
+  margin-right: 115px;
 }
 
 #modificar-foto{
   position: relative;
   background: #000000;
   float: left;
-  width: 480px;
+  width: 500px;
   height: 107px;
-  line-height: 75px;
+  line-height: 25px;
   text-align: center;
   color: #FFFFFF;
   font-family: Arial;
@@ -367,14 +368,27 @@ footer {
   margin-top: 30px;
   margin-left: 30px;
   padding: 10px;
+  overflow: hidden;
 }
 #modificar-foto img{
   float: left;
   border: 2px solid #FFFFFF;
 }
-#modificar-foto input{
+#modificar-foto #foto{
   float: left;
   margin-left: 10px;
+  margin-top: 25px;
+  height: 30px;
+}
+#modificar-foto #modificarFoto{
+  float: left;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+#modificar-foto label.ok{
+  left: 100px;
+  width: 400px;
 }
 
 #modificar-mapa{

@@ -3,12 +3,20 @@
   var marker = null;
   var cityCircle = null;
 
-  function initialize()
+  function initialize(lat, lng, desc)
   {
+    var zoom = 10;
+    if(lat == "")
+    {
+        lat = "-38.4192641";
+        zoom = 3;
+    }
+    if(lat == "")
+        lng = "-63.5989206";
 
     var mapOptions = {
-      center: new google.maps.LatLng("-38.4192641", "-63.5989206"),
-      zoom: 3,
+      center: new google.maps.LatLng(lat, lng),
+      zoom: zoom,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 
@@ -21,7 +29,7 @@
       title:"algo"
     });
 
-    var populationOptions = {
+    var radioOptions = {
       strokeColor: "#FF0000",
       strokeOpacity: 0.8,
       strokeWeight: 2,
@@ -29,9 +37,9 @@
       fillOpacity: 0.35,
       map: map,
       center: pos,
-      radius: 0
+      radius: ($("#radio").val()*1000)
     };
-    cityCircle = new google.maps.Circle(populationOptions);
+    cityCircle = new google.maps.Circle(radioOptions);
   }
 
   function actualizar_mapa()
@@ -40,7 +48,13 @@
     map.setCenter(pos);
     map.setZoom(10);
     marker.setPosition(pos);
-    var populationOptions = {
+    actualizar_radio();
+  }
+
+  function actualizar_radio()
+  {
+    $("#radio2").val($("#radio").val());
+    var radioOptions = {
       strokeColor: "#FF0000",
       strokeOpacity: 0.8,
       strokeWeight: 2,
@@ -51,9 +65,22 @@
       radius: ($("#radio").val()*1000)
     };
 
-    cityCircle.setOptions(populationOptions);
+    cityCircle.setOptions(radioOptions);
   }
 
-  $(document).ready(function(){
-    google.maps.event.addDomListener(window, 'load', initialize);
-  })
+  function actualizar_radio2()
+  {
+    $("#radio").val($("#radio2").val());
+    var radioOptions = {
+      strokeColor: "#FF0000",
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: "#FF0000",
+      fillOpacity: 0.35,
+      map: map,
+      center: pos,
+      radius: ($("#radio").val()*1000)
+    };
+
+    cityCircle.setOptions(radioOptions);
+  }

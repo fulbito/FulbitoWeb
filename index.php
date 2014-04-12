@@ -1,5 +1,11 @@
 <?
-  include_once("php/sesion.php"); 
+  include_once("php/sesion.php");
+   if(isset($_SESSION['id'])) // si no esta setiado el id
+   {
+     $locationIndex = "./home.php";
+     $tiempo =0;
+     print "<META HTTP-EQUIV=\"Refresh\"  CONTENT=\"$tiempo; URL=$locationIndex\">";
+   }
 ?>
 <!DOCTYPE html>
 

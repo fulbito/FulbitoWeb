@@ -18,6 +18,7 @@
 	<link rel="stylesheet" href="css/html5reset.css" media="all">
 	<link rel="stylesheet" href="css/style.css" media="all">
 	<link rel="stylesheet" href="css/validate.css" media="all">
+    <link rel="stylesheet" href="css/menu.css" type="text/css">
 
 	<!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements and feature detects -->
 	<script src="js/modernizr-2.5.3-min.js"></script>

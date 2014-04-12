@@ -4,11 +4,11 @@
 $( document ).ready(function() {
 	var options = {
 		map: ".map_canvas",
-		location: "Buenos Aires",
+		location: $("#geocomplete").val(),
 		details: "form"
 	};
 
-	$("#geocomplete").geocomplete(options);			
+	$("#geocomplete").geocomplete(options);
 });
 
 // ----------------- FECHA ------------------ //
