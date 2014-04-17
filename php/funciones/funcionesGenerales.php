@@ -32,7 +32,8 @@ function redimensionar_imagen($imagen, $nombre_imagen_asociada)
 //$directorio = "../../imagenes/thumbnails/" ;
 //$directorio = "./thumbnails/" ;
 
-$directorio= realpath('images/thumbnails/').'\\'; // CAMBIAR PATH CUANDO TERMINE OBJETOS 2
+//$directorio= realpath('images/thumbnails/').'\\'; // CAMBIAR PATH CUANDO TERMINE OBJETOS 2
+$directorio= './images/thumbnails/'; // CAMBIAR PATH CUANDO TERMINE OBJETOS 2
 //establecemos los límites de ancho y alto
 $nuevo_ancho = 134 ;
 $nuevo_alto = 101 ;

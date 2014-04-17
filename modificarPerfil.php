@@ -1,9 +1,7 @@
 <?
 /*
-TODO: Grabar contraseña
-Variables de sesion
-Modificar foto
-guardar Radio
+TODO: acomodar foto
+cartel delante del menu
 
 Se utiliza esta pagina para cambiar las opciones de perfil.
 Utiliza librerias Jquery: para el MAPA, para validar y para la fecha de nacimiento.

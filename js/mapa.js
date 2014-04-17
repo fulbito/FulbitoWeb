@@ -9,10 +9,14 @@
     if(lat == "")
     {
         lat = "-38.4192641";
+        $("#lat").val(lat);
         zoom = 3;
     }
-    if(lat == "")
+    if(lng == "")
+    {
         lng = "-63.5989206";
+        $("#lng").val(lng);
+    }
 
     var mapOptions = {
       center: new google.maps.LatLng(lat, lng),
@@ -21,7 +25,6 @@
     };
 
     map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-
     pos = new google.maps.LatLng($("#lat").val(), $("#lng").val());
     marker = new google.maps.Marker({
       position: pos,

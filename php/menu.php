@@ -9,7 +9,8 @@
   					<a class="gn-icon gn-icon-search"><span>Search</span></a>
   				</li>
   				<li><a href="home.php" class="gn-icon gn-icon-download">Inicio</a></li>
-  				<li><a href="modificarPerfil.php" class="gn-icon gn-icon-cog">Perfil</a></li>
+  				<li><a href="modificarPerfil.php" class="gn-icon gn-icon-cog">Datos de Perfil</a></li>
+  				<li><a href="estadisticas.php" class="gn-icon gn-icon-cog">Estadisticas Personales</a></li>
   				<li><a href="logout.php" class="gn-icon gn-icon-download">Cerrar sesi&oacute;n</a></li>
   			</ul>
   		</div><!-- /gn-scroller -->
