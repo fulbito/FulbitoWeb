@@ -64,6 +64,16 @@ global $db;
       </header>
 
 	  <div id="centro" class="sombra redondeado">
+        <div class="boton_home" onclick="window.location.href='crearPartido.php'">
+            <div class="boton_home_title">CREAR UN<br>PARTIDO</div>
+            <img src="images/crear.png" alt="" />
+            <p>Crea un partido publico o privado, elegi el lugar del encuentro y listo!</p>
+        </div>
+        <div class="boton_home" onclick="window.location.href='buscarPartido.php'">
+            <div class="boton_home_title">BUSCAR<br>PARTIDOS</div>
+            <img src="images/buscar.png" alt="" />
+            <p>Busca un partido cerca tuyo y sumate!</p>
+        </div>
       </div>
 
     </div>
