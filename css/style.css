@@ -370,9 +370,15 @@ footer {
   padding: 10px;
   overflow: hidden;
 }
-#modificar-foto img{
+#modificar-foto #thumb{
   float: left;
+  width: 120px;
+  height: 90px;
+  line-height: 85px;
+}
+#modificar-foto img{
   border: 2px solid #FFFFFF;
+  vertical-align: middle;;
 }
 #modificar-foto #foto{
   float: left;
@@ -386,9 +392,9 @@ footer {
   margin-top: 5px;
 }
 
-#modificar-foto label.ok{
-  left: 160px;
-  width: 340px;
+#modificar-foto label.ok, #modificar-foto label.errorLogin{
+  left: 140px;
+  width: 360px;
 }
 
 #modificar-mapa{

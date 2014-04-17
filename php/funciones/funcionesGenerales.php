@@ -36,7 +36,7 @@ function redimensionar_imagen($imagen, $nombre_imagen_asociada)
 $directorio= './images/thumbnails/'; // CAMBIAR PATH CUANDO TERMINE OBJETOS 2
 //establecemos los límites de ancho y alto
 $nuevo_ancho = 134 ;
-$nuevo_alto = 101 ;
+$nuevo_alto = 86 ;
 
 //echo $directorio."ss";
 

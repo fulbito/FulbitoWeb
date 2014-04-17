@@ -1,6 +1,5 @@
 <?
 /*
-TODO: acomodar foto
 
 Se utiliza esta pagina para cambiar las opciones de perfil.
 Utiliza librerias Jquery: para el MAPA, para validar y para la fecha de nacimiento.
@@ -305,6 +304,7 @@ $usuario = $db->get_row("SELECT *
       {
       ?>
         <form id="formModificarFoto" name="formModificarFoto" method="POST" action="<? $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data" >
+            <div id="thumb">
     		<?
                 $foto = $usuario->PATH_FOTO;
 
@@ -313,6 +313,7 @@ $usuario = $db->get_row("SELECT *
                 else
                     echo "<img src=./images/thumbnails/$foto >";
     		?>
+            </div>
     		<input id="foto" name="foto" type="file" placeholder="Foto de Perfil"/>
 
     		<input type="submit" name="modificarFoto" id="modificarFoto" value="Modificar" />
