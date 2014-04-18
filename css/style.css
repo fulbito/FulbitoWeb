@@ -181,6 +181,7 @@ footer {
   background: #000000;
   min-height: 500px;
   margin-top: 30px;
+  overflow: hidden;
 }
 
 #menu{
@@ -438,4 +439,8 @@ footer {
   width: 150px;
   margin: auto;
   line-height: 15px;
+}
+.tipito{
+  width: 186px;
+  height: 189px;
 }
