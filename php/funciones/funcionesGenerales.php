@@ -142,4 +142,14 @@ function formatear_fecha($fecha, $tipo)
 
   return $fecha_final;
 }
+
+
+function esVacio($variable)
+{
+  if(isset($variable) && !empty($variable) )
+      return   "'".$variable."'";
+  else
+      return 'NULL';
+
+}
 ?>
