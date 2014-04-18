@@ -181,6 +181,7 @@ footer {
   background: #000000;
   min-height: 500px;
   margin-top: 30px;
+  overflow: hidden;
 }
 
 #menu{
@@ -370,9 +371,15 @@ footer {
   padding: 10px;
   overflow: hidden;
 }
-#modificar-foto img{
+#modificar-foto #thumb{
   float: left;
+  width: 120px;
+  height: 90px;
+  line-height: 85px;
+}
+#modificar-foto img{
   border: 2px solid #FFFFFF;
+  vertical-align: middle;;
 }
 #modificar-foto #foto{
   float: left;
@@ -386,9 +393,9 @@ footer {
   margin-top: 5px;
 }
 
-#modificar-foto label.ok{
-  left: 160px;
-  width: 340px;
+#modificar-foto label.ok, #modificar-foto label.errorLogin{
+  left: 140px;
+  width: 360px;
 }
 
 #modificar-mapa{
@@ -405,4 +412,35 @@ footer {
 #modificar-mapa #map_canvas{
   width: 500px;
   height: 292px;
+}
+
+
+/*////// HOME //////*/
+.boton_home{
+  float: left;
+  width: 210px;
+  height: 314px;
+  text-align: center;
+  color: #FFFFFF;
+  cursor: pointer;
+  margin: 90px 45px;
+}
+.boton_home_title{
+  font-family: 'TwCenMT-Bold';
+  font-size: 24px;
+  font-style: italic;
+  font-weight: bold;
+  padding: 5px 0px;
+}
+.boton_home p{
+  font-size: 12px;
+  font-family: Arial;
+  font-style: italic;
+  width: 150px;
+  margin: auto;
+  line-height: 15px;
+}
+.tipito{
+  width: 186px;
+  height: 189px;
 }
