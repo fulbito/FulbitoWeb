@@ -22,6 +22,34 @@
 <script language="javascript" type="text/javascript" src="./js/additional-methods.js" ></script>
 <script language="javascript" type="text/javascript" src="./js/registrarse.js"></script>
 
+<script>
+function login(){
+
+    $.ajax({
+       type: 'get',
+       dataType: "json",
+       url: "php/webservices/procesaIngresar.php?correo="+$("#correo").val()+"&clave="+$("#clave").val(),
+       success: function(data){
+          if(data.error == false)
+          {
+            location.href="home.php";
+          }
+          else
+          {
+            $(".errorLogin").html(data.data);
+            $(".errorLogin").show();
+          }
+
+       },
+       error: function(error){
+         $(".errorLogin").html("Error ajax");
+         $(".errorLogin").show();
+       }
+    });
+
+}
+</script>
+
 <link rel="stylesheet" type="text/css" href="slider/engine1/style.css" />
 
 <body>
@@ -48,29 +76,19 @@
 
 
       <div id="login" class="redondeado sombra">
-        <?
-        if(isset($_SESSION['error']))
-        {
-          print "<label class='errorLogin'>".htmlentities($_SESSION['error'])."</label>";
-          unset($_SESSION['error']);
-        }
-        if(isset($_SESSION['ok']))
-        {
-          print "<label class='ok'>".htmlentities($_SESSION['ok'])."</label>";
-          unset($_SESSION['ok']);
-        }
-        ?>
+        <label class='errorLogin' style="display:none;"></label>
+        <label class='ok' style="display:none;"></label>
         <h1 style="margin-right:70px;">Bienvenido otra vez</h1>
 
-         <form id="formIngresar" name="formIngresar" method="get" action="./procesaIngresar.php"  >
+         <!--<form id="formIngresar" name="formIngresar" method="get" action="./procesaIngresar.php"  >-->
 
             <input id="correo" name="correo" type="text" placeholder="Correo eletronico"/><br>
 
             <input id="clave" name="clave" type="password" placeholder="Contrase&ntilde;a"/><br>
 
-	    <input type="submit" id="ingresar" name="ingresar" value="Ingresar" >
+	        <input type="submit" id="ingresar" name="ingresar" value="Ingresar" onclick="login();">
 
-        </form>
+         <!--</form>-->
 
 
 

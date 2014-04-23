@@ -1,4 +1,5 @@
 <?php
+include_once("../sesion.php");
 // Clases
 include_once "../clases/ezSQL-master/shared/ez_sql_core.php"; // Include ezSQL core (BD)
 include_once "../clases/ezSQL-master/mysql/ez_sql_mysql.php"; // Include ezSQL mysql
@@ -23,6 +24,7 @@ $locationIndex = './index.php';
 
 	// --------- Filas insertadas ----------
 	if($db->num_rows > 0){
+	    $_SESSION['id'] = $usuario->ID;
 	    $aux['id'] = $usuario->ID;
         $aux['alias'] = $usuario->ALIAS;
         $aux['mail'] = $usuario->MAIL;
