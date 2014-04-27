@@ -6,6 +6,9 @@
      $tiempo =0;
      print "<META HTTP-EQUIV=\"Refresh\"  CONTENT=\"$tiempo; URL=$locationIndex\">";
    }
+
+   include_once "debugger/ChromePhp.php";
+   ChromePhp::log('INDEX!');
 ?>
 <!DOCTYPE html>
 
@@ -22,45 +25,10 @@
 <script language="javascript" type="text/javascript" src="./js/additional-methods.js" ></script>
 <script language="javascript" type="text/javascript" src="./js/registrarse.js"></script>
 
-<script>
-function login(){
-
-    $.ajax({
-       type: 'get',
-       dataType: "json",
-       url: "php/webservices/procesaIngresar.php?correo="+$("#correo").val()+"&clave="+$("#clave").val(),
-       success: function(data){
-          if(data.error == false)
-          {
-            location.href="home.php";
-          }
-          else
-          {
-            $(".errorLogin").html(data.data);
-            $(".errorLogin").show();
-          }
-
-       },
-       error: function(error){
-         $(".errorLogin").html("Error ajax");
-         $(".errorLogin").show();
-       }
-    });
-
-}
-</script>
-
 <link rel="stylesheet" type="text/css" href="slider/engine1/style.css" />
 
 <body>
 <div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/es_LA/all.js#xfbml=1&appId=596936237067988";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 
 <div id="wrapper">
 
@@ -80,15 +48,15 @@ function login(){
         <label class='ok' style="display:none;"></label>
         <h1 style="margin-right:70px;">Bienvenido otra vez</h1>
 
-         <!--<form id="formIngresar" name="formIngresar" method="get" action="./procesaIngresar.php"  >-->
+        <form id="formIngresar" name="formIngresar" method="post" >
 
             <input id="correo" name="correo" type="text" placeholder="Correo eletronico"/><br>
 
             <input id="clave" name="clave" type="password" placeholder="Contrase&ntilde;a"/><br>
 
-	        <input type="submit" id="ingresar" name="ingresar" value="Ingresar" onclick="login();">
+	        <input type="submit" id="ingresar" name="ingresar" value="Ingresar">
 
-         <!--</form>-->
+        </form>
 
 
 

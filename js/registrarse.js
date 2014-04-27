@@ -1,4 +1,12 @@
 
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/es_LA/all.js#xfbml=1&appId=596936237067988";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
 $(function(){
 		$('#formRegistrarse').validate({	
 		
@@ -69,6 +77,30 @@ $(function(){
 			 		clave : {
 						required : "Debe ingresar su clave."
 					}
-			}
+			},
+            submitHandler: function (form) {
+
+                $.ajax({
+                  url: 'php/webservices/procesaIngresar.php',
+                  data: $('#formIngresar').serialize(),
+                  type: 'POST',
+                  dataType: 'json',
+                  success: function(data){
+                      if(data.error == false)
+                      {
+                        location.href="home.php";
+                      }
+                      else
+                      {
+                        $(".errorLogin").html(data.data);
+                        $(".errorLogin").show();
+                      }
+                   },
+                   error: function(error){
+                     $(".errorLogin").html("Error ajax");
+                     $(".errorLogin").show();
+                   }
+                });
+            }
 		});
 });
