@@ -8,8 +8,8 @@
 }(document, 'script', 'facebook-jssdk'));
 
 $(function(){
-		$('#formRegistrarse').validate({	
-		
+		$('#formRegistracion').validate({
+
 			rules :{
 					alias : {
 						required : true, //para validar campo vacio
@@ -55,7 +55,31 @@ $(function(){
 						maxlength : "Su password debe tener un maximo de 15 caracteres",
 						equalTo: "Los password deben ser iguales."
 					}
-			}
+			},
+            submitHandler: function (form) {
+
+                $.ajax({
+                  url: 'php/webservices/procesaRegistracion.php',
+                  data: $('#formRegistracion').serialize(),
+                  type: 'POST',
+                  dataType: 'json',
+                  success: function(data){
+                      if(data.error == false)
+                      {
+                        location.href="home.php";
+                      }
+                      else
+                      {
+                        $(".errorLogin").html(data.data);
+                        $(".errorLogin").show();
+                      }
+                   },
+                   error: function(error){
+                     $(".errorLogin").html("Error ajax");
+                     $(".errorLogin").show();
+                   }
+                });
+            }
 		});    
 		
 		$('#formIngresar').validate({

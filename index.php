@@ -48,7 +48,7 @@
         <label class='ok' style="display:none;"></label>
         <h1 style="margin-right:70px;">Bienvenido otra vez</h1>
 
-        <form id="formIngresar" name="formIngresar" method="post" >
+        <form id="formIngresar" name="formIngresar" method="post"  >
 
             <input id="correo" name="correo" type="text" placeholder="Correo eletronico"/><br>
 
@@ -62,17 +62,17 @@
 
         <h1 style="margin-right:120px;">Eres nuevo?&nbsp;&nbsp;</h1>
 
-        <form id="formRegistrarse" name="formRegistrarse" method="get" action="./procesaRegistracion.php"  >
+        <form id="formRegistracion" name="formRegistracion" method="post" >
 
-		<input id="alias" name="alias" type="text" placeholder="Usuario"/><br>
+    		<input id="alias" name="alias" type="text" placeholder="Usuario"/><br>
 
-		<input id="email" name="email" type="text" placeholder="Correo eletronico"/><br>
+    		<input id="email" name="email" type="text" placeholder="Correo eletronico"/><br>
 
-		<input id="password" name="password" type="password" placeholder="Contrase&ntilde;a"/><br>
+    		<input id="password" name="password" type="password" placeholder="Contrase&ntilde;a"/><br>
 
-		<input id="confirma_password" name="confirma_password" type="password" placeholder="Confirmar Contrase&ntilde;a"/><br>
+    		<input id="confirma_password" name="confirma_password" type="password" placeholder="Confirmar Contrase&ntilde;a"/><br>
 
-		<input type="submit" id="registrar" name="registrar" value="Registrarme" >
+    		<input type="submit" id="registrar" name="registrar" value="Registrarme" >
 
         </form>
 
