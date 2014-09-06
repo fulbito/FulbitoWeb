@@ -112,7 +112,7 @@ class Login extends CI_Controller
 	 * Si recibe un 1 es error y lo muestra en en login.
 	 * */
 
-	public function ingresar()
+	public function ingresar($correo_GET="",$clave_GET="")
 	{
 		if(isset($_POST['correo']) && isset($_POST['clave']))
 		{
@@ -141,38 +141,15 @@ class Login extends CI_Controller
 				$return["error"] = TRUE;
 				$return["data"] = "Usuario invalido";
 			}
-
-			if (function_exists('json_encode'))
-			{
-				chrome_log(json_encode($return));
-				print json_encode($return);
-				// ChromePhp::log(json_encode($return));
-
-			}
-			else
-			{
-				chrome_log(json_encode($return));
-				print __json_encode($return);
-				//  ChromePhp::log(__json_encode($return));
-			}
 		}
-		else
-		{
-			redirect(base_url()."index.php/login");
-		}
-	}
-
-    public function ingresar_GET($correo="",$clave="")
-	{
-		if($correo!="" && $clave!="")
-		{
-			$resultado = $this->Login_model->loguearse($correo,$clave); //pasamos los valores al modelo para que compruebe si existe el usuario con ese password
+        elseif($correo_GET != "" && $clave_GET != "")
+        {
+			$resultado = $this->Login_model->loguearse($correo_GET,$clave_GET); //pasamos los valores al modelo para que compruebe si existe el usuario con ese password
 
 			if ($resultado->num_rows() > 0)
 			{
 				foreach ($resultado->result() as $row)
 				{
-					chrome_log($row->ALIAS);
 					$this->session->set_userdata('id', $row->ID);
 					$this->session->set_userdata('mail', $row->MAIL);
 					$aux['id'] = $row->ID;
@@ -187,11 +164,11 @@ class Login extends CI_Controller
 				$return["error"] = TRUE;
 				$return["data"] = "Usuario invalido";
 			}
-		}
+        }
         else
         {
-          $return["error"] = TRUE;
-		  $return["data"] = "Usuario invalido";
+            $return["error"] = TRUE;
+			$return["data"] = "Debe completar todos los datos";
         }
 
         if (function_exists('json_encode'))
@@ -199,14 +176,16 @@ class Login extends CI_Controller
     		chrome_log(json_encode($return));
     		print json_encode($return);
     		// ChromePhp::log(json_encode($return));
+
     	}
     	else
     	{
     		chrome_log(json_encode($return));
     		print __json_encode($return);
-    		// ChromePhp::log(__json_encode($return));
+    		//  ChromePhp::log(__json_encode($return));
     	}
 	}
+
 
 	/* ERROR USUARIO O CLAVE INCORRECTOS
 	 * Se llama cuando no coinciden email y password.
