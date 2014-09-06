@@ -1,0 +1,69 @@
+<?php
+
+class Login_model extends CI_Model {
+
+    function __construct()
+    {
+        parent::__construct();
+    }
+    
+	//--- Comprueba correo y clave existan (ingresar)
+    public function loguearse($correo,$clave)
+	{
+		
+		$clave= md5($clave);
+		$query = $this->db->query("	SELECT * 
+									FROM USUARIO 
+									WHERE MAIL = '$correo' AND 
+										  PASSWORD  = '$clave'
+								  ");
+		chrome_log("	SELECT * 
+									FROM USUARIO 
+									WHERE MAIL = '$correo' AND 
+										  PASSWORD  = '$clave'
+								  ");		
+		return $query;
+	}
+	
+	//--- Comprueba correo que el correo ya exista (AJAX registrarse)
+	public function existeCorreo($correo)
+	{
+		$query = $this->db->query("	SELECT  * 
+									FROM USUARIO
+									WHERE MAIL = '$correo' ");
+		return $query->result_array();
+	}
+	
+	//--- Registrar nuevo usuario (AJAX registrarse)
+	public function registrarse($alias, $email, $password )
+	{
+		chrome_log("registrarse_model");
+		$query = $this->db->query("	INSERT INTO USUARIO(MAIL, PASSWORD, ALIAS, PATH_FOTO ) 
+									VALUES ('$email', '$password', '$alias', 'default.jpg' )");
+		$affected_rows = $this->db->affected_rows ();
+		chrome_log($affected_rows);
+		return $affected_rows;
+	}
+	
+	//--- Devuelve el password viejo a la hora de cambiarlo
+	public function guardarPasswordViejo($correo)
+	{
+		chrome_log("guardarPasswordViejo");
+		$query = $this->db->query("	SELECT PASSWORD FROM USUARIO WHERE MAIL = '$correo' ");
+		return $query->row();
+	}
+	
+	//--- Devuelve el password viejo a la hora de cambiarlo
+	public function cambiar_password($codigoCodificado,$correo)
+	{
+		chrome_log("cambiar_password");
+		chrome_log("UPDATE USUARIO SET PASSWORD = '$codigoCodificado' WHERE MAIL = '$correo'");
+		$query = $this->db->query("UPDATE USUARIO SET PASSWORD = '$codigoCodificado' WHERE MAIL = '$correo'");
+		return $query;
+	}
+}	
+    
+
+/* End of file Login_model.php */
+/* Location: ./application/models/login_model.php */
+?>
