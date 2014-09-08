@@ -90,7 +90,7 @@
 		
        
         <h1 style="margin-right:70px;">Bienvenido otra vez</h1>
-        <form id="formIngresar" name="formIngresar" method="post"  >
+        <form id="formIngresar" name="formIngresar" method="post" >
 
             <input id="correo" name="correo" type="text" placeholder="Correo eletronico"/><br>
             <input id="clave" name="clave" type="password" placeholder="Contrase&ntilde;a"/><br>

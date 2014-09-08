@@ -1,4 +1,18 @@
 <?
+
+/*  Esta clase maneja:
+ * 	- Mostrar Perfil.
+ *  - Modificar Perfil
+ * 	- Comprobar contraseña
+ * */
+
+/*	[ FALTA ] 
+ *	- Hacer el uso de variables de SESIONES.
+ * 	- En index: traer_datos_perfil enviando el email en session o el id, como queramos.
+ * 	- Hacer la verificacion de variables de sesiones.
+ * */
+ 
+ 
 class Perfil extends CI_Controller
 {
 	public function __construct()
@@ -9,16 +23,16 @@ class Perfil extends CI_Controller
 		$this->load->library('form_validation');
 		$this->load->helper('general_helper'); // Tiene la funcion generar_string_aleatorio
 	}
-   
+	
 	public function index()
 	{	
-			chrome_log("Perfil index");
-			$resultado = $this->Perfil_model->traer_datos_perfil("adrian.magliola@gmail.com");
-			if ($resultado->num_rows() > 0)
-			{
-				$datos['datos_perfil'] = $resultado;
-				$this->load->view('perfil/perfil',$datos);
-			}
+		chrome_log("Perfil index");
+		$resultado = $this->Perfil_model->traer_datos_perfil("adrian.magliola@gmail.com");
+		if ($resultado->num_rows() > 0)
+		{
+			$datos['datos_perfil'] = $resultado;
+			$this->load->view('perfil/perfil',$datos);
+		}
 	}
 	
 	public function modificar_perfil()

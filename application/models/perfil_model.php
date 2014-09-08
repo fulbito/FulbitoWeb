@@ -7,14 +7,15 @@ class Perfil_model extends CI_Model {
         parent::__construct();
     }
     
-	//--- Comprueba correo y clave existan (ingresar)
+	//--- Comprueba correo y clave existan (ingresar) ------------------//
     public function traer_datos_perfil($correo)
 	{
 		chrome_log("Perfil traer_datos_perfil");
-		$query = $this->db->query("	SELECT *
-									 FROM USUARIO AS u LEFT JOIN DATOS_OPCIONALES_USUARIO AS d
-									 ON ( u.ID = d.ID_USUARIO )
-									 WHERE u.MAIL = '$correo' ");
+		$sql = 	"	SELECT *
+					FROM 	USUARIO AS u LEFT JOIN DATOS_OPCIONALES_USUARIO AS d
+							ON ( u.ID = d.ID_USUARIO )
+					WHERE u.MAIL = ? ";
+		$query = $this->db->query($sql, array($correo));
 		return $query;
 	}
 	

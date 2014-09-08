@@ -1,9 +1,15 @@
-<?
+	<?
 /*  Esta clase maneja:
  * 	- Logueo.
  *  - Registracion.
  * 	- Recuperacion de contraseña.
  * 
+ * */
+
+/*	[ FALTA ] 
+ *	- Hacer el uso de variables de SESIONES (Pensar si la vamos a guardar en la BD la session, algunos lo recomiendan)
+ * 	- Hacer el Logout.
+ * 	- Hacer la verificacion de variables de sesiones.
  * */
  
 class Login extends CI_Controller
@@ -18,34 +24,8 @@ class Login extends CI_Controller
    
 	public function index()
 	{	
-		/*
-		if(isset($_POST['registrar'])) // REGISTRARSE
-		{
-			chrome_log("registrar");
-			$password= md5($_POST['password']);			
-			$resultado = $this->Login_model->registrarse($_POST['alias'],$_POST['email'],$password);
-			
-			if($resultado)
-			{
-				$mensaje_exito = "Usuario registrado correctamente.";
-				$datos['mensaje_exito'] =$mensaje_exito;
-				$this->load->view('login/login',$datos);
-			}
-			else 
-			{
-				chrome_log("Usuario no registrado");
-				$mensaje_error = "Error en la registracion, intente mas tarde.";
-				$datos['mensaje_error'] =$mensaje_error;
-				$this->load->view('login/login',$datos);
-			}
-			
-		}
-		elseif(!isset($_POST['correo'])) // LOGIN
-		{ */
-			chrome_log("logueo");
-			$this->load->view('login/login');
-		//}
-
+		chrome_log("logueo");
+		$this->load->view('login/login');
 	}
 	
 	/* REGISTRAR:
@@ -67,7 +47,6 @@ class Login extends CI_Controller
 			if ( $resultado > 0)
 			{
 				chrome_log("if");
-				//$_SESSION['id'] = $db->insert_id;
 				$return["error"] = FALSE;
 				$return["data"] = "Se ha registrado al usuario correctamente";
 			}
@@ -112,18 +91,21 @@ class Login extends CI_Controller
 	 * Si recibe un 1 es error y lo muestra en en login.
 	 * */
 
-	public function ingresar($correo_GET="",$clave_GET="")
-	{
-		if(isset($_POST['correo']) && isset($_POST['clave']))
+	public function ingresar()
+	{	
+		chrome_log("ingresar");
+		
+		if( isset($_POST['correo']) && isset($_POST['clave'] ) )
 		{
-			chrome_log("ingresar");
+			chrome_log("POST");
 			chrome_log($_POST['correo']);
 			chrome_log($_POST['clave']);
-
 			$resultado = $this->Login_model->loguearse($_POST['correo'],$_POST['clave']); //pasamos los valores al modelo para que compruebe si existe el usuario con ese password
-
+		
 			if ($resultado->num_rows() > 0)
 			{
+				chrome_log("CORRECTO");
+				
 				foreach ($resultado->result() as $row)
 				{
 					chrome_log($row->ALIAS);
@@ -138,54 +120,29 @@ class Login extends CI_Controller
 			}
 			else
 			{
+				chrome_log("INCORRECTO");
 				$return["error"] = TRUE;
 				$return["data"] = "Usuario invalido";
 			}
-		}
-        elseif($correo_GET != "" && $clave_GET != "")
-        {
-			$resultado = $this->Login_model->loguearse($correo_GET,$clave_GET); //pasamos los valores al modelo para que compruebe si existe el usuario con ese password
 
-			if ($resultado->num_rows() > 0)
+			if (function_exists('json_encode'))
 			{
-				foreach ($resultado->result() as $row)
-				{
-					$this->session->set_userdata('id', $row->ID);
-					$this->session->set_userdata('mail', $row->MAIL);
-					$aux['id'] = $row->ID;
-					$aux['alias'] = $row->ALIAS;
-					$aux['mail'] = $row->MAIL;
-					$return["error"] = FALSE;
-					$return["data"] = $aux;
-				}
+				chrome_log(json_encode($return));
+				print json_encode($return);
+				// ChromePhp::log(json_encode($return));
 			}
 			else
 			{
-				$return["error"] = TRUE;
-				$return["data"] = "Usuario invalido";
+				chrome_log(json_encode($return));
+				print __json_encode($return);
+				//  ChromePhp::log(__json_encode($return));
 			}
-        }
-        else
-        {
-            $return["error"] = TRUE;
-			$return["data"] = "Debe completar todos los datos";
-        }
-
-        if (function_exists('json_encode'))
-    	{
-    		chrome_log(json_encode($return));
-    		print json_encode($return);
-    		// ChromePhp::log(json_encode($return));
-
-    	}
-    	else
-    	{
-    		chrome_log(json_encode($return));
-    		print __json_encode($return);
-    		//  ChromePhp::log(__json_encode($return));
-    	}
+		}
+		else
+		{
+			redirect(base_url()."index.php/login");
+		}
 	}
-
 
 	/* ERROR USUARIO O CLAVE INCORRECTOS
 	 * Se llama cuando no coinciden email y password.
@@ -202,7 +159,6 @@ class Login extends CI_Controller
 	 * Se guarda le password viejo por si hay un error durante el cambio.
 	 * Se envia un email con la nueva clave, pidiendole que la cambie	 *
 	 * */
-
 	public function recuperar_password()
 	{
 		chrome_log("recuperar_password");
@@ -274,7 +230,6 @@ class Login extends CI_Controller
 		}
 	}
    
-   
     /* COMPROBACIONES AJAX.
      * Se utiliza para realizar las comparaciones de emails.
      * - Al registrarse, para comprobar que no haya otro usuario con ese mail.
@@ -282,7 +237,7 @@ class Login extends CI_Controller
      * 
      * */
     
-    // Registrarse 
+    //---------------------- Registrarse  --------------------------//
     public function comprobar_email_existente()
 	{
 		chrome_log("comprobar");
@@ -300,7 +255,7 @@ class Login extends CI_Controller
 		}
 	}
 	
-	// Recuperar contraseña 
+	//----------------------Recuperar contraseña  --------------------------//
 	public function comprobar_email_no_existente()
 	{
 		chrome_log("comprobar");

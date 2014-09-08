@@ -142,7 +142,6 @@ $(function(){
 						email    : true,  //para validar formato email
 						remote: { url: CI_ROOT+"index.php/login/comprobar_email_no_existente/", type: 'POST', async: false } 
 					}
-
 			},
 
 			messages : {
@@ -152,9 +151,7 @@ $(function(){
 						required : "Debe ingresar su email.",
 						email    : "Debe ingresar un email valido.",
 						remote    : "Email no registrado."
-
 					}
-
 			}
 
 		});    
