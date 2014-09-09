@@ -19,30 +19,44 @@ class Perfil extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('Perfil_model');	
-		$this->load->model('Login_model');	
 		$this->load->library('form_validation');
 		$this->load->helper('general_helper'); // Tiene la funcion generar_string_aleatorio
 	}
 	
 	public function index()
 	{	
-		chrome_log("Perfil index");
-		$resultado = $this->Perfil_model->traer_datos_perfil("adrian.magliola@gmail.com");
+		$resultado = $this->Perfil_model->traer_datos_perfil();
 		if ($resultado->num_rows() > 0)
 		{
 			$datos['datos_perfil'] = $resultado;
 			$this->load->view('perfil/perfil',$datos);
 		}
+		
+		
 	}
 	
+	/* Modificar los datos obligatorios de usuario
+	 * Modifica los datos opcionales de usuario.
+	 * 
+	 * */
 	public function modificar_perfil()
 	{
+		if(isset($_POST['modificar']))
+		{
+			$resultado = $this->Perfil_model->modificar_datos_perfil($_POST['alias'],$_POST['email'],$_POST['password']);
+			//redirect(base_url()."index.php/perfil");
 			
+			/*
+			$email_viejo = $this->Perfil_model->traer_email(); // trai
 			
-			$alias = $_POST['alias'];
-			$email = $_POST['email'];
-
-			$consulta = "UPDATE  USUARIO SET MAIL = '$email', ALIAS = '$alias' ";
+			if($email_viejo != $_POST['email'])
+				$resultado = $this->Perfil_model->modificar_datos_perfil($_POST['alias'],$_POST['email'],$_POST['password']);
+			else
+				$resultado = $this->Perfil_model->modificar_datos_perfil($_POST['alias'],$_POST['email'],$_POST['password']);
+			*/
+			/*
+			 * 
+			$consulta = "UPDATE USUARIO SET MAIL = '$email', ALIAS = '$alias' ";
 
 			//  Si cambio el password
 			if(isset($_POST['password']) && !empty($_POST['password']) )
@@ -59,9 +73,9 @@ class Perfil extends CI_Controller
 				$_SESSION['datosOk']= "Se han modificado los datos correctamente.";
 			else
 				$_SESSION['datosError']= "No se han modificado los datos, intente mas tarde.";
-
+																								*/
 			//-------------- TRABAJA CON LOS DATOS OPCIONALES ------------------------//
-
+			/*
 			$db->query("SELECT * FROM DATOS_OPCIONALES_USUARIO WHERE ID_USUARIO = $id_us ");
 
 			if($db->num_rows > 0) // ACTUALIZAR DATOS OPCIONALES
@@ -130,7 +144,6 @@ class Perfil extends CI_Controller
 				}
 
 				$consultaActulizarOpcionales.=" WHERE ID_USUARIO = '$id_us' ";
-
 				$db->query($consultaActulizarOpcionales);
 
 			}
@@ -194,8 +207,12 @@ class Perfil extends CI_Controller
 			else
 			   $_SESSION['datosOpcionales']= "No se han modificado los datos opcionales";
 
-			abrirPagina("./modificarPerfil.php",0);
-
+			abrirPagina("./modificarPerfil.php",0);*/
+		}
+		else
+		{
+			redirect(base_url()."index.php/home");
+		}	
 	}
 	
 	public function comprobar_email_existente()
@@ -203,7 +220,7 @@ class Perfil extends CI_Controller
 		chrome_log("comprobar_email_existente");
 		$correo = $_POST['email'];
 		
-		$resultado = $this->Login_model->existeCorreo($correo); 
+		$resultado = $this->Perfil_model->existeCorreoDuplicado($correo); 
 						
 		if($resultado) 
 		{

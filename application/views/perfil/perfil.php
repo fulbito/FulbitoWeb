@@ -91,7 +91,7 @@ Utiliza librerias Jquery: para el MAPA, para validar y para la fecha de nacimien
 
 			<h1 >Modificar Perfil</h1>
 
-			<form id="formModificar" name="formModificar" method="POST" enctype="multipart/form-data">
+			<form id="formModificar" name="formModificar" action="<?=base_url()?>/index.php/perfil/modificar_perfil" method="POST" enctype="multipart/form-data">
 
 				<!----DATOS OBLIGATORIOS -->
 				<input id="alias" name="alias" type="text" placeholder="Usuario" value="<? echo $usuario->ALIAS; ?>" /><br>
