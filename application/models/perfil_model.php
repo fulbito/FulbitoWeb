@@ -66,59 +66,73 @@ class Perfil_model extends CI_Model {
 	
 	
 	
-	//--- Modificar los datos del perfil ------------------//
-	/* Realiza las modificaciones de datos obligatorio y ocionales en una transaccion
-	 * atomica.
-	 * */
-	 
-	public function modificar_datos_perfil($alias, $email, $password)
+	//--- Modificar los datos obligatorios del perfil ------------------//
+	/* Realiza las modificaciones de datos obligatorio.
+	 * 												*/
+	public function modificar_datos_obligatorios($_ARRAY)
 	{
-		$this->db->trans_start(); // INICIA UNA TRASACCION
+		
 		$id_usuario =  $this->session->userdata('id');
 		
 		/* Modificar datos OBLIGATORIOS */
+
+		$data_obligatoria = array(
+		   'ALIAS' => $_ARRAY['alias'],            
+		);
 		
 		$email_viejo = $this->Perfil_model->traer_email(); // traigo email cargado
+		if( $email_viejo != $_ARRAY['email'] && !empty($_ARRAY['email']) ) // Cambio el email
+			$data_obligatoria['MAIL'] = $_ARRAY['email'];
+				
+		if(isset($_ARRAY['password']) && !empty($_ARRAY['password']) ) //  Si cambio el password
+			$data_obligatoria['PASSWORD'] = md5($_ARRAY['password']);
+				
+		$this->db->where('ID', $id_usuario);			
+		$this->db->update('USUARIO', $data_obligatoria);
 		
-		$sql = " UPDATE USUARIO SET ALIAS = ? ";
-		$valores = array($alias);
+	}
+	
+	//--- Modificar los datos opcionales del perfil ------------------//
+	/* Realiza las modificaciones de datos obligatorio.
+	 * Si no existe, lo inserta, si existe lo actualiza				*/
+	 
+	public function modificar_datos_opcionales($_ARRAY)
+	{		
+		$id_usuario =  $this->session->userdata('id');
+		$data_opcional = array();
 		
-		if( $email_viejo != $email && !empty($email) ) // Cambio el email
-		{
-			$sql.=", MAIL = ? ";
-			array_push($valores,$email);
-		}
+		if(isset($_ARRAY['datepicker']) && !empty($_ARRAY['datepicker']) )  //  Si cambio fecha nacimiento
+			$data_opcional['FECHA_NACIMIENTO'] = $_ARRAY['datepicker'];
 		
-		if(isset($password) && !empty($password) ) //  Si cambio el password
-		{
-			$password = md5($_POST['password']);
-			$sql.= ", PASSWORD = ? ";
-			array_push($valores,$password);
-		}		
+		if(isset($_ARRAY['geocomplete']) && !empty($_ARRAY['geocomplete']) )  //  Si cambio ubicacion
+			$data_opcional['UBICACION'] = $_ARRAY['geocomplete'];
 		
-		$sql.= " WHERE ID = ? ";
-		array_push($valores,$id_usuario);
-		$query = $this->db->query($sql, $valores);
+		if(isset($_ARRAY['lat']) && !empty($_ARRAY['lat']) )  //  Si cambio latitud
+			$data_opcional['LATITUD'] = $_ARRAY['lat'];	
+			
+		if(isset($_ARRAY['lng']) && !empty($_ARRAY['lng']) )  //  Si cambio ubicacion
+			$data_opcional['LONGITUD'] = $_ARRAY['lng'];	
 		
-		/* MOdificar datos OPCIONALES */
+		if(isset($_ARRAY['sexo']) && !empty($_ARRAY['sexo']) )  //  Si cambio ubicacion
+			$data_opcional['SEXO'] = $_ARRAY['sexo'];	
 		
+		if(isset($_ARRAY['telefono']) && !empty($_ARRAY['telefono']) )  //  Si cambio ubicacion
+			$data_opcional['TELEFONO'] = $_ARRAY['telefono'];	
+		
+		if(isset($_ARRAY['radio']) && !empty($_ARRAY['radio']) )  //  Si cambio ubicacion
+			$data_opcional['RADIO_BUSQUEDA_PARTIDOS'] = $_ARRAY['radio'];
+	
 		if($this->Perfil_model->existen_datos_opcionales()) // Si existe ACTUALIZO
 		{
-			echo "existe";
-		
+			$this->db->where('ID_USUARIO', $id_usuario);
+			$this->db->update('DATOS_OPCIONALES_USUARIO', $data_opcional); 
 		}
 		else // Si no existe INSERTO
 		{
-			echo "no existe";
-			
-		
+			$data_opcional['ID_USUARIO'] = $id_usuario;	
+			$this->db->insert('DATOS_OPCIONALES_USUARIO', $data_opcional); 
 		}
-		
-		/*
-		$affected_rows = $this->db->affected_rows();
-		return $affected_rows;*/
 	}
-	
 }	
     
 

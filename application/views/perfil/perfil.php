@@ -88,6 +88,16 @@ Utiliza librerias Jquery: para el MAPA, para validar y para la fecha de nacimien
 		</header>
 
 		<div id="modificar" class="redondeado sombra">
+			
+			<?	if(isset($mensaje_error)): ?>
+						<label class='errorLogin'><?=$mensaje_error?></label>
+				<? 		unset($mensaje_error);
+				endif;	?>
+
+			<?	if(isset($mensaje_exito)): ?>
+						<label class='ok'><?=$mensaje_exito?></label>
+				<? 		unset($mensaje_exito);
+				endif;	?>
 
 			<h1 >Modificar Perfil</h1>
 
@@ -126,13 +136,12 @@ Utiliza librerias Jquery: para el MAPA, para validar y para la fecha de nacimien
 				<?
 					$foto = $usuario->PATH_FOTO;
 
-					if( $foto == "default.jpg" )
-						echo "<img src=./images/thumbnails/default.jpg  >";
-					else
-						echo "<img src=./images/thumbnails/$foto >";
-				?>
+					if( $foto == "default.jpg" ): ?>
+						<img src="<?=base_url()?>assets/images/thumbnails/default.jpg>">
+				<?	else: ?>
+						<img style="width:70px; height:85px;" src="<?=base_url()?>assets/images/thumbnails/<?=$usuario->PATH_FOTO?>">
+				<?  endif ?>
 				<input id="foto" name="foto" type="file" placeholder="Foto de Perfil"/>
-
 				<input type="submit" name="modificarFoto" id="modificarFoto" value="Modificar" />
 			</form>
     	
