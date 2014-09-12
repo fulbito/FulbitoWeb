@@ -101,7 +101,7 @@ Utiliza librerias Jquery: para el MAPA, para validar y para la fecha de nacimien
 
 			<h1 >Modificar Perfil</h1>
 
-			<form id="formModificar" name="formModificar" action="<?=base_url()?>/index.php/perfil/modificar_perfil" method="POST" enctype="multipart/form-data">
+			<form id="formModificar" name="formModificar" action="<?=base_url()?>/index.php/perfil/modificar_datos_perfil" method="POST" enctype="multipart/form-data">
 
 				<!----DATOS OBLIGATORIOS -->
 				<input id="alias" name="alias" type="text" placeholder="Usuario" value="<? echo $usuario->ALIAS; ?>" /><br>
@@ -129,10 +129,10 @@ Utiliza librerias Jquery: para el MAPA, para validar y para la fecha de nacimien
 		<div id="modificar-mapa" class="redondeado sombra">
 			<div id="map_canvas" class="map_canvas"></div>
 		</div>
-
+	
 		<div id="modificar-foto" class="redondeado sombra">
 	
-			<form id="formModificarFoto" name="formModificarFoto" method="POST" action="<? $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data" >
+			<form id="formModificarFoto" name="formModificarFoto" method="POST" action="<?=base_url()?>/index.php/perfil/modificar_foto_perfil" enctype="multipart/form-data" >
 				<?
 					$foto = $usuario->PATH_FOTO;
 
@@ -141,11 +141,22 @@ Utiliza librerias Jquery: para el MAPA, para validar y para la fecha de nacimien
 				<?	else: ?>
 						<img style="width:70px; height:85px;" src="<?=base_url()?>assets/images/thumbnails/<?=$usuario->PATH_FOTO?>">
 				<?  endif ?>
-				<input id="foto" name="foto" type="file" placeholder="Foto de Perfil"/>
+				<input id="foto" name="userfile" type="file" placeholder="Foto de Perfil"/>
 				<input type="submit" name="modificarFoto" id="modificarFoto" value="Modificar" />
 			</form>
     	
-		</div>
+		</div> 
+		<?
+		/*
+		<?php echo form_open_multipart('perfil/upload_it');?>
+
+					<input type="file" name="userfile" size="20" />
+
+			<br /><br />
+
+			<input type="submit" value="upload" />
+
+			</form>*/ ?>
 	</div>
 </div>
 </body>

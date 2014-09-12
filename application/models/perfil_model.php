@@ -133,6 +133,19 @@ class Perfil_model extends CI_Model {
 			$this->db->insert('DATOS_OPCIONALES_USUARIO', $data_opcional); 
 		}
 	}
+	
+	//--- Actualizar nombre archivo ------------------//
+    public function actualizar_nombre_foto()
+	{
+		/*$id_usuario =  $this->session->userdata('id');
+		chrome_log("Perfil: actualizar_nombre_foto");
+		$sql = 	"	UPDATE  `a6003835_fulbito`.`USUARIO` 
+					SET  `PATH_FOTO` =  '13975165s72.JPG' 
+					WHERE  `USUARIO`.`ID` =1; ";
+		$query = $this->db->query($sql, array($id_usuario));
+		$row = $query->row();
+		return $row->MAIL;*/
+	}
 }	
     
 
