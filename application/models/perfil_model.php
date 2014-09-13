@@ -134,17 +134,35 @@ class Perfil_model extends CI_Model {
 		}
 	}
 	
-	//--- Actualizar nombre archivo ------------------//
-    public function actualizar_nombre_foto()
+	//--- Traer nombre archivo ------------------//
+    public function traer_nombre_foto()
 	{
-		/*$id_usuario =  $this->session->userdata('id');
+		$id_usuario =  $this->session->userdata('id');
 		chrome_log("Perfil: actualizar_nombre_foto");
-		$sql = 	"	UPDATE  `a6003835_fulbito`.`USUARIO` 
-					SET  `PATH_FOTO` =  '13975165s72.JPG' 
-					WHERE  `USUARIO`.`ID` =1; ";
+		
+		$sql = 	"	SELECT  PATH_FOTO
+					FROM USUARIO
+					WHERE   ID  = ? ";
 		$query = $this->db->query($sql, array($id_usuario));
 		$row = $query->row();
-		return $row->MAIL;*/
+		return $row->PATH_FOTO; 
+	}
+	
+	//--- Actualizar nombre archivo ------------------//
+    public function actualizar_nombre_foto($nombre_archivo)
+	{
+		$id_usuario =  $this->session->userdata('id');
+		chrome_log("Perfil: actualizar_nombre_foto");
+		
+		$sql = 	"	UPDATE   USUARIO 
+					SET   PATH_FOTO  =  ? 
+					WHERE  ID  = ? ";
+		$query = $this->db->query($sql, array($nombre_archivo, $id_usuario));
+		$cantidad=$this->db->affected_rows();
+	    if($cantidad>0)
+			return true;
+		else
+			return false;
 	}
 }	
     

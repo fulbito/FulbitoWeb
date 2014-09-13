@@ -134,32 +134,30 @@ Utiliza librerias Jquery: para el MAPA, para validar y para la fecha de nacimien
 		</div>
 	
 		<div id="modificar-foto" class="redondeado sombra">
-	
+			<?	if(isset($mensaje_foto_error)): ?>
+						<label class='errorLogin'><?=$mensaje_foto_error?></label>
+				<? 		unset($mensaje_foto_error);
+				endif;	?>
+
+			<?	if(isset($mensaje_foto_exito)): ?>
+						<label class='ok'><?=$mensaje_foto_exito?></label>
+				<? 		unset($mensaje_foto_exito);
+				endif;	?>
+				
 			<form id="formModificarFoto" name="formModificarFoto" method="POST" action="<?=base_url()?>/index.php/perfil/modificar_foto_perfil" enctype="multipart/form-data" >
 				<?
 					$foto = $usuario->PATH_FOTO;
 
 					if( $foto == "default.jpg" ): ?>
-						<img src="<?=base_url()?>assets/images/thumbnails/default.jpg>">
+						<img style="width:75px; height:85px;" src="<?=base_url()?>assets/images/fotos_perfil/default.jpg">
 				<?	else: ?>
-						<img style="width:70px; height:85px;" src="<?=base_url()?>assets/images/thumbnails/<?=$usuario->PATH_FOTO?>">
+						<img style="width:75px; height:85px;" src="<?=base_url()?>assets/images/fotos_perfil/foto_web/<?=$usuario->PATH_FOTO?>">
 				<?  endif ?>
 				<input id="foto" name="userfile" type="file" placeholder="Foto de Perfil"/>
 				<input type="submit" name="modificarFoto" id="modificarFoto" value="Modificar" />
 			</form>
     	
 		</div> 
-		<?
-		/*
-		<?php echo form_open_multipart('perfil/upload_it');?>
-
-					<input type="file" name="userfile" size="20" />
-
-			<br /><br />
-
-			<input type="submit" value="upload" />
-
-			</form>*/ ?>
 	</div>
 </div>
 </body>
