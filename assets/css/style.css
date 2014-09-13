@@ -54,7 +54,7 @@ background: #000000 url(../images/fondo.jpg) left top repeat-x;
   box-shadow:         0px 0px 10px 0px rgba(0, 0, 0, 1);
 }
 
-input[type="text"], input[type="password"]
+input[type="text"], input[type="password"], input[type="date"], input[type="time"]
 {
   background: #979797;
   -webkit-border-radius: 5px;

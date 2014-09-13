@@ -1,4 +1,4 @@
-	<?
+<?
 /*  Esta clase maneja:
  * 	- Logueo.
  *  - Registracion.
@@ -273,7 +273,13 @@ class Login extends CI_Controller
 		}
 	}
   
-  
+    public function logout()
+    {
+    	$this->session->unset_userdata('id');
+        $this->session->sess_destroy();
+        $this->load->view('login/login');
+    }
+
   /*
 	public function data()
 	{

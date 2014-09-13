@@ -1,17 +1,3 @@
-<?
-  /*
-  include_once("php/sesion.php");
-   if(isset($_SESSION['id'])) // si no esta setiado el id
-   {
-     $locationIndex = "./home.php";
-     $tiempo =0;
-     print "<META HTTP-EQUIV=\"Refresh\"  CONTENT=\"$tiempo; URL=$locationIndex\">";
-   }
-
-   include_once "debugger/ChromePhp.php";
-   ChromePhp::log('INDEX!');*/
-   
-?>
 <!DOCTYPE html>
 
 <!-- HTML5 Boilerplate -->
@@ -20,8 +6,6 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif] -->
 
-
-<? //include("php/head.php") ?>
 <head>
 	
 	<!-- Importante: la variable CI_ROOT se usa en JQUERY como base_url -->
@@ -75,16 +59,17 @@
       </header>
 
 	  <div id="centro" class="sombra redondeado">
-        <div class="boton_home" onclick="window.location.href='<?=base_url()?>index.php/partido/crear'">
-            <div class="boton_home_title">CREAR UN<br>PARTIDO</div>
-            <img src="<?=base_url()?>assets/images/crear.png" alt="" />
-            <p>Crea un partido publico o privado, elegi el lugar del encuentro y listo!</p>
-        </div>
-        <div class="boton_home" onclick="window.location.href='<?=base_url()?>index.php/partido/buscar'">
-            <div class="boton_home_title">BUSCAR<br>PARTIDOS</div>
-            <img src="<?=base_url()?>assets/images/buscar.png" alt="" />
-            <p>Busca un partido cerca tuyo y sumate!</p>
-        </div>
+        <h1>CREAR PARTIDO</h1>
+        <?php echo validation_errors(); ?>
+        <?php echo $error; ?>
+
+        <?php echo form_open('partido/crear') ?>
+            <input type="text" name="nombre" placeholder="Nombre del partido"/><br>
+            <input type="date" name="fecha" placeholder="Fecha"/><br>
+            <input type="time" name="hora" placeholder="Hora"/><br>
+            <input type="text" name="cancha" placeholder="Cancha"/><br>
+            <input type="submit" name="crear" value="CREAR"/><br>
+        <?php echo form_close() ?>
       </div>
 
     </div>

@@ -82,7 +82,7 @@
 				<label class='errorLogin'><?=$mensaje_error?></label>
 		<? 		unset($mensaje_error);
 			endif;	?>
-		
+
 		<?	if(isset($mensaje_exito)): ?>
 				<label class='ok'><?=$mensaje_exito?></label>
 		<? 		unset($mensaje_exito);

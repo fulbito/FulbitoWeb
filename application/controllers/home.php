@@ -17,12 +17,9 @@ class Home extends CI_Controller
    
 	public function index()
 	{	
-			chrome_log("logueo");
-			$this->load->view('home/home');
-			$this->load->view('home/menu');
-			
+    	chrome_log("logueo");
+    	$this->load->view('home/home');
 	}
 	
-
 }
 ?>
