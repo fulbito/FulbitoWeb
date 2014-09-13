@@ -18,7 +18,8 @@ class Partido extends CI_Controller
    
 	public function index()
 	{
-    	$this->load->view('partido/home');
+	    $data['partidos'] = $this->partido_model->get_partidos();
+    	$this->load->view('partido/home', $data);
 	}
 
     public function crear()
@@ -50,9 +51,11 @@ class Partido extends CI_Controller
     	}
 	}
 
-    public function armar()
+    public function armar($id)
 	{
 	    $data['error'] = "";
+        $data['partido'] = $this->partido_model->get_partidos($id);
+        $data['jugadores'] = $this->partido_model->get_jugadores();
 
         if ($this->form_validation->run() === FALSE)
     	{

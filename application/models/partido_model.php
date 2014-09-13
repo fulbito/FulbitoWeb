@@ -9,17 +9,44 @@ class Partido_model extends CI_Model {
         parent::__construct();
     }
     
-	//---Trae los datos del perfil, opcionales y obligatorios  ------------------//
-    public function traer_datos()
+
+    public function get_partidos($id = FALSE)
 	{
 		$id_usuario =  $this->session->userdata('id');
-		chrome_log("Perfil traer_datos_perfil");
-		$sql = 	"	SELECT *
-					FROM 	USUARIO AS u LEFT JOIN DATOS_OPCIONALES_USUARIO AS d
-							ON ( u.ID = d.ID_USUARIO )
-					WHERE u.ID = ? ";
-		$query = $this->db->query($sql, array($id_usuario));
-		return $query;
+
+        if($id === FALSE)
+        {
+    		$sql = 	"SELECT *
+    		         FROM partido";
+    		$query = $this->db->query($sql);
+            return $query->result_array();
+        }
+
+        $sql = 	"SELECT *
+  		         FROM partido WHERE id=".$id;
+  		$query = $this->db->query($sql);
+
+		return $query->row_array();
+	}
+
+
+    public function get_jugadores($id = FALSE)
+	{
+		$id_usuario =  $this->session->userdata('id');
+
+        if($id === FALSE)
+        {
+    		$sql = 	"SELECT *
+    		         FROM usuario";
+    		$query = $this->db->query($sql);
+            return $query->result_array();
+        }
+
+        $sql = 	"SELECT *
+  		         FROM usuario WHERE id=".$id;
+  		$query = $this->db->query($sql);
+
+		return $query->row_array();
 	}
 	
 	//--- Modificar los datos obligatorios del perfil ------------------//
