@@ -35,7 +35,7 @@ class Login extends CI_Controller
 	* 														*/
 	
 	public function registrar_usuario()
-	{	
+	{
 		if( isset($_POST['alias']) && isset($_POST['email']) && isset($_POST['password']) )
 		{
 			chrome_log("registrar_usuario");
@@ -46,33 +46,34 @@ class Login extends CI_Controller
 
 			if ( $resultado > 0)
 			{
-				chrome_log("if");
+				//chrome_log("if");
 				$return["error"] = FALSE;
 				$return["data"] = "Se ha registrado al usuario correctamente";
 			}
-			else 
-			{
-				chrome_log("if");
-				$return["error"] = TRUE;
-				$return["data"] = "No se ha podido registrar al usuario";
-			} 
-			
-			if (function_exists('json_encode'))
-			{
-				print json_encode($return);
-				// ChromePhp::log(json_encode($return));
-			}
 			else
 			{
-				print __json_encode($return);
-				//  ChromePhp::log(__json_encode($return));
-			} 
+				//chrome_log("if");
+				$return["error"] = TRUE;
+				$return["data"] = "No se ha podido registrar al usuario";
+			}
 			
 		}
-		else
-		{
-			redirect(base_url()."index.php/login");
-		}	
+        else
+        {
+            $return["error"] = TRUE;
+			$return["data"] = "Debe completar todos los campos";
+        }
+
+        if (function_exists('json_encode'))
+    	{
+    		print json_encode($return);
+    		// ChromePhp::log(json_encode($return));
+    	}
+    	else
+    	{
+    		print __json_encode($return);
+    		//  ChromePhp::log(__json_encode($return));
+    	}
 	}
 	
 	/* ERROR AL REGISTRAR EL USUARIO

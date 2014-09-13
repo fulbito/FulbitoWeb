@@ -81,6 +81,9 @@ Utiliza librerias Jquery: para el MAPA, para validar y para la fecha de nacimien
 <div id="wrapper">
 	<div id="degrade_arriba"></div>
 	<div id="degrade_abajo"></div>
+
+    <? $this->load->view('templates/menu'); ?>
+    
 	<div id="maincontent">
 		<header>
 			<a href="index.php"><img src="<?=base_url()?>assets/images/logo.png" alt="Fulbito" /></a>
