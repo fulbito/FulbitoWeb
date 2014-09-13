@@ -22,6 +22,26 @@ if(!function_exists('generar_string_aleatorio'))
 	 
 		}
 		return $rstr;
- 
     }
 }
+
+/* ----------- Borrar Archivo --------------------
+ * Recibe la ruta de un archivo a borrar */
+
+if(!function_exists('borrar_foto_perfil'))
+{
+    //formateamos la fecha y la hora, función de cesarcancino.com
+    function borrar_foto_perfil($ruta_archivo)
+	{
+		//$file = 'assets/images/fotos_perfil/'.$nombre_archivo;
+		$file = $ruta_archivo;
+		$do = unlink($file);
+			 
+		if($do != true)
+			return false;
+		else
+			return true;
+	
+	}
+}
+?>

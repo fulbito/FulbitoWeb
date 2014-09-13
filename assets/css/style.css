@@ -390,7 +390,7 @@ footer {
 #modificar-foto #modificarFoto{
   float: left;
   margin-left: 10px;
-  margin-top: 5px;
+  --margin-top: 5px;
 }
 
 #modificar-foto label.ok, #modificar-foto label.errorLogin{
