@@ -41,7 +41,7 @@
 <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/jquery-1.10.2.min.js"> </script>
 <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/jquery.validate.js" ></script>
 <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/additional-methods.js" ></script>
-<script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/login.js"></script>
+<script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/partido.js"></script>
 <body>
 <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/slider/engine1/style.css" />
 
@@ -62,12 +62,12 @@
         <h1>CREAR PARTIDO</h1>
         <?php echo validation_errors(); ?>
         <?php echo $error; ?>
-
-        <?php echo form_open('partido/crear') ?>
-            <input type="text" name="nombre" placeholder="Nombre del partido"/><br>
-            <input type="date" name="fecha" placeholder="Fecha"/><br>
-            <input type="time" name="hora" placeholder="Hora"/><br>
-            <input type="text" name="cancha" placeholder="Cancha"/><br>
+		<? $atributos = array('name' => 'crear_partido', 'id' => 'crear_partido'); ?>
+        <?php echo form_open('partido/crear', $atributos) ?>
+            <input type="text" name="nombre" id="nombre" placeholder="Nombre del partido"/><br>
+            <input type="date" name="fecha" id="fecha" placeholder="Fecha"/><br>
+            <input type="time" name="hora" id="hora" placeholder="Hora"/><br>
+            <input type="text" name="cancha" id="cancha" placeholder="Cancha"/><br>
             <input type="submit" name="crear" value="CREAR"/><br>
         <?php echo form_close() ?>
       </div>
