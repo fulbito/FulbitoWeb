@@ -50,14 +50,18 @@ class Perfil extends CI_Controller
 			
 			if ($this->db->trans_status() === FALSE)
 			{
-				$mensaje_error = "No se ha podido modificar los datos, intente mas tarde 2.";
+				$mensaje_error = "No se ha podido modificar los datos, intente mas tarde.";
 				$datos['mensaje_error'] =$mensaje_error;
+				$return["error"] = TRUE;
+				$return["data"] = $mensaje_error;
 				$this->load->view('login/login',$datos);
 			}
 			else
 			{
 				$mensaje_exito = "Datos modificados correctamente.";
 				$datos['mensaje_exito'] =$mensaje_exito;
+				$return["error"] = FALSE;
+				$return["data"] = $mensaje_exito ;
 				$resultado = $this->Perfil_model->traer_datos_perfil();
 				if ($resultado->num_rows() > 0)
 				{
@@ -65,6 +69,8 @@ class Perfil extends CI_Controller
 					$this->load->view('perfil/perfil',$datos);
 				}
 			}
+			
+			crear_json($return);
 			
 		}
 		else
@@ -105,6 +111,8 @@ class Perfil extends CI_Controller
 			//echo $this->upload->display_errors();
 			$mensaje_error = "No se ha podido subir la foto, intente mas tarde.";
 			$datos['mensaje_foto_error'] =$mensaje_error;
+			$return["error"] = TRUE;
+			$return["data"] = $mensaje_error;
 			$resultado = $this->Perfil_model->traer_datos_perfil();
 			if ($resultado->num_rows() > 0)
 			{
@@ -140,6 +148,8 @@ class Perfil extends CI_Controller
 				
 				$mensaje_error = "No se ha podido subir la foto, intente mas tarde.";
 				$datos['mensaje_foto_error'] =$mensaje_error;
+				$return["error"] = TRUE;
+				$return["data"] = $mensaje_error;
 				$resultado = $this->Perfil_model->traer_datos_perfil();
 				if ($resultado->num_rows() > 0)
 				{
@@ -171,6 +181,8 @@ class Perfil extends CI_Controller
 					
 					$mensaje_error = "No se ha podido subir la foto, intente mas tarde.";
 					$datos['mensaje_foto_error'] =$mensaje_error;
+					$return["error"] = TRUE;
+					$return["data"] = $mensaje_error;
 					$resultado = $this->Perfil_model->traer_datos_perfil();
 					if ($resultado->num_rows() > 0)
 					{
@@ -199,6 +211,8 @@ class Perfil extends CI_Controller
 						
 						$mensaje_exito = "La foto se ha modificado exitosamente.";
 						$datos['mensaje_foto_exito'] =$mensaje_exito;
+						$return["error"] = FALSE;
+						$return["data"] = $mensaje_exito;
 						$resultado = $this->Perfil_model->traer_datos_perfil();
 						if ($resultado->num_rows() > 0)
 						{
@@ -219,6 +233,8 @@ class Perfil extends CI_Controller
 						
 						$mensaje_error = "No se ha podido subir la foto, intente mas tarde.";
 						$datos['mensaje_foto_error'] =$mensaje_error;
+						$return["error"] = TRUE;
+						$return["data"] = $mensaje_error;
 						$resultado = $this->Perfil_model->traer_datos_perfil();
 						if ($resultado->num_rows() > 0)
 						{
@@ -229,6 +245,8 @@ class Perfil extends CI_Controller
 					
 				}			
 			}
+			
+			crear_json($return);
 		}
 	}
 	

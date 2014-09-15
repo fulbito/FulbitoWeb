@@ -46,13 +46,13 @@ class Login extends CI_Controller
 
 			if ( $resultado > 0)
 			{
-				//chrome_log("if");
+				// WebService
 				$return["error"] = FALSE;
 				$return["data"] = "Se ha registrado al usuario correctamente";
 			}
 			else
 			{
-				//chrome_log("if");
+				// WebService
 				$return["error"] = TRUE;
 				$return["data"] = "No se ha podido registrar al usuario";
 			}
@@ -60,20 +60,12 @@ class Login extends CI_Controller
 		}
         else
         {
+            // WebService
             $return["error"] = TRUE;
 			$return["data"] = "Debe completar todos los campos";
         }
-
-        if (function_exists('json_encode'))
-    	{
-    		print json_encode($return);
-    		// ChromePhp::log(json_encode($return));
-    	}
-    	else
-    	{
-    		print __json_encode($return);
-    		//  ChromePhp::log(__json_encode($return));
-    	}
+		
+		crear_json($return);
 	}
 	
 	/* ERROR AL REGISTRAR EL USUARIO
@@ -115,29 +107,20 @@ class Login extends CI_Controller
 					$aux['id'] = $row->ID;
 					$aux['alias'] = $row->ALIAS;
 					$aux['mail'] = $row->MAIL;
+					// WebService
 					$return["error"] = FALSE;
 					$return["data"] = $aux;
 				}
 			}
 			else
 			{
-				chrome_log("INCORRECTO");
+				// WebService
 				$return["error"] = TRUE;
 				$return["data"] = "Usuario invalido";
 			}
+			
+			crear_json($return);	
 
-			if (function_exists('json_encode'))
-			{
-				chrome_log(json_encode($return));
-				print json_encode($return);
-				// ChromePhp::log(json_encode($return));
-			}
-			else
-			{
-				chrome_log(json_encode($return));
-				print __json_encode($return);
-				//  ChromePhp::log(__json_encode($return));
-			}
 		}
 		else
 		{
@@ -164,7 +147,7 @@ class Login extends CI_Controller
 	{
 		chrome_log("recuperar_password");
 				
-		if(!isset($_POST['enviar']))
+		if(!isset($_POST['email']))
 		{ 
 			$this->load->view('login/recuperar_password');
 		}
@@ -201,6 +184,9 @@ class Login extends CI_Controller
 					$mensaje_exito = "Se ha enviado un mail con su nueva clave.";
 					$datos['mensaje_exito'] =$mensaje_exito;
 					$this->load->view('login/login',$datos);
+					// WebService
+					$return["error"] = FALSE;
+					$return["data"] = $mensaje_exito;
 				}
 
 				else
@@ -209,6 +195,9 @@ class Login extends CI_Controller
 					
 					$mensaje_error = "Ocurrió un error al actualizar su clave, intente mas tarde.";
 					$datos['mensaje_error'] =$mensaje_error;
+					// Web Service
+					$return["error"] = TRUE;
+					$return["data"] = $mensaje_error;
 					// Restauro el password viejo
 					$resultado = $this->Login_model->cambiar_password($password_viejo,$correo);
 					$this->load->view('login/login',$datos);
@@ -226,8 +215,12 @@ class Login extends CI_Controller
 					
 				$mensaje_error = "Ocurrió un error al actualizar su clave, intentelo nuevalemnte mas tarde.";
 				$datos['mensaje_error'] =$mensaje_error;
+				// Web Service
+				$return["error"] = TRUE;
+				$return["data"] = $mensaje_error;
 				$this->load->view('login/login',$datos);
 			}
+			crear_json($return);
 		}
 	}
    
@@ -256,7 +249,7 @@ class Login extends CI_Controller
 		}
 	}
 	
-	//----------------------Recuperar contraseña  --------------------------//
+	//---------------------- Comprobar que no existe el email  --------------------------//
 	public function comprobar_email_no_existente()
 	{
 		chrome_log("comprobar");

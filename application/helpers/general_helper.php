@@ -44,4 +44,27 @@ if(!function_exists('borrar_foto_perfil'))
 	
 	}
 }
+
+/* ----------- CREAR EL JSON --------------------
+ * Crea el json para enviar al webservice. */
+
+if(!function_exists('crear_json'))
+{
+    
+    function crear_json($return)
+	{
+		if (function_exists('json_encode'))
+		{
+			chrome_log(json_encode($return));
+			print json_encode($return);
+			// ChromePhp::log(json_encode($return));
+		}
+		else
+		{
+			chrome_log(json_encode($return));
+			print __json_encode($return);
+			//  ChromePhp::log(__json_encode($return));
+		}
+	}
+}
 ?>
