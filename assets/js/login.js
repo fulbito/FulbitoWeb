@@ -76,7 +76,7 @@ $(function(){
 					  }
                    },
                    error: function(error){
-                      alert("44");
+
                      $(".errorLogin").html("Error ajax");
                      $(".errorLogin").show();
                    }

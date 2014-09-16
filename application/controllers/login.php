@@ -36,27 +36,41 @@ class Login extends CI_Controller
 	
 	public function registrar_usuario()
 	{
-		if( isset($_POST['alias']) && isset($_POST['email']) && isset($_POST['password']) )
+		if( isset($_POST['alias']) && !empty($_POST['alias']) &&
+			isset($_POST['email']) && !empty($_POST['email']) &&
+			isset($_POST['password']) && !empty($_POST['password']) )
 		{
 			chrome_log("registrar_usuario");
 			$alias= $_POST['alias'];
 			$email= $_POST['email'];
-			$password= md5($_POST['password']);
-			$resultado = $this->Login_model->registrarse($_POST['alias'],$_POST['email'],$password);
-
-			if ( $resultado > 0)
+			
+			$resultado_email = $this->Login_model->existeCorreo($_POST['email']); 
+						
+			if(!$resultado_email) 
 			{
-				// WebService
-				$return["error"] = FALSE;
-				$return["data"] = "Se ha registrado al usuario correctamente";
+				$password= md5($_POST['password']);
+				$resultado = $this->Login_model->registrarse($_POST['alias'],$_POST['email'],$password);
+
+				if ( $resultado > 0)
+				{
+					// WebService
+					$return["id"] = $this->db->insert_id();
+					$return["error"] = FALSE;
+					$return["data"] = "Se ha registrado al usuario correctamente";
+				}
+				else
+				{
+					// WebService
+					$return["error"] = TRUE;
+					$return["data"] = "No se ha podido registrar al usuario";
+				}
 			}
-			else
+			else // Duplicado
 			{
 				// WebService
 				$return["error"] = TRUE;
-				$return["data"] = "No se ha podido registrar al usuario";
-			}
-			
+				$return["data"] = "Ya existe ese email registrado.";
+			}	
 		}
         else
         {
@@ -66,6 +80,7 @@ class Login extends CI_Controller
         }
 		
 		crear_json($return);
+		
 	}
 	
 	/* ERROR AL REGISTRAR EL USUARIO
@@ -88,7 +103,8 @@ class Login extends CI_Controller
 	{	
 		chrome_log("ingresar");
 		
-		if( isset($_POST['correo']) && isset($_POST['clave'] ) )
+		if( isset($_POST['correo']) && !empty($_POST['correo']) &&
+			isset($_POST['clave'] ) && !empty($_POST['clave']) )
 		{
 			chrome_log("POST");
 			chrome_log($_POST['correo']);
