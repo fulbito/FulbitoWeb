@@ -22,10 +22,13 @@
 
 <? //include("php/head.php") ?>
 <head>
-	
+    <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/jquery-1.10.2.min.js"> </script>
+    <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/jquery.validate.js" ></script>
+    <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/additional-methods.js" ></script>
+    <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/login.js"></script>
 	<!-- Importante: la variable CI_ROOT se usa en JQUERY como base_url -->
 	<script type="text/javascript">
-        CI_ROOT = "<?=base_url() ?>";
+        CI_ROOT = "<?=base_url();?>";
     </script>
 
 	<meta charset="utf-8">
@@ -53,10 +56,7 @@
 
 </head>
 
-<script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/jquery-1.10.2.min.js"> </script>
-<script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/jquery.validate.js" ></script>
-<script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/additional-methods.js" ></script>
-<script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/login.js"></script>
+
 
 <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/slider/engine1/style.css" />
 

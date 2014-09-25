@@ -54,9 +54,9 @@ class Login extends CI_Controller
 				if ( $resultado > 0)
 				{
 					// WebService
-					$return["id"] = $this->db->insert_id();
+					$aux["id"] = $this->db->insert_id();
 					$return["error"] = FALSE;
-					$return["data"] = "Se ha registrado al usuario correctamente";
+					$return["data"] = $aux;
 				}
 				else
 				{
@@ -79,7 +79,9 @@ class Login extends CI_Controller
 			$return["data"] = "Debe completar todos los campos";
         }
 		
-		crear_json($return);
+	   	crear_json($return);
+
+
 		
 	}
 	
@@ -100,9 +102,9 @@ class Login extends CI_Controller
 	 * */
 
 	public function ingresar()
-	{	
+	{
 		chrome_log("ingresar");
-		
+
 		if( isset($_POST['correo']) && !empty($_POST['correo']) &&
 			isset($_POST['clave'] ) && !empty($_POST['clave']) )
 		{
@@ -110,14 +112,14 @@ class Login extends CI_Controller
 			chrome_log($_POST['correo']);
 			chrome_log($_POST['clave']);
 			$resultado = $this->Login_model->loguearse($_POST['correo'],$_POST['clave']); //pasamos los valores al modelo para que compruebe si existe el usuario con ese password
-		
+
 			if ($resultado->num_rows() > 0)
 			{
-				chrome_log("CORRECTO");
-				
+    			chrome_log("CORRECTO");
+
 				foreach ($resultado->result() as $row)
 				{
-					chrome_log($row->ALIAS);
+                	chrome_log($row->ALIAS);
 					$this->session->set_userdata('id', $row->ID);
 					$this->session->set_userdata('mail', $row->MAIL);
 					$aux['id'] = $row->ID;
@@ -134,14 +136,15 @@ class Login extends CI_Controller
 				$return["error"] = TRUE;
 				$return["data"] = "Usuario invalido";
 			}
-			
-			crear_json($return);	
+
+			crear_json($return);
 
 		}
 		else
 		{
 			redirect(base_url()."index.php/login");
 		}
+
 	}
 
 	/* ERROR USUARIO O CLAVE INCORRECTOS

@@ -75,10 +75,8 @@ $(function(){
 						location.href= CI_ROOT+'index.php/login/error_registrar_usuario';
 					  }
                    },
-                   error: function(error){
-
-                     $(".errorLogin").html("Error ajax");
-                     $(".errorLogin").show();
+                   error: function(x, status, error){
+                     alert(error);
                    }
                 });
             } 
@@ -124,9 +122,8 @@ $(function(){
 						location.href= CI_ROOT+'index.php/login/error_ingresar';
 					  }
                    },
-                   error: function(error){
-                     $(".errorLogin").html("Error ajax");
-                     $(".errorLogin").show();
+                   error: function(x, status, error){
+                     alert(error);
                    }
                 });
             }

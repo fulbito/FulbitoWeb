@@ -14,7 +14,8 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/Fulbito/';
+//$config['base_url']	= 'http://localhost/Fulbito/';
+$config['base_url']	= 'http://www.sistemasancayetano.com.ar/Fulbito/';
 //$config['base_url']	= 'http://www.fulbitoweb.com.ar/';
 
 /*
