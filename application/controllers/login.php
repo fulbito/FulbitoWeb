@@ -21,13 +21,97 @@ class Login extends CI_Controller
 		$this->load->library('form_validation');
 		$this->load->helper('general_helper'); // Tiene la funcion generar_string_aleatorio
 	}
-   
+	
+	/* INGRESAR:
+	 * Busca si existe el correo y el password y devuelve la fila.
+	 * Armael JSON para devolverlo en el ajax
+	 * Si recibe un 1 es error y lo muestra en en login.
+	 * */
+	
 	public function index()
 	{	
 		chrome_log("logueo");
 		$this->load->view('login/login');
 	}
 	
+	
+	public function ingresar()
+	{
+		chrome_log("ingresar");
+
+		if( isset($_POST['correo']) && !empty($_POST['correo']) &&
+			isset($_POST['clave']) && !empty($_POST['clave']) )
+		{
+			chrome_log("POST");
+			chrome_log($_POST['correo']);
+			chrome_log($_POST['clave']);
+			$resultado = $this->Login_model->loguearse($_POST['correo'],$_POST['clave']); //pasamos los valores al modelo para que compruebe si existe el usuario con ese password
+
+			if ($resultado->num_rows() > 0)
+			{
+    			chrome_log("CORRECTO");
+
+				foreach ($resultado->result() as $row)
+				{
+                	chrome_log($row->alias);
+					
+					$this->session->set_userdata('id', $row->id);
+					$this->session->set_userdata('mail', $row->email);
+					
+					$aux['id'] = $row->id;
+					$aux['alias'] = $row->alias;
+					$aux['mail'] = $row->email;
+					$aux['fecha_nacimiento'] = $row->fecha_nacimiento;
+					$aux['ubicacion'] = $row->ubicacion;
+					$aux['longitud'] = $row->longitud;
+					$aux['sexo'] = $row->sexo;
+					$aux['telefono'] = $row->telefono;
+					$aux['radio_busqueda_partido'] = $row->radio_busqueda_partido;
+					
+					// WS
+					$return["error"] = FALSE;
+					$return["data"] = $aux;
+				}
+			}
+			else
+			{
+				// WS
+				$return["error"] = TRUE;
+				$return["data"] = 2; // 2: Email o Contraseña incorrectos.
+				
+			}
+
+			crear_json($return);
+
+		}
+		else
+		{
+			chrome_log("NO SETEO");
+			
+			if( isset($_POST['origen']) && ($_POST['origen']=="android") )
+			{
+				// WS
+				$return["error"] = TRUE;
+				$return["data"] = 1; 
+				crear_json($return);
+			}
+			else
+				redirect(base_url()."index.php/login");
+			
+		}
+
+	}
+
+	/* ERROR USUARIO O CLAVE INCORRECTOS
+	 * Se llama cuando no coinciden email y password.
+	 * 												*/
+	public function error_ingresar()
+	{
+		$mensaje_error = "Usuario o Password incorrecto.";
+		$datos['mensaje_error'] =$mensaje_error;
+		$this->load->view('login/login',$datos);
+	}
+
 	/* REGISTRAR:
 	* Busca si existe el correo y el password y devuelve la fila.
 	* Armael JSON para devolverlo en el ajax
@@ -45,44 +129,56 @@ class Login extends CI_Controller
 			$email= $_POST['email'];
 			
 			$resultado_email = $this->Login_model->existeCorreo($_POST['email']); 
-						
+								
 			if(!$resultado_email) 
 			{
+				chrome_log("FUNCION : resultado_email");
 				$password= md5($_POST['password']);
 				$resultado = $this->Login_model->registrarse($_POST['alias'],$_POST['email'],$password);
 
 				if ( $resultado > 0)
 				{
-					// WebService
+					chrome_log("POSITIVO");
+					// WS
 					$aux["id"] = $this->db->insert_id();
 					$return["error"] = FALSE;
 					$return["data"] = $aux;
 				}
 				else
 				{
-					// WebService
+					chrome_log("NEGATIVO");
+					// WS
 					$return["error"] = TRUE;
-					$return["data"] = "No se ha podido registrar al usuario";
+					$return["data"] = 5; // 5: No se ha podido registrar al usuario, intente nuevamente mas tarde.
+					
 				}
 			}
 			else // Duplicado
 			{
-				// WebService
+				chrome_log("DUPLICADO");
+				// WS
 				$return["error"] = TRUE;
-				$return["data"] = "Ya existe ese email registrado.";
-			}	
+				$return["data"] = 4; // 4: Email duplicado, ya existe un usuario con ese email registrado.
+			}
+			
+			crear_json($return);
+				
 		}
         else
         {
-            // WebService
-            $return["error"] = TRUE;
-			$return["data"] = "Debe completar todos los campos";
+            chrome_log("NO SETEO REGISTRARSE");
+			
+			if( isset($_POST['origen']) && ($_POST['origen']=="android") )
+			{
+				// WS 
+				$return["error"] = TRUE;
+				$return["data"] = 3;	// 3: Debe completar todos los campos.
+				crear_json($return);
+			}
+			else
+				redirect(base_url()."index.php/login");
         }
-		
-	   	crear_json($return);
-
-
-		
+	
 	}
 	
 	/* ERROR AL REGISTRAR EL USUARIO
@@ -94,73 +190,13 @@ class Login extends CI_Controller
 		$datos['mensaje_error'] =$mensaje_error;
 		$this->load->view('login/login',$datos);	
 	}
-
-	/* INGRESAR:
-	 * Busca si existe el correo y el password y devuelve la fila.
-	 * Armael JSON para devolverlo en el ajax
-	 * Si recibe un 1 es error y lo muestra en en login.
-	 * */
-
-	public function ingresar()
-	{
-		chrome_log("ingresar");
-
-		if( isset($_POST['correo']) && !empty($_POST['correo']) &&
-			isset($_POST['clave'] ) && !empty($_POST['clave']) )
-		{
-			chrome_log("POST");
-			chrome_log($_POST['correo']);
-			chrome_log($_POST['clave']);
-			$resultado = $this->Login_model->loguearse($_POST['correo'],$_POST['clave']); //pasamos los valores al modelo para que compruebe si existe el usuario con ese password
-
-			if ($resultado->num_rows() > 0)
-			{
-    			chrome_log("CORRECTO");
-
-				foreach ($resultado->result() as $row)
-				{
-                	chrome_log($row->ALIAS);
-					$this->session->set_userdata('id', $row->ID);
-					$this->session->set_userdata('mail', $row->MAIL);
-					$aux['id'] = $row->ID;
-					$aux['alias'] = $row->ALIAS;
-					$aux['mail'] = $row->MAIL;
-					// WebService
-					$return["error"] = FALSE;
-					$return["data"] = $aux;
-				}
-			}
-			else
-			{
-				// WebService
-				$return["error"] = TRUE;
-				$return["data"] = "Usuario invalido";
-			}
-
-			crear_json($return);
-
-		}
-		else
-		{
-			redirect(base_url()."index.php/login");
-		}
-
-	}
-
-	/* ERROR USUARIO O CLAVE INCORRECTOS
-	 * Se llama cuando no coinciden email y password.
-	 * 												*/
-	public function error_ingresar()
-	{
-		$mensaje_error = "Usuario o Password incorrecto.";
-		$datos['mensaje_error'] =$mensaje_error;
-		$this->load->view('login/login',$datos);
-	}
-
+	
 	/* RECUPERAR PASSWORD:
 	 * Busca si existe el correo, si existe le envia un password generado aleatoriamente.
 	 * Se guarda le password viejo por si hay un error durante el cambio.
 	 * Se envia un email con la nueva clave, pidiendole que la cambie	 *
+	 * 
+	 * 
 	 * */
 	public function recuperar_password()
 	{
@@ -168,7 +204,15 @@ class Login extends CI_Controller
 				
 		if(!isset($_POST['email']))
 		{ 
-			$this->load->view('login/recuperar_password');
+			if( isset($_POST['origen']) && ($_POST['origen']=="android") )
+			{ 
+				// WS
+				$return["error"] = TRUE;
+				$return["data"] = 6; // 6: debe ingresar su email registrado para recuperar su contraseña.
+				crear_json($return);
+			}
+			else
+				$this->load->view('login/recuperar_password');
 		}
 		else
 		{
@@ -202,24 +246,27 @@ class Login extends CI_Controller
 				{
 					$mensaje_exito = "Se ha enviado un mail con su nueva clave.";
 					$datos['mensaje_exito'] =$mensaje_exito;
-					$this->load->view('login/login',$datos);
-					// WebService
+										
+					// WS
 					$return["error"] = FALSE;
 					$return["data"] = $mensaje_exito;
 				}
-
 				else
 				{
 					show_error($this->correo->print_debugger());
+					$datos['mensaje_error'] = "Ocurrió un error al actualizar su clave, intente mas tarde.";
 					
-					$mensaje_error = "Ocurrió un error al actualizar su clave, intente mas tarde.";
-					$datos['mensaje_error'] =$mensaje_error;
 					// Web Service
 					$return["error"] = TRUE;
-					$return["data"] = $mensaje_error;
+					$return["data"] = 7; 	// 7: Ocurrió un error al actualizar su clave, intente mas tarde.
+				
 					// Restauro el password viejo
 					$resultado = $this->Login_model->cambiar_password($password_viejo,$correo);
-					$this->load->view('login/login',$datos);
+					
+					if($resultado) // 
+						chrome_log("Password restaurado");
+					else
+						chrome_log("No se pudo restaurar el password");
 				}
 				
 			}
@@ -227,19 +274,27 @@ class Login extends CI_Controller
 			{
 				chrome_log("Cambio erroneo");
 				$resultado = $this->Login_model->cambiar_password($password_viejo,$correo); // Restauro password viejo.
+				
 				if($resultado) // si existe el usuario, registramos las variables de sesión y abrimos la página de exito
 					chrome_log("Password restaurado");
 				else
 					chrome_log("No se pudo restaurar el password");
 					
-				$mensaje_error = "Ocurrió un error al actualizar su clave, intentelo nuevalemnte mas tarde.";
-				$datos['mensaje_error'] =$mensaje_error;
+				$datos['mensaje_error'] = "Ocurrió un error al actualizar su clave, intentelo nuevalemnte mas tarde.";
+				
 				// Web Service
 				$return["error"] = TRUE;
-				$return["data"] = $mensaje_error;
-				$this->load->view('login/login',$datos);
+				$return["data"] = 7 ;
 			}
-			crear_json($return);
+			
+			if( isset($_POST['origen']) && ($_POST['origen']=="android") )
+			{
+				crear_json($return);
+			}
+			else
+				$this->load->view('login/login',$datos);
+			
+			
 		}
 	}
    

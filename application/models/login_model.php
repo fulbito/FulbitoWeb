@@ -15,9 +15,10 @@ class Login_model extends CI_Model {
 		
 		$clave= md5($clave);
 		$sql =  "	SELECT * 
-					FROM USUARIO 
-					WHERE MAIL = ? AND 
-						  PASSWORD  = ?	";		  
+					FROM usuario u LEFT JOIN datos_opc_usuario do ON (u.id = do.id_usuario)
+					WHERE 
+							u.email = ? AND 
+							u.password  = ?	";		  
 		$query = $this->db->query($sql, array($correo, $clave));
 		return $query;
 	}
@@ -25,9 +26,11 @@ class Login_model extends CI_Model {
 	//--- Comprueba correo que el correo ya exista (AJAX registrarse)------------------//
 	public function existeCorreo($correo)
 	{
+		chrome_log("existeCorreo");
 		$sql = "	SELECT  * 
-					FROM USUARIO
-					WHERE MAIL = ? " ;
+					FROM usuario
+					WHERE email = ? " ;
+		chrome_log($sql);
 		$query = $this->db->query($sql, array($correo));
 		return $query->result_array();
 	}
@@ -37,8 +40,9 @@ class Login_model extends CI_Model {
 	{	
 		$foto = 'default.jpg';
 		chrome_log("registrarse_model");
-		$sql = "	INSERT INTO USUARIO(MAIL, PASSWORD, ALIAS, PATH_FOTO ) 
+		$sql = "	INSERT INTO usuario(email, password, alias, foto ) 
 					VALUES ( ? , ? , ? ,? )";
+					
 		$query = $this->db->query($sql, array($email,$password, $alias,$foto));			
 		$affected_rows = $this->db->affected_rows();
 		chrome_log($affected_rows);
@@ -49,7 +53,7 @@ class Login_model extends CI_Model {
 	public function guardarPasswordViejo($correo)
 	{
 		chrome_log("guardarPasswordViejo");
-		$sql = " SELECT PASSWORD FROM USUARIO WHERE MAIL = ? ";
+		$sql = " SELECT password FROM usuario WHERE email = ? ";
 		$query = $this->db->query($sql, array($correo));
 		return $query->row();
 	}
@@ -58,8 +62,8 @@ class Login_model extends CI_Model {
 	public function cambiar_password($codigoCodificado,$correo)
 	{
 		chrome_log("cambiar_password");
-		chrome_log("UPDATE USUARIO SET PASSWORD = '$codigoCodificado' WHERE MAIL = '$correo'");
-		$sql = "UPDATE USUARIO SET PASSWORD = ? WHERE MAIL = ? ";
+		chrome_log("UPDATE usuario SET password = '$codigoCodificado' WHERE email = '$correo'");
+		$sql = "UPDATE usuario SET password = ? WHERE email = ? ";
 		$query = $this->db->query($sql, array($codigoCodificado,$correo));
 		return $query;
 	}
