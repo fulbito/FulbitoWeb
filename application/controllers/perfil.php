@@ -39,7 +39,8 @@ class Perfil extends CI_Controller
 	public function modificar_datos_perfil()
 	{
 		chrome_log("Perfil: modificar_datos_perfil");
-		if(isset($_POST['modificar']))
+		
+		if(isset($_POST))
 		{
 			$this->db->trans_start(); // INICIA UNA TRASACCION
 			
@@ -50,18 +51,20 @@ class Perfil extends CI_Controller
 			
 			if ($this->db->trans_status() === FALSE)
 			{
-				$mensaje_error = "No se ha podido modificar los datos, intente mas tarde.";
-				$datos['mensaje_error'] =$mensaje_error;
+				$datos['mensaje_error'] = "No se ha podido modificar los datos, intente mas tarde.";
+				
+				// WS
 				$return["error"] = TRUE;
-				$return["data"] = $mensaje_error;
+				$return["data"] = 9 ;
 				$this->load->view('login/login',$datos);
 			}
 			else
 			{
-				$mensaje_exito = "Datos modificados correctamente.";
-				$datos['mensaje_exito'] =$mensaje_exito;
+				$datos['mensaje_exito'] = "Datos modificados correctamente.";
+				
+				// WS
 				$return["error"] = FALSE;
-				$return["data"] = $mensaje_exito ;
+				
 				$resultado = $this->Perfil_model->traer_datos_perfil();
 				if ($resultado->num_rows() > 0)
 				{
@@ -70,12 +73,26 @@ class Perfil extends CI_Controller
 				}
 			}
 			
-			crear_json($return);
+			if( isset($_POST['origen']) && ($_POST['origen']=="android") )
+			{
+				crear_json($return);
+			}
 			
+
 		}
 		else
 		{
-			redirect(base_url()."index.php/home");
+			chrome_log("NO SETEO");
+			
+			if( isset($_POST['origen']) && ($_POST['origen']=="android") )
+			{
+				// WS
+				$return["error"] = TRUE;
+				$return["data"] = 8; //Debe enviar los datos a modificar
+				crear_json($return);
+			}
+			else
+				redirect(base_url()."index.php/home");
 		}	
 	}
 	

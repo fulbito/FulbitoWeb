@@ -15,9 +15,9 @@ class Perfil_model extends CI_Model {
 		$id_usuario =  $this->session->userdata('id');
 		chrome_log("Perfil traer_datos_perfil");
 		$sql = 	"	SELECT *
-					FROM 	USUARIO AS u LEFT JOIN DATOS_OPCIONALES_USUARIO AS d
-							ON ( u.ID = d.ID_USUARIO )
-					WHERE u.ID = ? ";
+					FROM 	usuario AS u LEFT JOIN datos_opc_usuario AS d
+							ON ( u.id = d.id_usuario )
+					WHERE u.id = ? ";
 		$query = $this->db->query($sql, array($id_usuario));
 		return $query;
 	}
@@ -27,22 +27,22 @@ class Perfil_model extends CI_Model {
 	{
 		$id_usuario =  $this->session->userdata('id');
 		chrome_log("Perfil traer_email");
-		$sql = 	"	SELECT MAIL
-					FROM  USUARIO u
-					WHERE u.ID = ? ";
+		$sql = 	"	SELECT email
+					FROM  usuario u
+					WHERE u.id = ? ";
 		$query = $this->db->query($sql, array($id_usuario));
 		$row = $query->row();
-		return $row->MAIL;
+		return $row->email;
 	}
 	
 	//--- Devuelve si existen datos opcionales ------------------//
-    public function existen_datos_opcionales()
+    public function existen_datos_opcionales($id_usuario)
 	{
-		$id_usuario =  $this->session->userdata('id');
+		//$id_usuario =  $this->session->userdata('id');
 		chrome_log("Perfil: existe_datos_opcionales");
 		$sql = 	"	SELECT * 
-					FROM DATOS_OPCIONALES_USUARIO 
-					WHERE ID_USUARIO = ? ";
+					FROM datos_opc_usuario 
+					WHERE id_usuario = ? ";
 					
 		$query = $this->db->query($sql, array($id_usuario));
 		
@@ -58,8 +58,8 @@ class Perfil_model extends CI_Model {
 		
 		$id_usuario =  $this->session->userdata('id');
 		$sql = "	SELECT  * 
-					FROM USUARIO
-					WHERE MAIL = ? AND ID != ? " ;
+					FROM usuario
+					WHERE email = ? AND id != ? " ;
 		$query = $this->db->query($sql, array($correo,$id_usuario));
 		return $query->result_array();
 	}
@@ -72,23 +72,25 @@ class Perfil_model extends CI_Model {
 	public function modificar_datos_obligatorios($_ARRAY)
 	{
 		
-		$id_usuario =  $this->session->userdata('id');
+		//$id_usuario =  $this->session->userdata('id');
+		$id_usuario = $_ARRAY['id_usuario'];
 		
 		/* Modificar datos OBLIGATORIOS */
 
 		$data_obligatoria = array(
-		   'ALIAS' => $_ARRAY['alias'],            
+		   'alias' => $_ARRAY['alias'],            
 		);
 		
+		/* NO SE PERMITE CAMBIAR EL EMAIL 
 		$email_viejo = $this->Perfil_model->traer_email(); // traigo email cargado
 		if( $email_viejo != $_ARRAY['email'] && !empty($_ARRAY['email']) ) // Cambio el email
-			$data_obligatoria['MAIL'] = $_ARRAY['email'];
+			$data_obligatoria['email'] = $_ARRAY['email'];*/
 				
 		if(isset($_ARRAY['password']) && !empty($_ARRAY['password']) ) //  Si cambio el password
-			$data_obligatoria['PASSWORD'] = md5($_ARRAY['password']);
+			$data_obligatoria['password'] = md5($_ARRAY['password']);
 				
-		$this->db->where('ID', $id_usuario);			
-		$this->db->update('USUARIO', $data_obligatoria);
+		$this->db->where('id', $id_usuario);			
+		$this->db->update('usuario', $data_obligatoria);
 		
 	}
 	
@@ -98,39 +100,41 @@ class Perfil_model extends CI_Model {
 	 
 	public function modificar_datos_opcionales($_ARRAY)
 	{		
-		$id_usuario =  $this->session->userdata('id');
+		//$id_usuario =  $this->session->userdata('id');
+		$id_usuario = $_ARRAY['id_usuario'];
+		
 		$data_opcional = array();
 		
 		if(isset($_ARRAY['datepicker']) && !empty($_ARRAY['datepicker']) )  //  Si cambio fecha nacimiento
-			$data_opcional['FECHA_NACIMIENTO'] = $_ARRAY['datepicker'];
+			$data_opcional['fecha_nacimiento'] = $_ARRAY['datepicker'];
 		
 		if(isset($_ARRAY['geocomplete']) && !empty($_ARRAY['geocomplete']) )  //  Si cambio ubicacion
-			$data_opcional['UBICACION'] = $_ARRAY['geocomplete'];
+			$data_opcional['ubicacion'] = $_ARRAY['geocomplete'];
 		
 		if(isset($_ARRAY['lat']) && !empty($_ARRAY['lat']) )  //  Si cambio latitud
-			$data_opcional['LATITUD'] = $_ARRAY['lat'];	
+			$data_opcional['latitud'] = $_ARRAY['lat'];	
 			
 		if(isset($_ARRAY['lng']) && !empty($_ARRAY['lng']) )  //  Si cambio ubicacion
-			$data_opcional['LONGITUD'] = $_ARRAY['lng'];	
+			$data_opcional['longitud'] = $_ARRAY['lng'];	
 		
 		if(isset($_ARRAY['sexo']) && !empty($_ARRAY['sexo']) )  //  Si cambio ubicacion
-			$data_opcional['SEXO'] = $_ARRAY['sexo'];	
+			$data_opcional['sexo'] = $_ARRAY['sexo'];	
 		
 		if(isset($_ARRAY['telefono']) && !empty($_ARRAY['telefono']) )  //  Si cambio ubicacion
-			$data_opcional['TELEFONO'] = $_ARRAY['telefono'];	
+			$data_opcional['telefono'] = $_ARRAY['telefono'];	
 		
 		if(isset($_ARRAY['radio']) && !empty($_ARRAY['radio']) )  //  Si cambio ubicacion
-			$data_opcional['RADIO_BUSQUEDA_PARTIDOS'] = $_ARRAY['radio'];
+			$data_opcional['radio_busqueda_partido'] = $_ARRAY['radio'];
 	
-		if($this->Perfil_model->existen_datos_opcionales()) // Si existe ACTUALIZO
+		if($this->Perfil_model->existen_datos_opcionales($id_usuario)) // Si existe ACTUALIZO
 		{
-			$this->db->where('ID_USUARIO', $id_usuario);
-			$this->db->update('DATOS_OPCIONALES_USUARIO', $data_opcional); 
+			$this->db->where('id_usuario', $id_usuario);
+			$this->db->update('datos_opc_usuario', $data_opcional); 
 		}
 		else // Si no existe INSERTO
 		{
-			$data_opcional['ID_USUARIO'] = $id_usuario;	
-			$this->db->insert('DATOS_OPCIONALES_USUARIO', $data_opcional); 
+			$data_opcional['id_usuario'] = $id_usuario;	
+			$this->db->insert('datos_opc_usuario', $data_opcional); 
 		}
 	}
 	
@@ -140,12 +144,12 @@ class Perfil_model extends CI_Model {
 		$id_usuario =  $this->session->userdata('id');
 		chrome_log("Perfil: actualizar_nombre_foto");
 		
-		$sql = 	"	SELECT  PATH_FOTO
-					FROM USUARIO
-					WHERE   ID  = ? ";
+		$sql = 	"	SELECT  foto
+					FROM usuario
+					WHERE   id  = ? ";
 		$query = $this->db->query($sql, array($id_usuario));
 		$row = $query->row();
-		return $row->PATH_FOTO; 
+		return $row->foto; 
 	}
 	
 	//--- Actualizar nombre archivo ------------------//
@@ -154,9 +158,9 @@ class Perfil_model extends CI_Model {
 		$id_usuario =  $this->session->userdata('id');
 		chrome_log("Perfil: actualizar_nombre_foto");
 		
-		$sql = 	"	UPDATE   USUARIO 
-					SET   PATH_FOTO  =  ? 
-					WHERE  ID  = ? ";
+		$sql = 	"	UPDATE   usuario 
+					SET   foto  =  ? 
+					WHERE  id  = ? ";
 		$query = $this->db->query($sql, array($nombre_archivo, $id_usuario));
 		$cantidad=$this->db->affected_rows();
 	    if($cantidad>0)

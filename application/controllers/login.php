@@ -61,6 +61,7 @@ class Login extends CI_Controller
 					$aux['id'] = $row->id;
 					$aux['alias'] = $row->alias;
 					$aux['mail'] = $row->email;
+					
 					$aux['fecha_nacimiento'] = $row->fecha_nacimiento;
 					$aux['ubicacion'] = $row->ubicacion;
 					$aux['longitud'] = $row->longitud;
@@ -138,11 +139,15 @@ class Login extends CI_Controller
 
 				if ( $resultado > 0)
 				{
+					$this->session->set_userdata('id', $this->db->insert_id());
+					$this->session->set_userdata('mail', $_POST['email']);
+					
 					chrome_log("POSITIVO");
 					// WS
 					$aux["id"] = $this->db->insert_id();
 					$return["error"] = FALSE;
 					$return["data"] = $aux;
+					
 				}
 				else
 				{
