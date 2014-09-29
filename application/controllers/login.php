@@ -65,6 +65,7 @@ class Login extends CI_Controller
 					$aux['fecha_nacimiento'] = $row->fecha_nacimiento;
 					$aux['ubicacion'] = $row->ubicacion;
 					$aux['longitud'] = $row->longitud;
+					$aux['latitud'] = $row->latitud;
 					$aux['sexo'] = $row->sexo;
 					$aux['telefono'] = $row->telefono;
 					$aux['radio_busqueda_partido'] = $row->radio_busqueda_partido;
