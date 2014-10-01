@@ -10,31 +10,39 @@ class Partido_model extends CI_Model {
     }
     
 
-    public function get_partidos($id = FALSE)
-	{
-		$id_usuario =  $this->session->userdata('id');
+    /*
+        Traer todo los partidos o uno en particular
+    */
 
-        if($id === FALSE)
+    public function traer_partidos($id_partido = FALSE)
+	{
+		chrome_log("traer_partidos");
+
+        if($id_partido === FALSE) // [MODIFICAR] - Trae todos los partidos (hay que refinar)
         {
     		$sql = 	"SELECT *
     		         FROM partido";
+
     		$query = $this->db->query($sql);
             return $query->result_array();
         }
+        else // Trae un partido en particular
+        {
+            $sql =  "SELECT *
+                 FROM partido WHERE id = ? ";
+            $query = $this->db->query($sql, array($id_partido));        
 
-        $sql = 	"SELECT *
-  		         FROM partido WHERE id=".$id;
-  		$query = $this->db->query($sql);
-
-		return $query->row_array();
+            return $query->row_array();
+        }
+        
 	}
 
 
-    public function get_jugadores($id = FALSE)
+    public function traer_jugadores($id = FALSE)
 	{
 		$id_usuario =  $this->session->userdata('id');
 
-        if($id === FALSE)
+        if($id === FALSE) 
         {
     		$sql = 	"SELECT *
     		         FROM usuario";
@@ -48,21 +56,51 @@ class Partido_model extends CI_Model {
 
 		return $query->row_array();
 	}
-	
-	//--- Modificar los datos obligatorios del perfil ------------------//
-	/* Realiza las modificaciones de datos obligatorio.*/
-	public function crear()
-	{
-        $data = array(
-    		'nombre' => $this->input->post('nombre'),
-    		'fecha' => $this->input->post('fecha'),
-    		'hora' => $this->input->post('hora'),
-    		'cancha' => $this->input->post('cancha')
-    	);
 
-        $this->db->insert('partido', $data);
-    	return $this->db->insert_id();
+	//--- Guardar Partido  ------------------//
+
+	public function guardar_partido($_ARRAY)
+	{
+        $data_partido = array();
+
+        $data_partido['id_usuario_adm'] =  $_ARRAY['id_usuario'];
+        $data_partido['fecha'] =  $_ARRAY['fecha'];
+        $data_partido['hora'] =  $_ARRAY['hora'];
+        $data_partido['id_tipo_partido'] =  $_ARRAY['id_tipo_partido'];
+        $data_partido['id_estado_partido'] =  $this->partido_model->traer_id_estado_partido("Nuevo");
+        
+        if(isset($_ARRAY['cant_jugadores']) && !empty($_ARRAY['cant_jugadores']) )  //  Si cambio fecha nacimiento
+            $data_partido['cant_jugadores'] = $_ARRAY['cant_jugadores'];
+
+        $this->db->insert('partido', $data_partido); 
+
+        return $this->db->insert_id(); 
+
 	}
+
+    //--- Tipos de Partido  ------------------//
+    public function traer_tipos_partidos()
+    {
+        chrome_log("traer_tipos_partidos");
+        $sql = "    SELECT  * 
+                    FROM tipo_partido
+                    WHERE 1 " ;
+        $query = $this->db->query($sql);
+        return $query;//->result_array();
+    }
+
+    //--- Id de estados de Partido  ------------------//
+    public function traer_id_estado_partido($string)
+    {
+        chrome_log("traer_id_estado_partido");
+        $sql = "    SELECT  * 
+                    FROM estado_partido
+                    WHERE descripcion = ? ";
+        $query = $this->db->query($sql, array($string));
+        return $query->row()->id;
+    }
+
+
 
 }	
     

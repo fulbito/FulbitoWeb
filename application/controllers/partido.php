@@ -18,48 +18,91 @@ class Partido extends CI_Controller
    
 	public function index()
 	{
-	    $data['partidos'] = $this->partido_model->get_partidos();
-    	$this->load->view('partido/home', $data);
+        //$data['partidos'] = $this->partido_model->get_partidos();
+    	//$this->load->view('partido/home', $data);
 	}
 
     public function crear()
 	{
-	    $data['error'] = "";
+	   
+        chrome_log("Partido: crear");
+        
+        if( isset($_POST) && count($_POST) > 0)
+        {
+            $id_partido = $this->partido_model->guardar_partido($_POST);
 
-        $this->form_validation->set_rules('nombre', 'nombre', 'required');
-    	$this->form_validation->set_rules('fecha', 'fecha', 'required');
-    	$this->form_validation->set_rules('hora', 'hora', 'required');
-    	$this->form_validation->set_rules('cancha', 'cancha', 'required');
-
-        if ($this->form_validation->run() === FALSE)
-    	{
-    		$this->load->view('partido/crear', $data);
-    	}
-    	else
-    	{
-    		$partido_id = $this->partido_model->crear();
-            if($partido_id)
+            if($id_partido) // Si se creó el partido
             {
-              $data['partido_id'] = $partido_id;
-              $this->load->view('partido/armar', $data);
+                if( isset($_POST['origen']) && ($_POST['origen']=="android") )
+                {
+                    // WS
+                    $aux["id"] = $this->db->insert_id();
+                    $return["error"] = FALSE;
+                    $return["data"] = $aux;
+                }
+                else // Llamo a armar el partido
+                {
+                    redirect(base_url()."index.php/partido/armar/".$id_partido);
+                }
+
+            }
+            else // Si no se pudo crear el partido
+            {
+                if( isset($_POST['origen']) && ($_POST['origen']=="android") )
+                {
+                    // WS
+                    $return["error"] = TRUE;
+                    $return["data"] = 11; //No se ha podido crear el partido, intente mas tarde
+                    crear_json($return);
+                }
+                else // Llamo a armar el partido
+                {
+                    $datos['mensaje_error'] = "No se ha podido crear el partido, intente mas tarde.";
+                    $this->load->view('partido/crear_partido', $data);
+                }
+            } 
+        }
+        else
+        {
+            chrome_log("NO SETEO PARTIDO");
+            
+            if( isset($_POST['origen']) && ($_POST['origen']=="android") )
+            {
+                // WS
+                $return["error"] = TRUE;
+                $return["data"] = 10; //Debe enviar los datos del partido.
+                crear_json($return);
             }
             else
             {
-              $data['error'] = "Se produjo un error al crear el partido";
-              $this->load->view('partido/crear', $data);
+                $data['tipo_partido'] = $this->partido_model->traer_tipos_partidos();
+                $this->load->view('partido/crear_partido', $data);
             }
-    	}
-	}
+        }  
+    } 
+       
 
-    public function armar($id)
+    public function armar()
 	{
-	    $data['error'] = "";
+        $id_partido = $this->uri->segment(3);
+        
+        if(isset($id_partido))
+        {
+            $data['partido'] = $this->partido_model->traer_partidos($id_partido);
+            $this->load->view('partido/armar_partido', $data);
+        }
+        
+
+        
+     
+        /*
+        $data['error'] = "";
         $data['partido'] = $this->partido_model->get_partidos($id);
         $data['jugadores'] = $this->partido_model->get_jugadores();
 
         if ($this->form_validation->run() === FALSE)
     	{
-    		$this->load->view('partido/armar', $data);
+    		$this->load->view('partido/armar_partido', $data);
     	}
     	else
     	{
@@ -72,9 +115,9 @@ class Partido extends CI_Controller
             else
             {
               $data['error'] = "Se produjo un error al crear el partido";
-              $this->load->view('partido/armar', $data);
+              $this->load->view('partido/armar_partido', $data);
             }
-    	}
+    	} */
 	}
 
 }
