@@ -1,6 +1,6 @@
 <?php
 
-// http://escodeigniter.com/guia_usuario/database/transactions.html
+// Transacciones:  http://escodeigniter.com/guia_usuario/database/transactions.html
 
 class Partido_model extends CI_Model {
 
@@ -11,31 +11,37 @@ class Partido_model extends CI_Model {
     
 
     /*
-        Traer todo los partidos o uno en particular
+      Trae la informacion de un partido en particular
     */
-
-    public function traer_partidos($id_partido = FALSE)
+    public function traer_informacion_partido($id_partido = FALSE)
 	{
-		chrome_log("traer_partidos");
+        $sql =  "SELECT *
+                 FROM partido 
+                 WHERE id = ? ";
+    
+        $query = $this->db->query($sql, array($id_partido));        
 
-        if($id_partido === FALSE) // [MODIFICAR] - Trae todos los partidos (hay que refinar)
-        {
-    		$sql = 	"SELECT *
-    		         FROM partido";
-
-    		$query = $this->db->query($sql);
-            return $query->result_array();
-        }
-        else // Trae un partido en particular
-        {
-            $sql =  "SELECT *
-                 FROM partido WHERE id = ? ";
-            $query = $this->db->query($sql, array($id_partido));        
-
-            return $query->row_array();
-        }
-        
+        return $query->row();
+                
 	}
+
+    /*
+      Trae los partidos donde el usuario es administrador
+    */
+    public function traer_mis_partidos_creados($id_usuario)
+    {
+        chrome_log("traer_mis_partidos_creados");    
+
+        $sql =  "SELECT *
+                 FROM partido 
+                 WHERE id_usuario_adm = ? "; 
+
+        $query = $this->db->query($sql, array($id_usuario));        
+
+        return $query;
+                
+    }
+
 
 
     public function traer_jugadores($id = FALSE)
@@ -57,8 +63,9 @@ class Partido_model extends CI_Model {
 		return $query->row_array();
 	}
 
-	//--- Guardar Partido  ------------------//
-
+    /*
+        Guarda un partido
+    */
 	public function guardar_partido($_ARRAY)
 	{
         $data_partido = array();
@@ -78,7 +85,9 @@ class Partido_model extends CI_Model {
 
 	}
 
-    //--- Tipos de Partido  ------------------//
+    /* 
+        Devuelve los tipos de partidos: id y descripcion (privado o publico )
+    */
     public function traer_tipos_partidos()
     {
         chrome_log("traer_tipos_partidos");
@@ -89,7 +98,10 @@ class Partido_model extends CI_Model {
         return $query;//->result_array();
     }
 
-    //--- Id de estados de Partido  ------------------//
+    
+    /* 
+        Devuelve informacion de estado recibido : id y descripcion ( Estados : nuevo, con invitaciones, listo, finalizado)
+    */
     public function traer_id_estado_partido($string)
     {
         chrome_log("traer_id_estado_partido");
@@ -100,6 +112,26 @@ class Partido_model extends CI_Model {
         return $query->row()->id;
     }
 
+    /*
+        Se fija si puede editar el partido
+    */
+
+    public function es_administrador($id_usuario, $id_partido)
+    {
+        chrome_log("es_administrador");
+        
+        $sql = "    SELECT  * 
+                    FROM partido
+                    WHERE id = ? AND
+                          id_usuario_adm = ?  ";
+
+        $query = $this->db->query($sql, array($id_partido,$id_usuario));
+        
+        if($query->row())
+            return true;
+        else
+            return false;
+    }
 
 
 }	

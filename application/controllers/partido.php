@@ -58,7 +58,7 @@ class Partido extends CI_Controller
                 else // Llamo a armar el partido
                 {
                     $datos['mensaje_error'] = "No se ha podido crear el partido, intente mas tarde.";
-                    $this->load->view('partido/crear_partido', $data);
+                    $this->load->view('partido/partido', $data);
                 }
             } 
         }
@@ -76,10 +76,60 @@ class Partido extends CI_Controller
             else
             {
                 $data['tipo_partido'] = $this->partido_model->traer_tipos_partidos();
-                $this->load->view('partido/crear_partido', $data);
+                $this->load->view('partido/partido', $data);
             }
         }  
-    } 
+    }
+
+    public function editar()
+    {
+        chrome_log("Partido: editar");
+        $id_partido = $this->uri->segment(3);
+
+        if( 
+            ( isset($_POST) && count($_POST) > 0 )      ||
+            ( isset($id_partido) && !empty($id_partido) )
+          )
+        {
+
+                if(!isset($_POST['id_usuario'])):
+                        $id_usuario =  $this->session->userdata('id');
+                        $id_partido = $this->uri->segment(3);
+                else:
+                        $id_usuario = $_POST['id_usuario'];
+                        $id_partido = $_POST['id_partido'];
+                endif;
+
+                $administrador = $this->partido_model->es_administrador($id_usuario, $id_partido);
+                
+                if( $administrador) // Es administrador
+                {
+                   $data['datos_partido'] = $this->partido_model->traer_informacion_partido($id_partido);
+                   $data['tipo_partido'] = $this->partido_model->traer_tipos_partidos();
+                   $this->load->view('partido/partido', $data);
+                }
+                else // No es Administrador 
+                {
+                    
+                } 
+        }
+        else
+        {
+            chrome_log("NO SETEO EL PARTIDO ");
+            
+            if( isset($_POST['origen']) && ($_POST['origen']=="android") )
+            {
+                // WS
+                $return["error"] = TRUE;
+                $return["data"] = 12; //Debe elegir el partido a editar
+                crear_json($return);
+            }
+            else
+            {
+                redirect(base_url()."index.php/partido/ver/");
+            }
+        }
+    }  
        
 
     public function armar()
@@ -88,10 +138,24 @@ class Partido extends CI_Controller
         
         if(isset($id_partido))
         {
-            $data['partido'] = $this->partido_model->traer_partidos($id_partido);
+            $data['partido'] = $this->partido_model->traer_informacion_partido($id_partido);
             $this->load->view('partido/armar_partido', $data);
         }
-        
+
+
+    }   
+
+     public function ver()
+    {
+        if(!isset($_POST['id_usuario']))
+            $id_usuario =  $this->session->userdata('id');
+        else
+            $id_usuario = $_POST['id_usuario'];
+
+        $data['mis_partidos']=$this->partido_model->traer_mis_partidos_creados($id_usuario);
+        //$data['nuevos_partidos']=$this->partido_model->nuevos_partidos($id_usuario)
+        $this->load->view('partido/ver_partidos',$data);
+    } 
 
         
      
@@ -118,7 +182,7 @@ class Partido extends CI_Controller
               $this->load->view('partido/armar_partido', $data);
             }
     	} */
-	}
+	
 
 }
 ?>

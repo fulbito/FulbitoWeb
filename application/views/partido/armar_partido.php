@@ -1,5 +1,3 @@
-<? $id_usuario =  $this->session->userdata('id'); ?>
-
 <!DOCTYPE html>
 
 <!-- HTML5 Boilerplate -->
@@ -8,10 +6,8 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif] -->
 
-
-<? //include("php/head.php") ?>
 <head>
-	
+
 	<!-- Importante: la variable CI_ROOT se usa en JQUERY como base_url -->
 	<script type="text/javascript">
         CI_ROOT = "<?=base_url() ?>";
@@ -36,7 +32,7 @@
 	<link rel="stylesheet" href="<?=base_url()?>assets/css/style.css" media="all">
 	<link rel="stylesheet" href="<?=base_url()?>assets/css/validate.css" media="all">
     <link rel="stylesheet" href="<?=base_url()?>assets/css/menu.css" type="text/css">
-    
+
 	<!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements and feature detects -->
 	<script src="<?=base_url()?>assets/js/modernizr-2.5.3-min.js"></script>
 
@@ -46,6 +42,7 @@
 <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/jquery.validate.js" ></script>
 <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/additional-methods.js" ></script>
 <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/login.js"></script>
+
 <body>
 <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/slider/engine1/style.css" />
 
@@ -63,25 +60,19 @@
       </header>
 
 	  <div id="centro" class="sombra redondeado">
-        <div class="boton_home" onclick="window.location.href='<?=base_url()?>index.php/partido/crear'">
-            <div class="boton_home_title">CREAR UN<br>PARTIDO</div>
-            <img src="<?=base_url()?>assets/images/crear.png" alt="" />
-            <p>Crea un partido publico o privado, elegi el lugar del encuentro y listo!</p>
+        <h1>ARMAR EQUIPOS <?if(isset($partido['nombre'])) echo "para el partido".$partido['nombre'];?></h1>
+        <div id="tablero">
+            <img src="<?=base_url()?>assets/images/tablero2.jpg" alt="" />
         </div>
-        <div class="boton_home" onclick="window.location.href='<?=base_url()?>index.php/partido/buscar'">
-            <div class="boton_home_title">BUSCAR<br>PARTIDOS</div>
-            <img src="<?=base_url()?>assets/images/buscar.png" alt="" />
-            <p>Busca un partido cerca tuyo y sumate!</p>
-        </div>
-        <div class="boton_home" onclick="window.location.href='<?=base_url()?>index.php/partido/ver/'">
-            <div class="boton_home_title">VER MIS PARTIDOS</div>
-            <img src="<?=base_url()?>assets/images/buscar.png" alt="" />
-            <p>Ver mis partidos !</p>
+        <div id="jugadores">
+
         </div>
       </div>
 
     </div>
 </div>
+
+
 
 </body>
 

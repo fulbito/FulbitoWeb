@@ -40,7 +40,7 @@ class Perfil extends CI_Controller
 	{
 		chrome_log("Perfil: modificar_datos_perfil");
 		
-		if(isset($_POST))
+		if(isset($_POST)) 
 		{
 			$this->db->trans_start(); // INICIA UNA TRASACCION
 			
@@ -78,7 +78,6 @@ class Perfil extends CI_Controller
 				crear_json($return);
 			}
 			
-
 		}
 		else
 		{

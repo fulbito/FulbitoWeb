@@ -1,6 +1,7 @@
+<!DOCTYPE html>
+
 <? $id_usuario =  $this->session->userdata('id'); ?>
 
-<!DOCTYPE html>
 
 <!-- HTML5 Boilerplate -->
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -8,8 +9,6 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif] -->
 
-
-<? //include("php/head.php") ?>
 <head>
 	
 	<!-- Importante: la variable CI_ROOT se usa en JQUERY como base_url -->
@@ -40,12 +39,13 @@
 	<!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements and feature detects -->
 	<script src="<?=base_url()?>assets/js/modernizr-2.5.3-min.js"></script>
 
+
 </head>
 
 <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/jquery-1.10.2.min.js"> </script>
 <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/jquery.validate.js" ></script>
 <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/additional-methods.js" ></script>
-<script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/login.js"></script>
+<script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/partido.js"></script>
 <body>
 <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/slider/engine1/style.css" />
 
@@ -63,28 +63,49 @@
       </header>
 
 	  <div id="centro" class="sombra redondeado">
-        <div class="boton_home" onclick="window.location.href='<?=base_url()?>index.php/partido/crear'">
-            <div class="boton_home_title">CREAR UN<br>PARTIDO</div>
-            <img src="<?=base_url()?>assets/images/crear.png" alt="" />
-            <p>Crea un partido publico o privado, elegi el lugar del encuentro y listo!</p>
-        </div>
-        <div class="boton_home" onclick="window.location.href='<?=base_url()?>index.php/partido/buscar'">
-            <div class="boton_home_title">BUSCAR<br>PARTIDOS</div>
-            <img src="<?=base_url()?>assets/images/buscar.png" alt="" />
-            <p>Busca un partido cerca tuyo y sumate!</p>
-        </div>
-        <div class="boton_home" onclick="window.location.href='<?=base_url()?>index.php/partido/ver/'">
-            <div class="boton_home_title">VER MIS PARTIDOS</div>
-            <img src="<?=base_url()?>assets/images/buscar.png" alt="" />
-            <p>Ver mis partidos !</p>
-        </div>
+    <h1>PARTIDO</h1>
+
+
+      <?  if(isset($mensaje_error)): ?>
+                 <label class='errorLogin'><?=$mensaje_error?></label>
+              <? unset($mensaje_error);
+          endif;
+      ?>
+
+      <?  
+          if(isset($mensaje_exito)): ?>
+               <label class='ok'><?=$mensaje_exito?></label>
+            <? unset($mensaje_exito);
+          endif;  
+      ?>
+       
+		<? $atributos = array('name' => 'crear_partido', 'id' => 'crear_partido'); ?>
+        <?php echo form_open('partido/crear', $atributos) ?>
+            <input id="id_usuario" name="id_usuario" type="hidden" value="<? echo $id_usuario; ?>" />
+           
+            <input <? if(isset($datos_partido->nombre)) echo "value=".$datos_partido->nombre; ?> type="text" name="nombre" id="nombre" placeholder="Nombre del partido"/><br>
+            <input <? if(isset($datos_partido->fecha)) echo "value=".$datos_partido->fecha; ?> type="date" name="fecha" id="fecha" placeholder="Fecha"/>*<br>
+            <input <? if(isset($datos_partido->hora)) echo "value=".$datos_partido->hora; ?> type="time" name="hora" id="hora" placeholder="Hora"/>*<br>
+        
+        
+         <? foreach ($tipo_partido->result() as $row ) 
+            { ?>
+                <input type="radio" name="id_tipo_partido" id="id_tipo_partido" value="<?=$row->id;?>" <? if($row->descripcion=='Privado') echo 'checked=checked'; ?>/> <? echo $row->descripcion; ?>   
+        <?  } ?>
+        
+
+            <br>
+            <input type="text" name="cancha" id="cancha" placeholder="Cancha/Club/Lugar"/><br>
+            <input <? if(isset($datos_partido->hora)) echo "value=".$datos_partido->cant_jugadores; ?> type="text" name="cant_jugadores" id="cant_jugadores" placeholder="Cantidad de Jugadores"/><br>
+            <input type="submit" name="crear" value="CREAR"/><br>
+        <?php echo form_close() ?>
       </div>
 
     </div>
+
 </div>
 
 </body>
 
 
 </html>
-
