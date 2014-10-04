@@ -131,7 +131,7 @@ class Partido extends CI_Controller
             }
         }
     }
-    }
+    
 
      public function ver()
     {
