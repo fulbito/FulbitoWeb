@@ -178,6 +178,7 @@ footer {
 /* FULBITO */
 
 #centro{
+  position: relative;
   background: #000000;
   min-height: 500px;
   margin-top: 30px;
@@ -444,3 +445,53 @@ footer {
   width: 186px;
   height: 189px;
 }
+
+/*///////// ARMAR PARTIDO /////////*/
+#jugadores{
+  float: right;
+}
+
+.dropzone-wrapper {
+    position: absolute;
+    width: 543px;
+    height: 351px;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: url(../images/tablero2.jpg);
+}
+
+.dropzone {
+    overflow: hidden;
+    width: 271px;
+    height: 351px;
+    padding: 1px;
+    color: #666;
+    text-align: center;
+    border: 4px dashed transparent;
+    transition: background .15s linear, border-color .15s linear;
+    float: left;
+}
+
+.dropzone.-drop-possible {
+  border-color: #666;
+}
+
+.dropzone.-drop-over {
+    background: rgba(0,255,0,0.3);
+    color: #fff;
+}
+
+.draggable {
+    position: relative;
+    z-index: 10;
+    width: 100px;
+    height: 80px;
+    margin: 5px;
+    padding: 5px;
+    background-color: #29e;
+    color: #fff;
+    text-align: center;
+}
+
+.draggable.-drop-possible { background-color: #42bd41; }

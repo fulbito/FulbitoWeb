@@ -19,7 +19,8 @@ class Partido extends CI_Controller
 	public function index()
 	{
         //$data['partidos'] = $this->partido_model->get_partidos();
-    	//$this->load->view('partido/home', $data);
+    	//$this->load->view('partido/home');
+        redirect(base_url()."index.php/home/");
 	}
 
     public function crear()
@@ -156,8 +157,6 @@ class Partido extends CI_Controller
         //$data['nuevos_partidos']=$this->partido_model->nuevos_partidos($id_usuario)
         $this->load->view('partido/ver_partidos',$data);
     } 
-
-        
      
         /*
         $data['error'] = "";
@@ -182,7 +181,5 @@ class Partido extends CI_Controller
               $this->load->view('partido/armar_partido', $data);
             }
     	} */
-	
-
 }
 ?>
