@@ -5,7 +5,7 @@
  * 
  * */
  
-class Partido extends CI_Controller
+class Equipo extends CI_Controller
 {
 	public function __construct()
 	{
@@ -25,7 +25,6 @@ class Partido extends CI_Controller
 
     public function crear()
 	{
-	   
         chrome_log("Partido: crear");
         
         if( isset($_POST) && count($_POST) > 0)
@@ -130,8 +129,7 @@ class Partido extends CI_Controller
                 redirect(base_url()."index.php/partido/ver/");
             }
         }
-    }  
-       
+    }
 
     public function armar()
 	{
@@ -140,13 +138,11 @@ class Partido extends CI_Controller
         if(isset($id_partido))
         {
             $data['partido'] = $this->partido_model->traer_informacion_partido($id_partido);
-            $this->load->view('partido/armar_partido', $data);
+            $this->load->view('equipo/armar_equipo', $data);
         }
-
-
     }   
 
-     public function ver()
+    public function ver()
     {
         if(!isset($_POST['id_usuario']))
             $id_usuario =  $this->session->userdata('id');
@@ -156,30 +152,7 @@ class Partido extends CI_Controller
         $data['mis_partidos']=$this->partido_model->traer_mis_partidos_creados($id_usuario);
         //$data['nuevos_partidos']=$this->partido_model->nuevos_partidos($id_usuario)
         $this->load->view('partido/ver_partidos',$data);
-    } 
-     
-        /*
-        $data['error'] = "";
-        $data['partido'] = $this->partido_model->get_partidos($id);
-        $data['jugadores'] = $this->partido_model->get_jugadores();
+    }
 
-        if ($this->form_validation->run() === FALSE)
-    	{
-    		$this->load->view('partido/armar_partido', $data);
-    	}
-    	else
-    	{
-    		$partido_id = $this->partido_model->crear();
-            if($partido_id)
-            {
-              $data['partido_id'] = $partido_id;
-              $this->load->view('partido/final', $data);
-            }
-            else
-            {
-              $data['error'] = "Se produjo un error al crear el partido";
-              $this->load->view('partido/armar_partido', $data);
-            }
-    	} */
 }
 ?>
