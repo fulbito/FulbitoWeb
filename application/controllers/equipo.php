@@ -43,7 +43,7 @@ class Partido extends CI_Controller
                 }
                 else // Llamo a armar el partido
                 {
-                    redirect(base_url()."index.php/equipo/armar/".$id_partido);
+                    redirect(base_url()."index.php/partido/armar/".$id_partido);
                 }
 
             }
@@ -130,8 +130,21 @@ class Partido extends CI_Controller
                 redirect(base_url()."index.php/partido/ver/");
             }
         }
-    }
-    }
+    }  
+       
+
+    public function armar()
+	{
+        $id_partido = $this->uri->segment(3);
+        
+        if(isset($id_partido))
+        {
+            $data['partido'] = $this->partido_model->traer_informacion_partido($id_partido);
+            $this->load->view('partido/armar_partido', $data);
+        }
+
+
+    }   
 
      public function ver()
     {
@@ -143,7 +156,7 @@ class Partido extends CI_Controller
         $data['mis_partidos']=$this->partido_model->traer_mis_partidos_creados($id_usuario);
         //$data['nuevos_partidos']=$this->partido_model->nuevos_partidos($id_usuario)
         $this->load->view('partido/ver_partidos',$data);
-    }
+    } 
      
         /*
         $data['error'] = "";
