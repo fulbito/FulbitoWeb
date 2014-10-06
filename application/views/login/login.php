@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 
-<? $this->load->view('templates/menu'); ?>
+<? $this->load->view('templates/head'); ?>
 
 <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/slider/engine1/style.css" />
 

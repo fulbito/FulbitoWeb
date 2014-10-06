@@ -73,7 +73,7 @@
        			else:
        				foreach ($mis_partidos->result() as $row):
        				
-       					echo "<a href=".base_url()."index.php/partido/editar/".$row->id."> Editar </a> | <a href=".base_url()."index.php/partido/armar/".$row->id."> armar </a> | ".$row->fecha." - ".$row->hora."<br>";
+       					echo "<a href=".base_url()."index.php/partido/editar/".$row->id."> Editar </a> | <a href=".base_url()."index.php/partido/configurar/".$row->id."> Configurar </a> |  <a href=".base_url()."index.php/partido/armar/".$row->id."> armar </a> | ".$row->fecha." - ".$row->hora."<br>";
        				
        				endforeach;
 
