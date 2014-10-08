@@ -12,7 +12,7 @@ class Login_model extends CI_Model {
 	//--- Comprueba correo y clave existan (ingresar) ------------------//
     public function loguearse($correo,$clave)
 	{
-		
+		chrome_log("LOGIN_MODEL/loguearse ");
 		$clave= md5($clave);
 		$sql =  "	SELECT * 
 					FROM usuario u LEFT JOIN datos_opc_usuario do ON (u.id = do.id_usuario)
@@ -26,7 +26,7 @@ class Login_model extends CI_Model {
 	//--- Comprueba correo que el correo ya exista (AJAX registrarse)------------------//
 	public function existeCorreo($correo)
 	{
-		chrome_log("existeCorreo");
+		chrome_log("LOGIN_MODEL/existeCorreo");
 		$sql = "	SELECT  * 
 					FROM usuario
 					WHERE email = ? " ;
@@ -39,7 +39,7 @@ class Login_model extends CI_Model {
 	public function registrarse($alias, $email, $password )
 	{	
 		$foto = 'default.jpg';
-		chrome_log("registrarse_model");
+		chrome_log("LOGIN_MODEL/registrarse_model");
 		$sql = "	INSERT INTO usuario(email, password, alias, foto ) 
 					VALUES ( ? , ? , ? ,? )";
 					
@@ -52,7 +52,7 @@ class Login_model extends CI_Model {
 	//--- Devuelve el password viejo a la hora de cambiarlo ------------------//
 	public function guardarPasswordViejo($correo)
 	{
-		chrome_log("guardarPasswordViejo");
+		chrome_log("LOGIN_MODEL/guardarPasswordViejo");
 		$sql = " SELECT password FROM usuario WHERE email = ? ";
 		$query = $this->db->query($sql, array($correo));
 		return $query->row();
@@ -61,7 +61,7 @@ class Login_model extends CI_Model {
 	//--- Cambia el password viejo  ------------------//
 	public function cambiar_password($codigoCodificado,$correo)
 	{
-		chrome_log("cambiar_password");
+		chrome_log("LOGIN_MODEL/cambiar_password");
 		chrome_log("UPDATE usuario SET password = '$codigoCodificado' WHERE email = '$correo'");
 		$sql = "UPDATE usuario SET password = ? WHERE email = ? ";
 		$query = $this->db->query($sql, array($codigoCodificado,$correo));

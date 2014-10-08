@@ -18,8 +18,6 @@ class Partido extends CI_Controller
    
 	public function index()
 	{
-        //$data['partidos'] = $this->partido_model->get_partidos();
-    	//$this->load->view('partido/home');
         redirect(base_url()."index.php/home/");
 	}
 
@@ -66,7 +64,7 @@ class Partido extends CI_Controller
         }
         else
         {
-            chrome_log("NO SETEO PARTIDO");
+            chrome_log("No envio informacion para crear el partido");
             
             if( isset($_POST['origen']) && ($_POST['origen']=="android") )
             {
@@ -98,7 +96,7 @@ class Partido extends CI_Controller
             }
             else
             {
-                redirect(base_url()."index.php/partido/ver/");
+                redirect(base_url()."index.php/partido/mis_partidos/");
             }
 
         }
@@ -228,6 +226,9 @@ class Partido extends CI_Controller
 
     public function configurar($id_partido)
     {
+        chrome_log("Controlador PARTIDO/configurar ");
+
+
         if( isset($_POST) && count($_POST) > 0)
         {
 

@@ -29,5 +29,6 @@
     <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/jquery-1.10.2.min.js"> </script>
     <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/jquery.validate.js" ></script>
     <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/additional-methods.js" ></script>
-    <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/login.js"></script>
+    
+
 </head>

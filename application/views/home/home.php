@@ -4,7 +4,6 @@
 <? $this->load->view('templates/head'); ?>
 
 <body>
-<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/slider/engine1/style.css" />
 
 <div id="wrapper">
 
@@ -41,4 +40,3 @@
 
 
 </html>
-
