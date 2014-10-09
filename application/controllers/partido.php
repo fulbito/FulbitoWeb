@@ -18,8 +18,6 @@ class Partido extends CI_Controller
    
 	public function index()
 	{
-        //$data['partidos'] = $this->partido_model->get_partidos();
-    	//$this->load->view('partido/home');
         redirect(base_url()."index.php/home/");
 	}
 
@@ -41,9 +39,9 @@ class Partido extends CI_Controller
                     $return["error"] = FALSE;
                     $return["data"] = $aux;
                 }
-                else // Llamo a armar el partido
+                else // Llamo a configurar el equipo
                 {
-                    redirect(base_url()."index.php/partido/armar/".$id_partido);
+                    redirect(base_url()."index.php/partido/configurar/".$id_partido);
                 }
 
             }
@@ -59,13 +57,14 @@ class Partido extends CI_Controller
                 else // Llamo a armar el partido
                 {
                     $datos['mensaje_error'] = "No se ha podido crear el partido, intente mas tarde.";
+                    $data['tipo_visibilidad_partido'] = $this->partido_model->traer_tipos_visibilidad_partidos();
                     $this->load->view('partido/partido', $data);
                 }
             } 
         }
         else
         {
-            chrome_log("NO SETEO PARTIDO");
+            chrome_log("No envio informacion para crear el partido");
             
             if( isset($_POST['origen']) && ($_POST['origen']=="android") )
             {
@@ -76,48 +75,18 @@ class Partido extends CI_Controller
             }
             else
             {
-                $data['tipo_partido'] = $this->partido_model->traer_tipos_partidos();
+                $data['tipo_visibilidad_partido'] = $this->partido_model->traer_tipos_visibilidad_partidos();
                 $this->load->view('partido/partido', $data);
             }
         }  
     }
 
-    public function editar()
+    public function editar($id_partido)
     {
         chrome_log("Partido: editar");
-        $id_partido = $this->uri->segment(3);
 
-        if( 
-            ( isset($_POST) && count($_POST) > 0 )      ||
-            ( isset($id_partido) && !empty($id_partido) )
-          )
+        if(!isset($id_partido) ) //---------------------- NO envio el ID de Partido a Editar -------//
         {
-
-                if(!isset($_POST['id_usuario'])):
-                        $id_usuario =  $this->session->userdata('id');
-                        $id_partido = $this->uri->segment(3);
-                else:
-                        $id_usuario = $_POST['id_usuario'];
-                        $id_partido = $_POST['id_partido'];
-                endif;
-
-                $administrador = $this->partido_model->es_administrador($id_usuario, $id_partido);
-                
-                if( $administrador) // Es administrador
-                {
-                   $data['datos_partido'] = $this->partido_model->traer_informacion_partido($id_partido);
-                   $data['tipo_partido'] = $this->partido_model->traer_tipos_partidos();
-                   $this->load->view('partido/partido', $data);
-                }
-                else // No es Administrador 
-                {
-                    
-                } 
-        }
-        else
-        {
-            chrome_log("NO SETEO EL PARTIDO ");
-            
             if( isset($_POST['origen']) && ($_POST['origen']=="android") )
             {
                 // WS
@@ -127,26 +96,92 @@ class Partido extends CI_Controller
             }
             else
             {
-                redirect(base_url()."index.php/partido/ver/");
+                redirect(base_url()."index.php/partido/mis_partidos/");
             }
-        }
-    }  
-       
 
-    public function armar()
-	{
-        $id_partido = $this->uri->segment(3);
-        
-        if(isset($id_partido))
+        }
+        else //----------------------- MODIFICAR LOS DATOS ---------------------//
         {
-            $data['partido'] = $this->partido_model->traer_informacion_partido($id_partido);
-            $this->load->view('partido/armar_partido', $data);
+            
+            if( isset($_POST) && count($_POST) > 0 ) // Modificar los datos
+            {
+                chrome_log(" Entra a modificar el partido ");
+
+                if(!isset($_POST['id_usuario']))
+                    $id_usuario =  $this->session->userdata('id');
+                else
+                    $id_usuario = $_POST['id_usuario'];
+
+                chrome_log($id_usuario);
+
+
+                $administrador = $this->partido_model->es_administrador($id_usuario, $id_partido);
+                
+                if( $administrador) // Es administrador
+                {
+                    chrome_log("Es administrador");
+
+                    $resultado = $this->partido_model->modificar_partido($_POST); 
+
+                    if($resultado)
+                    {
+                        chrome_log("Cambio exitoso");  
+                        $return["error"] = false;
+                        
+                        $mensaje_exito = "Se ha modificar el partido exitosamente.";
+                        $datos['mensaje_exito'] =$mensaje_exito;
+                    }
+                    else
+                    {
+                        chrome_log("Cambio no exitoso");    
+                       
+                        $return["error"] = TRUE;
+                        $return["data"] = 12; // "No se ha podido modificar el partido.";
+
+                        $mensaje_error = "No se ha podido modificar el partido.";
+                        $datos['mensaje_error'] =$mensaje_error;
+                    }
+                }
+                else // No es administrador
+                {
+                    chrome_log("No es administrador");    
+                       
+                    $return["error"] = TRUE;
+                    $return["data"] = 12; // No es administrador
+
+                    $datos['mensaje_error'] = "Usted no es administrador del partido.";
+                }
+
+                if( isset($_POST['origen']) && ($_POST['origen']=="android") )
+                {
+                    crear_json($return);
+                }
+                else
+                    $this->load->view('partido/editar/'.$id_partido,$datos);
+
+            }
+            else // No envio los datos
+            {
+                if( isset($_POST['origen']) && ($_POST['origen']=="android") )
+                {
+                    // WS
+                    $return["error"] = TRUE;
+                    $return["data"] = 12; //Debe enviar los datos del partido
+                    crear_json($return);
+                }
+                else
+                {
+                    redirect(base_url()."index.php/partido/ver_partido/".$id_partido);
+                }
+
+            }
+
+               
         }
+    }
+    
 
-
-    }   
-
-     public function ver()
+    public function mis_partidos()
     {
         if(!isset($_POST['id_usuario']))
             $id_usuario =  $this->session->userdata('id');
@@ -154,32 +189,70 @@ class Partido extends CI_Controller
             $id_usuario = $_POST['id_usuario'];
 
         $data['mis_partidos']=$this->partido_model->traer_mis_partidos_creados($id_usuario);
-        //$data['nuevos_partidos']=$this->partido_model->nuevos_partidos($id_usuario)
         $this->load->view('partido/ver_partidos',$data);
-    } 
-     
-        /*
-        $data['error'] = "";
-        $data['partido'] = $this->partido_model->get_partidos($id);
-        $data['jugadores'] = $this->partido_model->get_jugadores();
+    }
 
-        if ($this->form_validation->run() === FALSE)
-    	{
-    		$this->load->view('partido/armar_partido', $data);
-    	}
-    	else
-    	{
-    		$partido_id = $this->partido_model->crear();
-            if($partido_id)
+    public function ver_partido($id_partido)
+    {
+        chrome_log("ver_partido".$id_partido);
+
+        if(!isset($id_partido) )
+        {
+            redirect(base_url()."index.php/partido/mis_partidos");
+            chrome_log("No esta seteado");
+        }
+        else
+        {
+            chrome_log("SETEADO ".$id_partido);
+            $id_usuario =  $this->session->userdata('id');
+            $administrador = $this->partido_model->es_administrador($id_usuario, $id_partido);
+
+            if( $administrador) // Es administrador
             {
-              $data['partido_id'] = $partido_id;
-              $this->load->view('partido/final', $data);
+               chrome_log("Admin ".$administrador);
+               $data['datos_partido'] = $this->partido_model->traer_informacion_partido($id_partido);
+               $data['tipo_visibilidad_partido'] = $this->partido_model->traer_tipos_visibilidad_partidos();
+
+               $this->load->view('partido/partido', $data);
+            }
+            else // No es Administrador 
+            {
+                $datos['mensaje_error'] = "Usted no es administrador del partido.";
+                redirect(base_url()."index.php/partido/mis_partidos");
+            }
+
+        }
+    }
+
+    public function configurar($id_partido)
+    {
+        chrome_log("Controlador PARTIDO/configurar ");
+
+
+        if( isset($_POST) && count($_POST) > 0)
+        {
+
+        }
+        else
+        {
+            chrome_log("NO SETEO configurar");
+            
+            if( isset($_POST['origen']) && ($_POST['origen']=="android") )
+            {
+                // WS
+                //$return["error"] = TRUE;
+                //$return["data"] = 10; //Debe enviar los datos del partido.
+                crear_json($return);
             }
             else
             {
-              $data['error'] = "Se produjo un error al crear el partido";
-              $this->load->view('partido/armar_partido', $data);
+                $data['tipo_seleccion_jugadores'] = $this->partido_model->traer_tipos_seleccion_jugadores();
+                $data['tipo_partido'] = $this->partido_model->traer_tipos_partidos();
+                $this->load->view('partido/configurar', $data);
             }
-    	} */
+        }
+        
+    }
+     
 }
 ?>

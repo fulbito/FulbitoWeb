@@ -1,23 +1,23 @@
 <?
 
 /*  Esta clase maneja:
- * 	- Mostrar Perfil.
- *  - Modificar Perfil
+ * 	- Mostrar usuario.
+ *  - Modificar usuario
  * 	- Comprobar contraseña
 
 /*	[ FALTA ] 
  *	- Hacer el uso de variables de SESIONES.
- * 	- En index: traer_datos_perfil enviando el email en session o el id, como queramos.
+ * 	- En index: traer_datos_usuario enviando el email en session o el id, como queramos.
  * 	- Hacer la verificacion de variables de sesiones.
  * */
  
  
-class Perfil extends CI_Controller
+class Usuario extends CI_Controller
 {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('Perfil_model');	
+		$this->load->model('Usuario_model');	
 		$this->load->library('form_validation');
 		$this->load->helper('general_helper'); // Tiene la funcion generar_string_aleatorio
 		$this->load->helper(array('form', 'url'));
@@ -25,27 +25,27 @@ class Perfil extends CI_Controller
 	
 	public function index()
 	{	
-		$resultado = $this->Perfil_model->traer_datos_perfil();
+		$resultado = $this->Usuario_model->traer_datos_usuarios();
 		if ($resultado->num_rows() > 0)
 		{
-			$datos['datos_perfil'] = $resultado;
-			$this->load->view('perfil/perfil',$datos);
+			$datos['datos_usuario'] = $resultado;
+			$this->load->view('usuario/usuario',$datos);
 		}
 	}
 	
 	/* Modificar los datos obligatorios de usuario
 	 * Modifica los datos opcionales de usuario.
 	 * */
-	public function modificar_datos_perfil()
+	public function modificar_datos_usuario()
 	{
-		chrome_log("Perfil: modificar_datos_perfil");
+		chrome_log("usuario: modificar_datos_usuario");
 		
 		if(isset($_POST)) 
 		{
 			$this->db->trans_start(); // INICIA UNA TRASACCION
 			
-			$resultado = $this->Perfil_model->modificar_datos_obligatorios($_POST); // Alias, email, password
-			$resultado = $this->Perfil_model->modificar_datos_opcionales($_POST); // telefono, fecha nacimiento, sexo
+			$resultado = $this->usuario_model->modificar_datos_obligatorios($_POST); // Alias, email, password
+			$resultado = $this->usuario_model->modificar_datos_opcionales($_POST); // telefono, fecha nacimiento, sexo
 		
 			$this->db->trans_complete();
 			
@@ -65,11 +65,11 @@ class Perfil extends CI_Controller
 				// WS
 				$return["error"] = FALSE;
 				
-				$resultado = $this->Perfil_model->traer_datos_perfil();
+				$resultado = $this->usuario_model->traer_datos_usuario();
 				if ($resultado->num_rows() > 0)
 				{
-					$datos['datos_perfil'] = $resultado;
-					$this->load->view('perfil/perfil',$datos);
+					$datos['datos_usuario'] = $resultado;
+					$this->load->view('usuario/usuario',$datos);
 				}
 			}
 			
@@ -96,22 +96,22 @@ class Perfil extends CI_Controller
 	}
 	
 	
-	/* Modifica la foto de perfil del usuario
+	/* Modifica la foto de usuario del usuario
 	 * - Sube la foto al servidor
 	 * - Hace un resize para la web y otro para android
 	 * - Borra la imagen del servidor
 	 * 														 */
 	 
-	function modificar_foto_perfil() 
+	function modificar_foto_usuario() 
 	{
-		chrome_log("Perfil: modificar_foto_perfil");
+		chrome_log("usuario: modificar_foto_usuario");
 		$id_usuario =  $this->session->userdata('id');
 		/* GUARDAR LA FOTO EN EL SERVIDOR */
 
 		$this->load->helper('form');
 
 		//Configure
-		$config['upload_path'] = 'assets/images/fotos_perfil/'; // Carpeta donde guarda las fotos
+		$config['upload_path'] = 'assets/images/fotos_usuario/'; // Carpeta donde guarda las fotos
 		$config['allowed_types'] = 'gif|jpg|png'; 	// set the filter image types
 		$nombre_archivo = $id_usuario."_".time();
 		$config['file_name'] = $nombre_archivo; // Nombre en el servidor
@@ -123,30 +123,30 @@ class Perfil extends CI_Controller
 		
 		if (!$this->upload->do_upload('userfile')) //---------------- NO subio la foto al servidor
 		{
-			chrome_log("Perfil: NO subio la foto al servidor");
+			chrome_log("usuario: NO subio la foto al servidor");
 			//echo $this->upload->display_errors();
 			$mensaje_error = "No se ha podido subir la foto, intente mas tarde.";
 			$datos['mensaje_foto_error'] =$mensaje_error;
 			$return["error"] = TRUE;
 			$return["data"] = $mensaje_error;
-			$resultado = $this->Perfil_model->traer_datos_perfil();
+			$resultado = $this->usuario_model->traer_datos_usuario();
 			if ($resultado->num_rows() > 0)
 			{
-				$datos['datos_perfil'] = $resultado;
-				$this->load->view('perfil/perfil',$datos);
+				$datos['datos_usuario'] = $resultado;
+				$this->load->view('usuario/usuario',$datos);
 			}	
 		} 
 		else  //---------------- SI subio la foto original
 		{ 
-			chrome_log("Perfil: SI subio la foto original");
+			chrome_log("usuario: SI subio la foto original");
 			$data = array('msg' => "Upload success!");
 			$datos= $this->upload->data();	// Trae informacion de la foto subida.
 			$nombre_archivo = $datos['file_name'];
 					
 			//---- Genero la imagen WEB
 			$config_web['image_library'] = 'gd2';
-			$config_web['source_image']	= 'assets/images/fotos_perfil/'.$nombre_archivo;
-			$config_web['new_image'] = 'assets/images/fotos_perfil/foto_web/'.$nombre_archivo;
+			$config_web['source_image']	= 'assets/images/fotos_usuario/'.$nombre_archivo;
+			$config_web['new_image'] = 'assets/images/fotos_usuario/foto_web/'.$nombre_archivo;
 			$config_web['width']	= 200;
 			$config_web['height']	= 225;
 				
@@ -156,30 +156,30 @@ class Perfil extends CI_Controller
 			if ( ! $this->image_lib->resize()) //---------------- NO pudo modificar la foto WEB
 			{
 				// echo "Imagen Web: ".$this->image_lib->display_errors();
-				chrome_log("Perfil:  NO pudo modificar la foto WEB");
+				chrome_log("usuario:  NO pudo modificar la foto WEB");
 								
 				// Borrar foto original
-				$ruta_archivo = 'assets/images/fotos_perfil/'.$nombre_archivo;
-				borrar_foto_perfil($ruta_archivo);
+				$ruta_archivo = 'assets/images/fotos_usuario/'.$nombre_archivo;
+				borrar_foto_usuario($ruta_archivo);
 				
 				$mensaje_error = "No se ha podido subir la foto, intente mas tarde.";
 				$datos['mensaje_foto_error'] =$mensaje_error;
 				$return["error"] = TRUE;
 				$return["data"] = $mensaje_error;
-				$resultado = $this->Perfil_model->traer_datos_perfil();
+				$resultado = $this->usuario_model->traer_datos_usuario();
 				if ($resultado->num_rows() > 0)
 				{
-					$datos['datos_perfil'] = $resultado;
-					$this->load->view('perfil/perfil',$datos);
+					$datos['datos_usuario'] = $resultado;
+					$this->load->view('usuario/usuario',$datos);
 				}	
 			}
 			else //---------------- SI Modifico la foto WEB
 			{
-				chrome_log("Perfil:  SI Modifico la foto WEB");
+				chrome_log("usuario:  SI Modifico la foto WEB");
 				//---- Genero la imagen ANDROID
 				$config_android['image_library'] = 'gd2';
-				$config_android['source_image']	= 'assets/images/fotos_perfil/'.$nombre_archivo;
-				$config_android['new_image'] = 'assets/images/fotos_perfil/foto_android/'.$nombre_archivo;
+				$config_android['source_image']	= 'assets/images/fotos_usuario/'.$nombre_archivo;
+				$config_android['new_image'] = 'assets/images/fotos_usuario/foto_android/'.$nombre_archivo;
 				$config_android['width']	= 50;
 				$config_android['height']	= 75;
 					
@@ -189,73 +189,73 @@ class Perfil extends CI_Controller
 				if ( ! $this->image_lib->resize()) //---------------- NO pudo modificar la foto ANDROID
 				{
 					// echo "Imagen ANDROID: ".$this->image_lib->display_errors();
-					$ruta_archivo = 'assets/images/fotos_perfil/'.$nombre_archivo;
-					borrar_foto_perfil($ruta_archivo);
+					$ruta_archivo = 'assets/images/fotos_usuario/'.$nombre_archivo;
+					borrar_foto_usuario($ruta_archivo);
 					
-					$ruta_archivo = 'assets/images/fotos_perfil/foto_web/'.$nombre_archivo;
-					borrar_foto_perfil($ruta_archivo);
+					$ruta_archivo = 'assets/images/fotos_usuario/foto_web/'.$nombre_archivo;
+					borrar_foto_usuario($ruta_archivo);
 					
 					$mensaje_error = "No se ha podido subir la foto, intente mas tarde.";
 					$datos['mensaje_foto_error'] =$mensaje_error;
 					$return["error"] = TRUE;
 					$return["data"] = $mensaje_error;
-					$resultado = $this->Perfil_model->traer_datos_perfil();
+					$resultado = $this->usuario_model->traer_datos_usuario();
 					if ($resultado->num_rows() > 0)
 					{
-						$datos['datos_perfil'] = $resultado;
-						$this->load->view('perfil/perfil',$datos);
+						$datos['datos_usuario'] = $resultado;
+						$this->load->view('usuario/usuario',$datos);
 					}	
 				}
 				else  //---------------- SI Modifico la foto ANDROID -----------------
 				{
-					$nombre_foto_anterior = $this->Perfil_model->traer_nombre_foto();
-					$resultado = $this->Perfil_model->actualizar_nombre_foto($nombre_archivo);				
+					$nombre_foto_anterior = $this->usuario_model->traer_nombre_foto($id_usuario);
+					$resultado = $this->usuario_model->actualizar_nombre_foto($nombre_archivo);				
 					
 					if($resultado) // Si modifico el nombre
 					{
 						if($nombre_foto_anterior != 'default.jpg') 
 						{
-							$ruta_archivo = 'assets/images/fotos_perfil/'.$nombre_archivo;
-							borrar_foto_perfil($ruta_archivo);
+							$ruta_archivo = 'assets/images/fotos_usuario/'.$nombre_archivo;
+							borrar_foto_usuario($ruta_archivo);
 							
-							$ruta_archivo = 'assets/images/fotos_perfil/foto_android/'.$nombre_foto_anterior;
-							borrar_foto_perfil($ruta_archivo);
+							$ruta_archivo = 'assets/images/fotos_usuario/foto_android/'.$nombre_foto_anterior;
+							borrar_foto_usuario($ruta_archivo);
 							
-							$ruta_archivo = 'assets/images/fotos_perfil/foto_web/'.$nombre_foto_anterior;
-							borrar_foto_perfil($ruta_archivo);
+							$ruta_archivo = 'assets/images/fotos_usuario/foto_web/'.$nombre_foto_anterior;
+							borrar_foto_usuario($ruta_archivo);
 						}
 						
 						$mensaje_exito = "La foto se ha modificado exitosamente.";
 						$datos['mensaje_foto_exito'] =$mensaje_exito;
 						$return["error"] = FALSE;
 						$return["data"] = $mensaje_exito;
-						$resultado = $this->Perfil_model->traer_datos_perfil();
+						$resultado = $this->usuario_model->traer_datos_usuario();
 						if ($resultado->num_rows() > 0)
 						{
-							$datos['datos_perfil'] = $resultado;
-							$this->load->view('perfil/perfil',$datos);
+							$datos['datos_usuario'] = $resultado;
+							$this->load->view('usuario/usuario',$datos);
 						}	
 					}
 					else // Si no actualizo el nombre, borro el original, android y web de la foto nueva.
 					{	
-						$ruta_archivo = 'assets/images/fotos_perfil/'.$nombre_archivo;
-						borrar_foto_perfil($ruta_archivo);
+						$ruta_archivo = 'assets/images/fotos_usuario/'.$nombre_archivo;
+						borrar_foto_usuario($ruta_archivo);
 						
-						$ruta_archivo = 'assets/images/fotos_perfil/foto_android/'.$nombre_archivo;
-						borrar_foto_perfil($ruta_archivo);
+						$ruta_archivo = 'assets/images/fotos_usuario/foto_android/'.$nombre_archivo;
+						borrar_foto_usuario($ruta_archivo);
 						
-						$ruta_archivo = 'assets/images/fotos_perfil/foto_web/'.$nombre_archivo;
-						borrar_foto_perfil($ruta_archivo);			
+						$ruta_archivo = 'assets/images/fotos_usuario/foto_web/'.$nombre_archivo;
+						borrar_foto_usuario($ruta_archivo);			
 						
 						$mensaje_error = "No se ha podido subir la foto, intente mas tarde.";
 						$datos['mensaje_foto_error'] =$mensaje_error;
 						$return["error"] = TRUE;
 						$return["data"] = $mensaje_error;
-						$resultado = $this->Perfil_model->traer_datos_perfil();
+						$resultado = $this->usuario_model->traer_datos_usuario();
 						if ($resultado->num_rows() > 0)
 						{
-							$datos['datos_perfil'] = $resultado;
-							$this->load->view('perfil/perfil',$datos);
+							$datos['datos_usuario'] = $resultado;
+							$this->load->view('usuario/usuario',$datos);
 						}	
 					}					
 					
@@ -273,7 +273,7 @@ class Perfil extends CI_Controller
 		chrome_log("comprobar_email_existente");
 		$correo = $_POST['email'];
 		
-		$resultado = $this->Perfil_model->existeCorreoDuplicado($correo); 
+		$resultado = $this->usuario_model->existeCorreoDuplicado($correo); 
 						
 		if($resultado) 
 		{

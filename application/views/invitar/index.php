@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-
-<html class="no-js">
+<html>
 
 <? $this->load->view('templates/head'); ?>
 
@@ -14,24 +13,28 @@
     <? $this->load->view('templates/menu'); ?>
 
     <div id="maincontent">
-     
-      <? $this->load->view('templates/header'); ?> 
+      <? $this->load->view('templates/header'); ?>
 
 	  <div id="centro" class="sombra redondeado">
-        <h1>MIS PARTIDOS</h1>
+
+        <form>
+            <input type="mail" placeholder="E-mail" name="mail"/>
+            <input type="submit" name="enviar_mail" value="Invitar"/>
+        </form>
+
         <?
-        foreach($partidos as $partido)
+        foreach($usuarios as $usuario)
         {
-          print "<a href='".base_url()."index.php/partido/armar/".$partido['id']."'>".$partido['nombre']."</a><br>";
+            echo $usuario->nombre."<br>";
         }
         ?>
+
       </div>
 
     </div>
+
 </div>
 
 </body>
 
-
 </html>
-

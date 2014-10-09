@@ -1,4 +1,3 @@
-
 // ----------------- MAPA ------------------ //
 
 $( document ).ready(function() {
@@ -11,7 +10,10 @@ $( document ).ready(function() {
 	$("#geocomplete").geocomplete(options);
 });
 
+
 // ----------------- FECHA ------------------ //
+
+/*
 $(function() {
     $( "#datepicker" ).datepicker({
       changeMonth: true,
@@ -20,7 +22,7 @@ $(function() {
     });
 
 
-});
+}); */
 
 // ----------------- VALIDAR ------------------ //
 
@@ -34,11 +36,6 @@ $(function(){
 						required : true, //para validar campo vacio
 						minlength : 6, //para validar campo con minimo 3 caracteres
 						maxlength : 20,  //para validar campo con maximo 9 caracteres
-					},
-					email : {
-						required : true, //para validar campo vacio
-						email    : true,  //para validar formato email
-						remote: { url: CI_ROOT+"index.php/perfil/comprobar_email_existente/", type: 'POST', async: false } 
 					},
 					password : {
 						minlength : 6, //para validar campo con minimo 3 caracteres
@@ -56,11 +53,6 @@ $(function(){
 						minlength : "EL usuario debe tener un minimo de 6 caracteres",
 						maxlength : "EL usuario debe tener un maximo de 20 caracteres",
 					},
-			 		email : {
-						required : "Debe ingresar su email.",
-						email    : "Debe ingresar un email valido.",
-						remote    : "Email utilizado."
-					}, 
 					password : {
 						minlength : "Su password debe tener un minimo de 6 caracteres",
 						maxlength : "Su password debe tener un maximo de 15 caracteres"
