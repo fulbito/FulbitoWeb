@@ -60,8 +60,8 @@ $db['default']['password'] = 'fulbito2014';
 $db['default']['database'] = 'a6003835_fulbito';
 */
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'adminBD';
-$db['default']['password'] = 'Admin1234';
+$db['default']['username'] = 'root';
+$db['default']['password'] = '123456';
 $db['default']['database'] = 'fulbito';
 
 $db['default']['dbdriver'] = 'mysql';
