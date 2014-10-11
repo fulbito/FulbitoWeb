@@ -82,6 +82,7 @@ function invitar(id)
             ?>
         </div>
 
+        <a style="position:absolute; bottom:0px; right:0px;" href="<?=base_url()?>index.php/equipo/armar/<?=$partido->id?>">Listo</a>
       </div>
 
     </div>

@@ -11,7 +11,7 @@ class Invitar extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('partido_model');
-		$this->load->model('usuario_model');
+		//$this->load->model('usuario_model');
 		$this->load->model('invitar_model');
         $this->load->helper('form');
 		$this->load->library('form_validation');
