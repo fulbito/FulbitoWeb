@@ -43,7 +43,7 @@ class Partido extends CI_Controller
                 }
                 else // Llamo a armar el partido
                 {
-                    redirect(base_url()."index.php/equipo/armar/".$id_partido);
+                    redirect(base_url()."index.php/invitar/index/".$id_partido);
                 }
 
             }
