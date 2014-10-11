@@ -10,13 +10,14 @@ class Usuario_model extends CI_Model {
     }
 
     //---Trae los datos del perfil, opcionales y obligatorios  ------------------//
-    public function traer_usuarios($id_usuario = NULL)
+    public function traer_usuarios($id_usuario = FALSE)
 	{
 	    if($id_usuario === FALSE)
         {
             $sql = 	"SELECT *
 					FROM usuario AS u LEFT JOIN datos_opc_usuario AS d
 							ON ( u.id = d.id_usuario )";
+            $query = $this->db->query($sql);
             return $query->result_array();
         }
 
@@ -26,6 +27,22 @@ class Usuario_model extends CI_Model {
     			WHERE u.id = ? ";
 		$query = $this->db->query($sql, array($id_usuario));
 		return $query->row_array();
+	}
+
+    //---Trae los datos del perfil de amigos ------------------//
+    public function traer_amigos($id_usuario = FALSE)
+	{
+	    if($id_usuario === FALSE)
+        {
+            return FALSE;
+        }
+
+		$sql = 	"SELECT *
+    			FROM usuario AS u INNER JOIN amigo AS a
+    					ON ( u.id = a.id_usuario_amigo )
+    			WHERE a.id_usuario = ? ";
+		$query = $this->db->query($sql, array($id_usuario));
+		return $query->result_array();
 	}
 	
 	//--- Trae el email cargado ------------------//

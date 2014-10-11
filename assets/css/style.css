@@ -452,12 +452,10 @@ footer {
 }
 
 .dropzone-wrapper {
-    position: absolute;
+    position: relative;
     width: 543px;
     height: 351px;
-    top: 0;
-    left: 0;
-    right: 0;
+    float: left;
     background: url(../images/tablero2.jpg);
 }
 
@@ -486,12 +484,29 @@ footer {
     position: relative;
     z-index: 10;
     width: 80px;
-    height: 60px;
+    height: 80px;
     margin: 5px;
     padding: 5px;
     background-color: #29e;
     color: #fff;
     text-align: center;
 }
+.draggable .nombre{
+    position: relative;
+    font-size: 12px;
+    line-height: 10px;
+}
 
 .draggable.-drop-possible { background-color: #42bd41; }
+
+h2{
+  font-size: 20px;
+  color: #FFFFFF;
+}
+
+.usuarios{
+  float:left;
+  width: 200px;
+  height: 300px;
+  overflow-y: auto;
+}

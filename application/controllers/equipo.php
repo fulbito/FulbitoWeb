@@ -11,6 +11,7 @@ class Equipo extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('partido_model');
+		$this->load->model('usuario_model');
         $this->load->helper('form');
 		$this->load->library('form_validation');
 		$this->load->helper('general_helper'); // Tiene la funcion generar_string_aleatorio
@@ -138,6 +139,8 @@ class Equipo extends CI_Controller
         if(isset($id_partido))
         {
             $data['partido'] = $this->partido_model->traer_informacion_partido($id_partido);
+            $data['usuarios'] = $this->usuario_model->traer_usuarios();
+            //$data['usuario'] = $this->usuario_model->traer_usuarios(1);
             $this->load->view('equipo/armar_equipo', $data);
         }
     }   

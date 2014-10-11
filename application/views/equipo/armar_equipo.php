@@ -29,7 +29,7 @@
 
     // setup drop areas.
     // every dropzone accepts draggable #3
-    setupDropzone('.js-drop', '#drag1, #drag2, #drag3');
+    setupDropzone('.js-drop', '.draggable');
 
     /**
      * Setup a given element as a dropzone.
@@ -94,9 +94,15 @@
             <div id="drop2" class="dropzone js-drop">Equipo 2</div>
         </div>
         <div id="jugadores">
-          <div id="drag1" class="draggable js-drag">Jugador 1</div>
-          <div id="drag2" class="draggable js-drag">Jugador 2</div>
-          <div id="drag3" class="draggable js-drag">Jugador 3</div>
+            <?
+            foreach($usuarios as $usuario)
+            {
+              echo "<div id='drag".$usuario['id']."' class='draggable js-drag'>";
+                echo "<img src='".base_url()."assets/images/thumbnails/".$usuario['foto']."'>";
+                echo "<div class='nombre'>".$usuario['alias']."</div>";
+              echo "</div>";
+            }
+            ?>
         </div>
       </div>
 
