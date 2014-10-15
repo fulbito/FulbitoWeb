@@ -47,22 +47,24 @@
 
 $active_group = 'default';
 $active_record = TRUE;
-/*
+
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';
 $db['default']['password'] = 'root';
 $db['default']['database'] = 'fulbito';
-*/
+
 /*
 $db['default']['hostname'] = 'mysql13.000webhost.com';
 $db['default']['username'] = 'a6003835_fulbito';
 $db['default']['password'] = 'fulbito2014';
 $db['default']['database'] = 'a6003835_fulbito';
 */
+/*
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';
 $db['default']['password'] = '123456';
 $db['default']['database'] = 'fulbito';
+*/
 
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';

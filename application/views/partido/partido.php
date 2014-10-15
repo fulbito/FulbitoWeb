@@ -20,7 +20,7 @@
     <? $this->load->view('templates/header'); ?> 
 
 	  <div id="centro" class="sombra redondeado">
-    <h1>PARTIDO</h1>
+    <br><h1>PARTIDO</h1>
 
 
         <?  if(isset($mensaje_error)): ?>

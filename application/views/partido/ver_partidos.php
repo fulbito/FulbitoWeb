@@ -23,7 +23,21 @@
 	  <div id="centro" class="sombra redondeado">
        
         <div id="partidos_jugados" style="background-color:red; float:left;  width:50%;">
-       		MIS PARTIDOS CREADOS <br>
+       		MIS PARTIDOS CREADOS <br> <br>
+
+
+        <?  if(isset($mensaje_error)): ?>
+                   <label class='errorLogin'><?=$mensaje_error?></label>
+                <? unset($mensaje_error);
+            endif;
+        ?>
+
+        <?  
+            if(isset($mensaje_exito)): ?>
+                 <label class='ok'><?=$mensaje_exito?></label>
+              <? unset($mensaje_exito);
+            endif;  
+        ?>
 
        		<? 	
        			//echo "cantidad: ".$mis_partidos->num_rows();
@@ -33,7 +47,7 @@
        			else:
        				foreach ($mis_partidos->result() as $row):
        				
-       					echo "<a href=".base_url()."index.php/partido/editar/".$row->id."> Editar </a> | <a href=".base_url()."index.php/partido/configurar/".$row->id."> Configurar </a> |  <a href=".base_url()."index.php/partido/armar/".$row->id."> armar </a> | ".$row->fecha." - ".$row->hora."<br>";
+       					echo "<a href=".base_url()."index.php/partido/editar/".$row->id."> Editar </a> | <a href=".base_url()."index.php/partido/ver_configuracion_partido/".$row->id."> Configurar </a> |  <a href=".base_url()."index.php/partido/armar/".$row->id."> armar </a> | ".$row->fecha." - ".$row->hora."<br>";
        				
        				endforeach;
 

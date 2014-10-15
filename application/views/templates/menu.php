@@ -11,7 +11,6 @@
   				<li><a href="<?=base_url()?>index.php/home" class="gn-icon gn-icon-download">Inicio</a></li>
   				<li><a href="<?=base_url()?>index.php/usuario" class="gn-icon gn-icon-cog">Datos de Perfil</a></li>
   				<li><a href="<?=base_url()?>index.php/partido" class="gn-icon gn-icon-cog">Mis Partidos</a></li>
-                                <li><a href="<?=base_url()?>index.php/configuracion/menu/show_menu" class="gn-icon gn-icon-cog">Configuracion</a></li>
   				<li><a href="<?=base_url()?>index.php/login/logout" class="gn-icon gn-icon-download">Cerrar sesi&oacute;n</a></li>
   			</ul>
   		</div><!-- /gn-scroller -->
