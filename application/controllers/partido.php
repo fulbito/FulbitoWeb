@@ -1,29 +1,29 @@
 <?
 /*  Esta clase maneja:
- * 	- Index.
+ *  - Index.
  *  - Muro ?
  * 
  * */
  
 class Partido extends CI_Controller
 {
-	public function __construct()
-	{
-		parent::__construct();
-		$this->load->model('partido_model');
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model('partido_model');
         $this->load->helper('form');
-		$this->load->library('form_validation');
-		$this->load->helper('general_helper'); // Tiene la funcion generar_string_aleatorio
-	}
+        $this->load->library('form_validation');
+        $this->load->helper('general_helper'); // Tiene la funcion generar_string_aleatorio
+    }
    
-	public function index()
-	{
+    public function index()
+    {
         redirect(base_url()."index.php/home/");
-	}
+    }
 
     public function crear()
-	{
-	   
+    {
+       
         chrome_log("Partido: crear");
         
         if( isset($_POST) && count($_POST) > 0)
