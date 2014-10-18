@@ -43,8 +43,8 @@ class Usuario extends CI_Controller
 		
 		if(isset($_POST)) 
 		{
-			$id_usuario =  $this->session->userdata('id');
-			chrome_log($id_usuario);
+			/*$id_usuario =  $this->session->userdata('id');
+			chrome_log($id_usuario);*/
 			
 			$this->db->trans_start(); // INICIA UNA TRASACCION
 			
@@ -56,13 +56,21 @@ class Usuario extends CI_Controller
 			
 			if ($this->db->trans_status() === FALSE)
 			{
-				chrome_log("eRROR");
+				chrome_log("error");
 				$datos['mensaje_error'] = "No se ha podido modificar los datos, intente mas tarde.";
 				
-				// WS
+				//----  WS --//
 				$return["error"] = TRUE;
 				$return["data"] = 9 ;
-				$this->load->view('login/login',$datos);
+
+				if( isset($_POST['origen']) && ($_POST['origen']=="android") )
+				{
+					crear_json($return);
+				}
+				else
+				{
+					$this->load->view('login/login',$datos);
+				}
 			}
 			else
 			{
@@ -70,19 +78,23 @@ class Usuario extends CI_Controller
 				$datos['mensaje_exito'] = "Datos modificados correctamente.";
 				$return["error"] = FALSE;
 
-				$resultado = $this->Usuario_model->traer_datos_usuario($id_usuario);
-				if ($resultado->num_rows() > 0)
+				if( isset($_POST['origen']) && ($_POST['origen']=="android") )
 				{
-					$datos['datos_usuario'] = $resultado;
-					$this->load->view('usuario/usuario',$datos);
+					crear_json($return);
 				}
+				else
+				{
+					$resultado = $this->Usuario_model->traer_datos_usuario($_POST['id_usuario']);
+					if ($resultado->num_rows() > 0)
+					{
+						$datos['datos_usuario'] = $resultado;
+						$this->load->view('usuario/usuario',$datos);
+					}
+				}
+
 			} 
 			
-			if( isset($_POST['origen']) && ($_POST['origen']=="android") )
-			{
-				crear_json($return);
-			}
-
+			
 		}
 		else
 		{

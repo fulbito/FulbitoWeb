@@ -101,7 +101,6 @@ class Usuario_model extends CI_Model {
 	public function modificar_datos_opcionales($_ARRAY)
 	{		
 		
-
 		chrome_log("usuario: modificar_datos_opcionales");
 		//$id_usuario =  $this->session->userdata('id');
 		$id_usuario = $_ARRAY['id_usuario'];
