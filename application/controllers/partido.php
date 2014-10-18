@@ -279,14 +279,13 @@ class Partido extends CI_Controller
     }
 
 
-    public function configurar($id_partido)
+    public function configurar()
     {
         chrome_log("Controlador PARTIDO/configurar ");
-      
 
-        if(!isset($id_partido)) // No mando el ID , SALE
+        if(!isset($_POST['id_partido'])) // No mando el ID , SALE
         {
-             echo "b"; 
+
             if( isset($_POST['origen']) && ($_POST['origen']=="android") )
             {
                 // WS
@@ -301,10 +300,25 @@ class Partido extends CI_Controller
         }
         else
         {
-            
+
             if( isset($_POST) && count($_POST) > 0)
             {
-                echo "aaaa";
+               
+                switch($_POST['tipo_partido']):
+                    
+                    case 1:
+                            $this->partido_model->configurar_partido_amistoso($_POST);
+                            break;
+
+                    case 2:
+                            $this->partido_model->configurar_partido_desafio_jugador($_POST);
+                            break;
+
+                    case 3:
+                            $this->partido_model->configurar_partido_desafio_equipo($_POST);
+                            break;
+
+                endswitch; 
             }
             else
             {

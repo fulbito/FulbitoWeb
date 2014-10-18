@@ -180,6 +180,60 @@ class Partido_model extends CI_Model {
             return false;
     }
 
+    public function configurar_partido_amistoso($_ARRAY)
+    {
+        chrome_log("configurar_partido_amistoso");
+         
+        
+         
+        $sql = "    SELECT  * 
+                    FROM partido
+                    WHERE id = ? AND
+                          id_usuario_adm = ?  ";
+
+        $query = $this->db->query($sql, array($id_partido,$id_usuario));
+        
+        if($query->row())
+            return true;
+        else
+            return false; 
+    }
+
+    public function configurar_partido_desafio_jugador($_ARRAY)
+    {
+        chrome_log("configurar_partido_desafio_jugador");
+        /*
+        $sql = "    SELECT  * 
+                    FROM partido
+                    WHERE id = ? AND
+                          id_usuario_adm = ?  ";
+
+        $query = $this->db->query($sql, array($id_partido,$id_usuario));
+        
+        if($query->row())
+            return true;
+        else
+            return false;*/
+    }
+
+    public function configurar_partido_desafio_equipo($_ARRAY)
+    {
+        chrome_log("configurar_partido_desafio_equipo");
+        /*
+        $sql = "    SELECT  * 
+                    FROM partido
+                    WHERE id = ? AND
+                          id_usuario_adm = ?  ";
+
+        $query = $this->db->query($sql, array($id_partido,$id_usuario));
+        
+        if($query->row())
+            return true;
+        else
+            return false;*/
+    }
+
+
 
 }	
     
