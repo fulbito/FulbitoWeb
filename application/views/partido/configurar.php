@@ -78,8 +78,9 @@ $( document ).ready(function() {
 		    $atributos = array('name' => 'configurar_partido', 'id' => 'configurar_partido'); 
         echo form_open('partido/configurar/', $atributos);
         ?>
-           
-           ¿ Qué tipo de partido vas armar ?</br>
+            <input id="id_partido" name="id_partido" type="hidden" value="<? echo $datos_partido->id; ?>" /> 
+
+           ¿ Qué tipo de partido vas armar ? </br>
            
            <?
               foreach ($tipo_partido->result()  as $row):
