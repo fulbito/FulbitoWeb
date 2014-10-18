@@ -31,6 +31,9 @@
     // every dropzone accepts draggable #3
     setupDropzone('.js-drop', '.draggable');
 
+    var cantEquipo1 = 0;
+    var cantEquipo2 = 0;
+    var cantJugadores = <?=$partido->cant_jugadores?>/2;
     /**
      * Setup a given element as a dropzone.
      *
@@ -43,32 +46,65 @@
                 accept: accept,
                 ondropactivate: function (event) {
                     event.relatedTarget.classList.add('-drop-possible');
+                    //alert("ok");
                 },
                 ondropdeactivate: function (event) {
                     event.relatedTarget.classList.remove('-drop-possible');
+                    //alert("ok");
                 }
             })
             .on('dropactivate', function (event) {
-                console.log('activate', event);
-                event.target.classList.add('-drop-possible');
+              if(event.target.id == "drop1")
+              {
+                if(cantEquipo1 < cantJugadores)
+                    event.target.classList.add('-drop-possible');
+              }
+              if(event.target.id == "drop2")
+              {
+                if(cantEquipo2 < cantJugadores)
+                    event.target.classList.add('-drop-possible');
+              }
                 //event.target.textContent = 'Drop me here!';
             })
             .on('dropdeactivate', function (event) {
-                console.log('deactivate', event);
                 event.target.classList.remove('-drop-possible');
                 //event.target.textContent = 'Dropzone';
             })
             .on('dragenter', function (event) {
-                event.target.classList.add('-drop-over');
+              if(event.target.id == "drop1")
+              {
+                if(cantEquipo1 < cantJugadores)
+                {
+                    event.target.classList.add('-drop-over');
+                }
+                cantEquipo1++;
+              }
+              if(event.target.id == "drop2")
+              {
+                if(cantEquipo2 < cantJugadores)
+                {
+                    event.target.classList.add('-drop-over');
+                }
+                cantEquipo2++;
+              }
                 //event.relatedTarget.textContent = 'I\'m in';
             })
             .on('dragleave', function (event) {
+              if(event.target.id == "drop1")
+              {
+                    cantEquipo1--;
+              }
+              if(event.target.id == "drop2")
+              {
+                    cantEquipo2--;
+              }
                 event.target.classList.remove('-drop-over');
                 //event.relatedTarget.textContent = 'Drag me…';
             })
             .on('drop', function (event) {
                 event.target.classList.remove('-drop-over');
                 //event.relatedTarget.textContent = 'Dropped';
+                //alert(cantJugadores);
             });
     }
 
@@ -88,7 +124,7 @@
       <? $this->load->view('templates/header'); ?>
 
 	  <div id="centro" class="sombra redondeado">
-        <h1>ARMAR EQUIPOS<?=$partido->nombre?></h1>
+        <h1>ARMAR EQUIPOS <?=$partido->nombre?></h1>
         <div class="dropzone-wrapper">
             <div id="drop1" class="dropzone js-drop">Equipo 1</div>
             <div id="drop2" class="dropzone js-drop">Equipo 2</div>
