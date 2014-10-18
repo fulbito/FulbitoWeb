@@ -3,6 +3,7 @@
 
 <? $this->load->view('templates/head'); ?>
 
+    <script language="javascript" type="text/javascript" src="<?=base_url()?>assets/js/login.js"></script>
 <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/slider/engine1/style.css" />
 
 <body>

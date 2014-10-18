@@ -4,7 +4,6 @@
 <? $this->load->view('templates/head'); ?>
 
 <body>
-<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/slider/engine1/style.css" />
 
 <div id="wrapper">
 
@@ -27,7 +26,7 @@
             <img src="<?=base_url()?>assets/images/buscar.png" alt="" />
             <p>Busca un partido cerca tuyo y sumate!</p>
         </div>
-        <div class="boton_home" onclick="window.location.href='<?=base_url()?>index.php/partido/ver/'">
+        <div class="boton_home" onclick="window.location.href='<?=base_url()?>index.php/partido/mis_partidos/'">
             <div class="boton_home_title">VER MIS PARTIDOS</div>
             <img src="<?=base_url()?>assets/images/buscar.png" alt="" />
             <p>Ver mis partidos !</p>
@@ -41,4 +40,3 @@
 
 
 </html>
-
