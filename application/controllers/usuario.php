@@ -123,6 +123,7 @@ class Usuario extends CI_Controller
 	{
 		chrome_log("usuario: modificar_foto_usuario");
 		$id_usuario =  $this->session->userdata('id');
+		
 		/* GUARDAR LA FOTO EN EL SERVIDOR */
 
 		$this->load->helper('form');
@@ -138,11 +139,11 @@ class Usuario extends CI_Controller
 		$this->upload->initialize($config);
 		$this->upload->set_allowed_types('*');
 		
-		if (!$this->upload->do_upload('userfile')) //---------------- NO subio la foto al servidor
+		if (!$this->upload->do_upload('userfile')) //---------------- NO subio la foto al servidor -------------------//
 		{
 			chrome_log("usuario: NO subio la foto al servidor");
 			//echo $this->upload->display_errors();
-			$mensaje_error = "No se ha podido subir la foto, intente mas tarde.";
+			$mensaje_error = "No se ha podido subir la foto al servidor, intente mas tarde A.";
 			$datos['mensaje_foto_error'] =$mensaje_error;
 			$return["error"] = TRUE;
 			$return["data"] = $mensaje_error;
@@ -153,7 +154,7 @@ class Usuario extends CI_Controller
 				$this->load->view('usuario/usuario',$datos);
 			}	
 		} 
-		else  //---------------- SI subio la foto original
+		else  //---------------- SI subio la foto original ------------------------------------//
 		{ 
 			chrome_log("usuario: SI subio la foto original");
 			$data = array('msg' => "Upload success!");
@@ -172,12 +173,12 @@ class Usuario extends CI_Controller
 				
 			if ( ! $this->image_lib->resize()) //---------------- NO pudo modificar la foto WEB
 			{
-				// echo "Imagen Web: ".$this->image_lib->display_errors();
+				//echo "Imagen Web: ".$this->image_lib->display_errors();
 				chrome_log("usuario:  NO pudo modificar la foto WEB");
 								
 				// Borrar foto original
 				$ruta_archivo = 'assets/images/fotos_usuario/'.$nombre_archivo;
-				borrar_foto_usuario($ruta_archivo);
+				borrar_foto($ruta_archivo);
 				
 				$mensaje_error = "No se ha podido subir la foto, intente mas tarde.";
 				$datos['mensaje_foto_error'] =$mensaje_error;
@@ -207,10 +208,10 @@ class Usuario extends CI_Controller
 				{
 					// echo "Imagen ANDROID: ".$this->image_lib->display_errors();
 					$ruta_archivo = 'assets/images/fotos_usuario/'.$nombre_archivo;
-					borrar_foto_usuario($ruta_archivo);
+					borrar_foto($ruta_archivo);
 					
 					$ruta_archivo = 'assets/images/fotos_usuario/foto_web/'.$nombre_archivo;
-					borrar_foto_usuario($ruta_archivo);
+					borrar_foto($ruta_archivo);
 					
 					$mensaje_error = "No se ha podido subir la foto, intente mas tarde.";
 					$datos['mensaje_foto_error'] =$mensaje_error;
@@ -233,13 +234,13 @@ class Usuario extends CI_Controller
 						if($nombre_foto_anterior != 'default.jpg') 
 						{
 							$ruta_archivo = 'assets/images/fotos_usuario/'.$nombre_archivo;
-							borrar_foto_usuario($ruta_archivo);
+							borrar_foto($ruta_archivo);
 							
 							$ruta_archivo = 'assets/images/fotos_usuario/foto_android/'.$nombre_foto_anterior;
-							borrar_foto_usuario($ruta_archivo);
+							borrar_foto($ruta_archivo);
 							
 							$ruta_archivo = 'assets/images/fotos_usuario/foto_web/'.$nombre_foto_anterior;
-							borrar_foto_usuario($ruta_archivo);
+							borrar_foto($ruta_archivo);
 						}
 						
 						$mensaje_exito = "La foto se ha modificado exitosamente.";
@@ -256,13 +257,13 @@ class Usuario extends CI_Controller
 					else // Si no actualizo el nombre, borro el original, android y web de la foto nueva.
 					{	
 						$ruta_archivo = 'assets/images/fotos_usuario/'.$nombre_archivo;
-						borrar_foto_usuario($ruta_archivo);
+						borrar_foto($ruta_archivo);
 						
 						$ruta_archivo = 'assets/images/fotos_usuario/foto_android/'.$nombre_archivo;
-						borrar_foto_usuario($ruta_archivo);
+						borrar_foto($ruta_archivo);
 						
 						$ruta_archivo = 'assets/images/fotos_usuario/foto_web/'.$nombre_archivo;
-						borrar_foto_usuario($ruta_archivo);			
+						borrar_foto($ruta_archivo);			
 						
 						$mensaje_error = "No se ha podido subir la foto, intente mas tarde.";
 						$datos['mensaje_foto_error'] =$mensaje_error;
@@ -279,7 +280,7 @@ class Usuario extends CI_Controller
 				}			
 			}
 			
-			crear_json($return);
+			//crear_json($return);
 		}
 	}
 	

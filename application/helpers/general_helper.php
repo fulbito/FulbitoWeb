@@ -28,10 +28,10 @@ if(!function_exists('generar_string_aleatorio'))
 /* ----------- Borrar Archivo --------------------
  * Recibe la ruta de un archivo a borrar */
 
-if(!function_exists('borrar_foto_perfil'))
+if(!function_exists('borrar_foto'))
 {
     //formateamos la fecha y la hora, función de cesarcancino.com
-    function borrar_foto_perfil($ruta_archivo)
+    function borrar_foto($ruta_archivo)
 	{
 		//$file = 'assets/images/fotos_perfil/'.$nombre_archivo;
 		$file = $ruta_archivo;

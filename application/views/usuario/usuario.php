@@ -99,9 +99,9 @@
 					$foto = $usuario->foto;
 
 					if( $foto == "default.jpg" ): ?>
-						<img style="width:75px; height:85px;" src="<?=base_url()?>assets/images/fotos_perfil/default.jpg">
+						<img style="width:75px; height:85px; padding:3px; background-color:#000;" src="<?=base_url()?>assets/images/fotos_usuario/default.jpg">
 				<?	else: ?>
-						<img style="width:75px; height:85px;" src="<?=base_url()?>assets/images/fotos_perfil/foto_web/<?=$usuario->foto?>">
+						<img style="width:75px; height:85px;" src="<?=base_url()?>assets/images/fotos_usuario/foto_web/<?=$usuario->foto?>">
 				<?  endif ?>
 				<input id="foto" name="userfile" type="file" placeholder="Foto de Perfil"/>
 				<input type="submit" name="modificarFoto" id="modificarFoto" value="Modificar" />
