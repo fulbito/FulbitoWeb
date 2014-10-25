@@ -157,6 +157,7 @@ $( document ).ready(function() {
         echo form_open('partido/configurar/', $atributos);
         ?>
             <input id="id_partido" name="id_partido" type="hidden" value="<? echo $datos_partido->id; ?>" /> 
+            
 
            ¿ Qué tipo de partido vas armar ? </br>
            
@@ -178,6 +179,8 @@ $( document ).ready(function() {
            <div id='div_desafiar_jugador' style='display: none;'>
                ¿ A quién queres desafiar ?</br>
               <input type='text' name='jugador_desafiado' id='jugador_desafiado'/>
+              <input id="id_jugador_desafiante" name="id_jugador_desafiante" type="hidden" value="<? echo $this->session->userdata('id'); ?>" /> 
+              <input type='text' name='id_jugador_desafiado' id='id_jugador_desafiado'/>
            </div>
 
            <div id='div_desafiar_equipo' style='display: none;'>

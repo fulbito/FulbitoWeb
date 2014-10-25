@@ -14,7 +14,7 @@ class Partido_model extends CI_Model {
         Trae la informacion de un partido en particular
     */
     public function traer_informacion_partido($id_partido)
-    {
+	{
         chrome_log("PARTIDO_MODEL/traer_informacion_partido"); 
 
         $sql =  "SELECT *
@@ -28,7 +28,7 @@ class Partido_model extends CI_Model {
         $query = $this->db->query($sql, array($id_partido));        
 
         return $query->row();  
-    }
+	}
 
     /*
         Trae los partidos donde el usuario es administrador
@@ -50,8 +50,8 @@ class Partido_model extends CI_Model {
     /*
         Guarda un partido
     */
-    public function guardar_partido($_ARRAY)
-    {
+	public function guardar_partido($_ARRAY)
+	{
         chrome_log("PARTIDO_MODEL/guardar_partido");
 
         $data_partido = array();
@@ -72,7 +72,7 @@ class Partido_model extends CI_Model {
 
         return $this->db->insert_id(); 
 
-    }
+	}
 
     /*
         Modificar un partido
@@ -183,37 +183,36 @@ class Partido_model extends CI_Model {
     public function configurar_partido_amistoso($_ARRAY)
     {
         chrome_log("configurar_partido_amistoso");
-         
-        
-         
-        $sql = "    SELECT  * 
-                    FROM partido
-                    WHERE id = ? AND
-                          id_usuario_adm = ?  ";
 
-        $query = $this->db->query($sql, array($id_partido,$id_usuario));
-        
-        if($query->row())
-            return true;
-        else
-            return false; 
+        if(!$this->existe_partido_amistoso($_ARRAY['id_partido'])) // Si no existe el partido amistoso
+        {
+            $sql = "    INSERT  INTO partido_amistoso(id_partido, id_tipo_seleccion_jugadores ) 
+                        VALUES ( ? , ? )";
+                    
+            $query = $this->db->query($sql, array($_ARRAY['id_partido'],$_ARRAY['tipo_seleccion_jugadores'])); 
+        }
+        else // Si existe solo cambiamos el id_tipo_seleccion_jugadores
+        {
+            $sql = "UPDATE partido_amistoso SET id_tipo_seleccion_jugadores = ? WHERE id_partido = ? ";
+            $query = $this->db->query($sql, array($_ARRAY['tipo_seleccion_jugadores'],$_ARRAY['id_partido']));
+            return $query;
+        }
+
+        $affected_rows = $this->db->affected_rows();
+        chrome_log($affected_rows);
     }
 
     public function configurar_partido_desafio_jugador($_ARRAY)
     {
         chrome_log("configurar_partido_desafio_jugador");
-        /*
-        $sql = "    SELECT  * 
-                    FROM partido
-                    WHERE id = ? AND
-                          id_usuario_adm = ?  ";
+         
+        $sql = " INSERT  INTO partido_desafio_jugador(id_partido, id_usuario_desafiante, id_usuario_desafiado ) 
+                        VALUES ( ? , ? , ?  )";
+                    
+        $query = $this->db->query($sql, array($_POST['id_partido'],$_POST['id_jugador_desafiante'],$_POST['id_jugador_desafiado']));  
 
-        $query = $this->db->query($sql, array($id_partido,$id_usuario));
-        
-        if($query->row())
-            return true;
-        else
-            return false;*/
+        $affected_rows = $this->db->affected_rows();
+        chrome_log($affected_rows);
     }
 
     public function configurar_partido_desafio_equipo($_ARRAY)
@@ -234,8 +233,37 @@ class Partido_model extends CI_Model {
     }
 
 
+    public function setear_tipo_partido($id_partido, $id_tipo_partido)
+    {
+        chrome_log("setear_tipo_partido");
+        
+        $sql = "UPDATE partido SET id_tipo_partido = ? WHERE id = ? ";
+        $query = $this->db->query($sql, array($id_tipo_partido,$id_partido));
+        return $query;
+        
+        if($query->row())
+            return true;
+        else
+            return false;
+    }
 
-}   
+    public function existe_partido_amistoso($id_partido)
+    {
+        chrome_log("existe_partido_amistoso");
+        
+        $sql = "   SELECT  * 
+                    FROM partido_amistoso
+                    WHERE id_partido = ? ";
+
+        $query = $this->db->query($sql, array($id_partido));
+        
+        if($query->row())
+            return true;
+        else
+            return false;
+    }
+
+}	
     
 
 /* End of file Login_model.php */
