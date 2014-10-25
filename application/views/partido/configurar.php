@@ -11,9 +11,6 @@
 
 $( document ).ready(function() {
 
-  /*
-      Cambiar que esta hardcodeado
-  */
 
   $(".tipo_partido").change(function () {
       
@@ -38,7 +35,88 @@ $( document ).ready(function() {
         $( "#div_desafiar_equipo" ).show();
       }
 
-  });  
+  });
+
+  $('#configurar_partido').validate({
+
+
+      rules : 
+      {
+              tipo_partido : 
+              {
+                required : true
+              },
+              tipo_seleccion_jugadores: 
+              {
+                   required: 
+                   {
+                          depends: function(element) 
+                          {
+                            
+                              if ( $('input[name=tipo_partido]:checked', '#configurar_partido').val() == 1)
+                              {
+                                  return true;
+                              }
+                              else
+                              {
+                                  return false;
+                              } 
+                          }
+                    }
+              } ,
+              jugador_desafiado: 
+              {
+                   required: 
+                   {
+                          depends: function(element) 
+                          {
+                              if ( $('input[name=tipo_partido]:checked', '#configurar_partido').val() == 2)
+                              {
+                                  return true;
+                              }
+                              else
+                              {
+                                  return false;
+                              }
+                          }
+                    }
+              },
+              equipo_desafiado: 
+              {
+                   required: 
+                   {
+                          depends: function(element) 
+                          {
+                              if ( $('input[name=tipo_partido]:checked', '#configurar_partido').val() == 3)
+                              {
+                                  return true;
+                              }
+                              else
+                              {
+                                  return false;
+                              }
+                          }
+                    }
+              }
+      },
+      messages : {
+
+            tipo_partido : {
+              required : "Debe seleccionar el tipo de partido."
+            },
+            tipo_seleccion_jugadores:{
+              required : "Debe seleccionar quien arma los equipos"
+            } ,
+            jugador_desafiado:{
+              required : "Debe escribir el jugador a desafiar"
+            } ,
+            equipo_desafiado : {
+              required : "Debe escribir el equipo a desafiar"
+            }
+      }
+
+  });
+  
 
 
 });
@@ -84,7 +162,7 @@ $( document ).ready(function() {
            
            <?
               foreach ($tipo_partido->result()  as $row):
-                  echo "<input class='tipo_partido' type='radio' name='tipo_partido' id='tipo_partido_".$row->id."' value='".$row->id."'> ".$row->descripcion."</br>";
+                  echo "<input class='tipo_partido' type='radio' name='tipo_partido' id='tipo_partido' value='".$row->id."' /> ".$row->descripcion."</br>";
               endforeach;
            ?>
 
@@ -92,7 +170,7 @@ $( document ).ready(function() {
            ¿ Quién arma los equipos ?</br>
            <?
               foreach ($tipo_seleccion_jugadores->result()  as $row):
-                echo "<input type='radio' name='tipo_seleccion_jugadores' id='tipo_seleccion_jugadores' value=".$row->id."/> ".$row->descripcion."</br>";
+                echo "<input type='radio' name='tipo_seleccion_jugadores' id='tipo_seleccion_jugadores' value='".$row->id."' /> ".$row->descripcion."</br>";
               endforeach;
            ?>
            </div>
