@@ -278,6 +278,65 @@ class Partido extends CI_Controller
         }
     }
 
+    public function ver_partido_completo($id_partido)
+    {
+        chrome_log("ver_partido_completo");
+        
+        if(!isset($id_partido)) // No mando el ID , SALE
+        {
+            if( isset($_POST['origen']) && ($_POST['origen']=="android") )
+            {
+                // WS
+                $return["error"] = TRUE;
+                $return["data"] = 12; //Debe enviar el ID del partido.
+                crear_json($return);
+            }
+            else
+            {
+                redirect(base_url()."index.php/partido/mis_partidos/");
+            }
+        }
+        else
+        {
+            if(!isset($_POST['id_usuario']))
+                $id_usuario =  $this->session->userdata('id');
+            else
+                $id_usuario = $_POST['id_usuario'];
+
+            $administrador = $this->partido_model->es_administrador($id_usuario, $id_partido);
+             
+               
+            if( $administrador) // Es administrador
+            {
+                chrome_log("Es administrador");
+                /*
+                chrome_log("Admin ".$administrador);
+                $data['datos_partido'] = $this->partido_model->traer_informacion_partido($id_partido);
+                $data['tipo_visibilidad_partido'] = $this->partido_model->traer_tipos_visibilidad_partidos();
+
+                $this->load->view('partido/partido', $data);*/
+
+
+                $data2['datos_partido'] = $this->partido_model->traer_informacion_partido($id_partido);
+                $data2['tipo_seleccion_jugadores'] = $this->partido_model->traer_tipos_seleccion_jugadores();
+                $data2['tipo_partido'] = $this->partido_model->traer_tipos_partidos();
+                $this->load->view('partido/configurar', $data2);
+                
+            }
+            else // No es administrador
+            {
+                chrome_log("No es administrador");    
+                   
+                $return["error"] = TRUE;
+                $return["data"] = 12; // Usted no puede configurar este partido, no es su admisnitrador.
+
+                $datos['mensaje_error'] = "Usted no es administrador del partido.";
+            }
+
+        }
+    }
+
+
 
     public function configurar()
     {
